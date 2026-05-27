@@ -1,0 +1,32 @@
+# Step manifest template for nextflow-step-converter
+
+project:
+  name: example_project
+  description: Short project description
+  owner: optional
+
+steps:
+  - id: step_name
+    purpose: Short description of what this step does
+    script: scripts/script_name.R
+    command: Rscript scripts/script_name.R --input data/input.tsv --output results/step_name/output.tsv
+    inputs:
+      - path: data/input.tsv
+        type: table
+        description: Main input table
+    outputs:
+      - path: results/step_name/output.tsv
+        type: table
+        description: Main output table
+    parameters:
+      example_parameter: example_value
+    environment:
+      container: null
+      conda: null
+      modules: []
+    resources:
+      cpus: 2
+      memory: 8 GB
+      time: 2h
+    notes:
+      - Keep the original analysis logic unchanged unless explicitly requested.
