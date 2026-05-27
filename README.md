@@ -38,6 +38,18 @@ It focuses on:
 
 The skill is intentionally a packaging/conversion layer. It should not redesign statistical methods unless explicitly requested.
 
+### `consensus-mcp`
+
+A compact Claude Code / Codex skill for installing, verifying, repairing, and using the official Consensus MCP server for peer-reviewed literature search.
+
+It focuses on:
+
+- Claude Code, Claude Desktop, and Codex setup
+- OAuth repair for expired tokens and failed reconnects
+- correct use of the required `/mcp` endpoint
+- practical search constraints for evidence-focused paper search
+- avoiding accidental token/API-key exposure
+
 ## Basic usage
 
 ### Interpret existing results
@@ -89,4 +101,10 @@ Recommended Nextflow run style:
 
 ```bash
 nextflow run main.nf -resume -with-report -with-trace -with-timeline
+```
+
+### Set up or repair Consensus MCP
+
+```text
+Use the consensus-mcp skill. Verify my Consensus MCP setup, repair OAuth if needed, then use Consensus to search for recent peer-reviewed human studies and systematic reviews on exercise for depression.
 ```
