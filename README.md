@@ -2,6 +2,8 @@
 
 Lightweight, portable skills for bioinformatics and scientific data-analysis workflows.
 
+These skills are designed to be small, focused, and usable by both Claude Code and Codex through `SKILL.md`-style instruction modules.
+
 ## Included skills
 
 ### `bio-results-interpreter`
@@ -20,9 +22,25 @@ It focuses on:
 
 The skill is intentionally small and fast. It does **not** run new analyses by default.
 
+### `nextflow-step-converter`
+
+A compact Claude Code / Codex skill for converting existing scripts, commands, notebooks, or manually described analysis steps into clean Nextflow DSL2 workflow components.
+
+It focuses on:
+
+- preserving existing analysis logic
+- making inputs and outputs explicit
+- wrapping steps as Nextflow processes
+- creating step manifests
+- organizing modules under `modules/local/`
+- supporting `-resume`
+- producing trace/report/timeline-friendly workflows
+
+The skill is intentionally a packaging/conversion layer. It should not redesign statistical methods unless explicitly requested.
+
 ## Basic usage
 
-Ask Claude Code or Codex something like:
+### Interpret existing results
 
 ```text
 Use the bio-results-interpreter skill.
@@ -42,4 +60,33 @@ Results to interpret:
 - figures/top_pathways.png
 
 Do not run new analyses. Group results by analysis module. Embed figures and link tables. Separate direct observations from plausible hypotheses.
+```
+
+### Convert existing steps to Nextflow
+
+```text
+Use the nextflow-step-converter skill.
+
+Convert these existing analysis scripts into a minimal Nextflow DSL2 workflow. Do not change the statistical method or analysis logic. One process per logical step. Use explicit inputs and outputs. Add a step manifest and brief run instructions.
+
+Scripts:
+- scripts/run_deseq2.R
+- scripts/run_gsea.R
+- scripts/make_plots.R
+
+Inputs:
+- data/count_matrix.tsv
+- data/metadata.tsv
+
+Expected outputs:
+- results/deseq2/de_results.tsv
+- results/enrichment/gsea_results.tsv
+- results/figures/pca.png
+- results/figures/top_pathways.png
+```
+
+Recommended Nextflow run style:
+
+```bash
+nextflow run main.nf -resume -with-report -with-trace -with-timeline
 ```
