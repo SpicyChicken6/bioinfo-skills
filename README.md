@@ -38,6 +38,21 @@ It focuses on:
 
 The skill is intentionally a packaging/conversion layer. It should not redesign statistical methods unless explicitly requested.
 
+### `semantic-scholar-literature-search`
+
+A compact Claude Code / Codex skill for running structured literature searches with the Semantic Scholar API.
+
+It focuses on:
+
+- translating research questions into API query plans
+- using Semantic Scholar paper bulk search for broad discovery
+- enriching selected papers with paper details or batch lookup
+- using positive and negative seed papers for recommendations
+- exporting JSONL, CSV, and Markdown paper tables
+- summarizing literature themes, gaps, and follow-up searches
+
+The skill is intentionally an API-assisted search and triage layer. It does not claim full-text review unless full text is separately retrieved and read.
+
 ### `consensus-mcp`
 
 A compact Claude Code / Codex skill for installing, verifying, repairing, and using the official Consensus MCP server for peer-reviewed literature search.
@@ -101,6 +116,20 @@ Recommended Nextflow run style:
 
 ```bash
 nextflow run main.nf -resume -with-report -with-trace -with-timeline
+```
+
+### Search literature with Semantic Scholar
+
+```text
+Use the semantic-scholar-literature-search skill.
+
+Search Semantic Scholar for papers about digenic disease prediction using knowledge graphs and protein language model embeddings.
+
+Requirements:
+- prioritize papers from 2020 onward
+- include review papers and method papers
+- export a Markdown table with title, year, venue, citation count, URL, abstract summary, and why it is relevant
+- suggest 5 seed papers for follow-up recommendations
 ```
 
 ### Set up or repair Consensus MCP
