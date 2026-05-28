@@ -2,6 +2,13 @@
 """Lightweight Semantic Scholar literature search helper.
 
 Examples:
+  python scripts/s2_literature_search.py relevance \
+    --query '"digenic disease" prediction' \
+    --year '2020-' \
+    --limit 50 \
+    --out literature/relevance_search_results.jsonl \
+    --csv literature/relevance_search_results.csv
+
   python scripts/s2_literature_search.py search \
     --query '"digenic disease" prediction' \
     --year '2020-' \
@@ -34,6 +41,9 @@ DEFAULT_FIELDS = (
     "paperId,title,abstract,year,publicationDate,venue,publicationTypes,url,"
     "citationCount,influentialCitationCount,authors,externalIds,openAccessPdf,"
     "fieldsOfStudy,s2FieldsOfStudy"
+)
+RELEVANCE_FIELDS = (
+    DEFAULT_FIELDS + ",references.paperId,references.title,citations.paperId,citations.title"
 )
 
 
@@ -95,12 +105,7 @@ def jsonl_to_csv(jsonl_path: Path, csv_path: Path) -> None:
         writer.writerows(rows)
 
 
-def search(args: argparse.Namespace) -> None:
-    url = f"{GRAPH_BASE}/paper/search/bulk"
-    params: dict[str, Any] = {
-        "query": args.query,
-        "fields": args.fields,
-    }
+def add_common_filters(params: dict[str, Any], args: argparse.Namespace) -> None:
     if args.year:
         params["year"] = args.year
     if args.publication_date_or_year:
@@ -111,6 +116,55 @@ def search(args: argparse.Namespace) -> None:
         params["fieldsOfStudy"] = args.fields_of_study
     if args.min_citation_count is not None:
         params["minCitationCount"] = args.min_citation_count
+    if getattr(args, "venue", None):
+        params["venue"] = args.venue
+    if getattr(args, "open_access_pdf", False):
+        params["openAccessPdf"] = "true"
+
+
+def relevance(args: argparse.Namespace) -> None:
+    """Run paper relevance search with offset/limit pagination."""
+    url = f"{GRAPH_BASE}/paper/search"
+    params: dict[str, Any] = {
+        "query": args.query,
+        "fields": args.fields,
+        "limit": min(args.page_size, args.limit),
+        "offset": args.offset,
+    }
+    add_common_filters(params, args)
+
+    records: list[dict[str, Any]] = []
+    offset = args.offset
+    headers = get_headers()
+
+    while len(records) < args.limit:
+        params["offset"] = offset
+        params["limit"] = min(args.page_size, args.limit - len(records))
+        response = request_with_backoff("GET", url, params=params, headers=headers)
+        data = response.get("data", [])
+        if not data:
+            break
+        records.extend(data)
+        offset += len(data)
+        total = response.get("total")
+        if total is not None and offset >= int(total):
+            break
+
+    out = Path(args.out)
+    write_jsonl(records, out)
+    if args.csv:
+        jsonl_to_csv(out, Path(args.csv))
+    print(f"Wrote {len(records)} relevance-ranked papers to {out}")
+
+
+def search(args: argparse.Namespace) -> None:
+    """Run paper bulk search with token pagination."""
+    url = f"{GRAPH_BASE}/paper/search/bulk"
+    params: dict[str, Any] = {
+        "query": args.query,
+        "fields": args.fields,
+    }
+    add_common_filters(params, args)
     if args.sort:
         params["sort"] = args.sort
 
@@ -133,7 +187,7 @@ def search(args: argparse.Namespace) -> None:
     write_jsonl(records, out)
     if args.csv:
         jsonl_to_csv(out, Path(args.csv))
-    print(f"Wrote {len(records)} papers to {out}")
+    print(f"Wrote {len(records)} bulk-search papers to {out}")
 
 
 def recommend(args: argparse.Namespace) -> None:
@@ -154,22 +208,36 @@ def recommend(args: argparse.Namespace) -> None:
     print(f"Wrote {len(papers)} recommended papers to {out}")
 
 
+def add_common_search_args(parser: argparse.ArgumentParser) -> None:
+    parser.add_argument("--query", required=True)
+    parser.add_argument("--year", default=None, help="Year range, e.g. 2020-")
+    parser.add_argument("--publication-date-or-year", default=None)
+    parser.add_argument("--publication-types", default=None)
+    parser.add_argument("--fields-of-study", default=None)
+    parser.add_argument("--venue", default=None)
+    parser.add_argument("--open-access-pdf", action="store_true")
+    parser.add_argument("--min-citation-count", type=int, default=None)
+    parser.add_argument("--limit", type=int, default=100)
+    parser.add_argument("--csv", default=None)
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Semantic Scholar literature search helper")
     subparsers = parser.add_subparsers(dest="command", required=True)
 
+    relevance_parser = subparsers.add_parser("relevance", help="Run paper relevance search")
+    add_common_search_args(relevance_parser)
+    relevance_parser.add_argument("--fields", default=RELEVANCE_FIELDS)
+    relevance_parser.add_argument("--offset", type=int, default=0)
+    relevance_parser.add_argument("--page-size", type=int, default=100)
+    relevance_parser.add_argument("--out", default="literature/relevance_search_results.jsonl")
+    relevance_parser.set_defaults(func=relevance)
+
     search_parser = subparsers.add_parser("search", help="Run paper bulk search")
-    search_parser.add_argument("--query", required=True)
-    search_parser.add_argument("--year", default=None, help="Year range, e.g. 2020-")
-    search_parser.add_argument("--publication-date-or-year", default=None)
-    search_parser.add_argument("--publication-types", default=None)
-    search_parser.add_argument("--fields-of-study", default=None)
-    search_parser.add_argument("--min-citation-count", type=int, default=None)
+    add_common_search_args(search_parser)
     search_parser.add_argument("--sort", default=None)
     search_parser.add_argument("--fields", default=DEFAULT_FIELDS)
-    search_parser.add_argument("--limit", type=int, default=100)
     search_parser.add_argument("--out", default="literature/semantic_scholar_results.jsonl")
-    search_parser.add_argument("--csv", default=None)
     search_parser.set_defaults(func=search)
 
     rec_parser = subparsers.add_parser("recommend", help="Recommend papers from seed paper IDs")
