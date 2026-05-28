@@ -52,15 +52,67 @@ Use an API key when available. Read it from the environment variable `S2_API_KEY
 
 ## Preferred endpoints
 
-### 1. Paper bulk search
+### 1. Paper relevance search
 
-Use for broad discovery in most cases.
+Use when the user wants the most relevant papers for a focused query, especially when the top-ranked papers matter more than exhaustive retrieval.
+
+Endpoint:
+
+```text
+GET /paper/search
+```
+
+Use relevance search for:
+
+- the top 10-100 most relevant papers for a focused research question
+- interactive paper triage
+- seed-paper discovery before recommendation search
+- cases where richer metadata about authors, references, or citations may be useful
+- finding a small high-quality starting set before broader/bulk collection
+
+Useful parameters:
+
+- `query`
+- `fields`
+- `offset`
+- `limit`
+- `year`
+- `publicationDateOrYear`
+- `publicationTypes`
+- `fieldsOfStudy`
+- `venue`
+- `minCitationCount`
+- `openAccessPdf`
+
+Pagination uses `offset` and `limit`.
+
+Recommended fields for relevance triage:
+
+```text
+paperId,title,abstract,year,publicationDate,venue,publicationTypes,url,citationCount,influentialCitationCount,authors,externalIds,openAccessPdf,fieldsOfStudy,s2FieldsOfStudy,references,citations
+```
+
+Do not use relevance search for very large retrieval jobs unless the user specifically wants relevance-ranked pages and accepts slower or more resource-intensive requests.
+
+### 2. Paper bulk search
+
+Use for broad discovery in most cases, especially when collecting many records.
 
 Endpoint:
 
 ```text
 GET /paper/search/bulk
 ```
+
+Use bulk search for:
+
+- broad literature collection
+- larger result sets
+- systematic query sweeps
+- collecting papers across multiple terms
+- filtering by year, venue, field, publication type, open-access PDF availability, or citation count
+- using bulk pagination tokens
+- sorting by paper ID, publication date, or citation count
 
 Useful parameters:
 
@@ -82,7 +134,7 @@ Recommended fields:
 paperId,title,abstract,year,publicationDate,venue,publicationTypes,url,citationCount,influentialCitationCount,authors,externalIds,openAccessPdf,fieldsOfStudy,s2FieldsOfStudy
 ```
 
-### 2. Paper details
+### 3. Paper details
 
 Use when the user provides a known paper ID, DOI, arXiv ID, PMID, or Semantic Scholar paper ID.
 
@@ -98,7 +150,7 @@ Useful fields:
 title,abstract,year,venue,url,citationCount,influentialCitationCount,authors,externalIds,references,citations,openAccessPdf
 ```
 
-### 3. Paper batch details
+### 4. Paper batch details
 
 Use when enriching many selected paper IDs.
 
@@ -110,7 +162,7 @@ POST /paper/batch
 
 Send paper IDs in the request body and request only the fields needed.
 
-### 4. Recommendations from seed papers
+### 5. Recommendations from seed papers
 
 Use after initial triage to find related work.
 
@@ -127,7 +179,7 @@ Use:
 - `limit` to control the number of recommended papers
 - `fields` to request useful metadata
 
-### 5. Author batch lookup
+### 6. Author batch lookup
 
 Use when author context matters.
 
@@ -143,6 +195,33 @@ Useful fields:
 name,url,paperCount,hIndex,papers
 ```
 
+## Relevance search versus bulk search decision rule
+
+Default to this rule:
+
+- Use **paper relevance search** first when the user wants the best matching papers, a shortlist, a relevance-ranked starting point, or seed papers.
+- Use **paper bulk search** when the user wants broad collection, many results, sorting, large exports, or systematic query sweeps.
+- Use **recommendations** after selecting positive and negative seed papers from either relevance search or bulk search.
+- Use **paper details or batch details** to enrich a small selected set.
+
+A strong practical workflow is:
+
+```text
+relevance search → select seed papers → recommendations → bulk search for coverage → deduplicate → final ranked table
+```
+
+For quick literature exploration, use:
+
+```text
+relevance search → top paper table → themes and gaps
+```
+
+For broad evidence collection, use:
+
+```text
+query plan → bulk search across multiple queries → deduplicate → relevance/rule-based triage
+```
+
 ## Query planning rules
 
 Before calling the API, make a compact query plan:
@@ -155,6 +234,7 @@ Before calling the API, make a compact query plan:
 6. Decide whether to include reviews, methods, benchmarks, datasets, preprints, or clinical studies.
 7. Decide target fields.
 8. Decide output format.
+9. Decide whether the first pass should use relevance search, bulk search, or both.
 
 For bioinformatics topics, include method synonyms and biological synonyms.
 
@@ -168,6 +248,7 @@ Queries:
 - gene pair prioritization rare disease
 - protein language model variant prioritization
 - knowledge graph rare disease diagnosis
+First pass: relevance search for seed papers, then bulk search for coverage
 Date range: 2020-
 Include: method papers, benchmark papers, review papers
 Exclude: unrelated general network biology papers without disease prediction
@@ -179,6 +260,7 @@ Rank papers using a transparent score rather than citation count alone.
 
 Suggested criteria:
 
+- Semantic Scholar relevance rank when using `/paper/search`
 - topical relevance
 - recency
 - method relevance
@@ -198,6 +280,8 @@ When working inside a project, prefer these outputs:
 ```text
 literature/
   search_plan.md
+  relevance_search_results.jsonl
+  relevance_search_results.csv
   semantic_scholar_results.jsonl
   semantic_scholar_results.csv
   selected_papers.md
@@ -245,6 +329,7 @@ Use this structure unless the user asks otherwise:
 - Do not print the API key.
 - Use the `fields` parameter and request only needed fields.
 - Prefer bulk or batch endpoints when collecting many papers.
+- Use relevance search intentionally for focused top-ranked retrieval.
 - Handle pagination.
 - Respect rate limits.
 - Retry 429 responses with backoff.
@@ -270,6 +355,7 @@ Keep scripts small and transparent.
 When finishing a search task, report:
 
 - queries used
+- endpoint mode used: relevance search, bulk search, recommendations, or details/batch details
 - number of records retrieved
 - number of records selected
 - output files created
