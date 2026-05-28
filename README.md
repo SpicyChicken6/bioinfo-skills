@@ -22,6 +22,18 @@ It focuses on:
 
 The skill is intentionally small and fast. It does **not** run new analyses by default.
 
+### `consensus-mcp`
+
+A compact Claude Code / Codex skill for installing, verifying, repairing, and using the official Consensus MCP server for peer-reviewed literature search.
+
+It focuses on:
+
+- Claude Code, Claude Desktop, and Codex setup
+- OAuth repair for expired tokens and failed reconnects
+- correct use of the required `/mcp` endpoint
+- practical search constraints for evidence-focused paper search
+- avoiding accidental token/API-key exposure
+
 ### `nextflow-step-converter`
 
 A compact Claude Code / Codex skill for converting existing scripts, commands, notebooks, or manually described analysis steps into clean Nextflow DSL2 workflow components.
@@ -52,18 +64,6 @@ It focuses on:
 - summarizing literature themes, gaps, and follow-up searches
 
 The skill is intentionally an API-assisted search and triage layer. It does not claim full-text review unless full text is separately retrieved and read.
-
-### `consensus-mcp`
-
-A compact Claude Code / Codex skill for installing, verifying, repairing, and using the official Consensus MCP server for peer-reviewed literature search.
-
-It focuses on:
-
-- Claude Code, Claude Desktop, and Codex setup
-- OAuth repair for expired tokens and failed reconnects
-- correct use of the required `/mcp` endpoint
-- practical search constraints for evidence-focused paper search
-- avoiding accidental token/API-key exposure
 
 ## Basic usage
 
