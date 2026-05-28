@@ -65,6 +65,22 @@ It focuses on:
 
 The skill is intentionally an API-assisted search and triage layer. It does not claim full-text review unless full text is separately retrieved and read.
 
+### `grill-me`
+
+A compact, domain-agnostic Claude Code / Codex skill for running a structured, constructive design review that stress-tests a plan and then recommends answers.
+
+It focuses on:
+
+- scope, requirements, assumptions, and constraints
+- architecture, data flows, and failure modes
+- testing, deployment, and monitoring
+- asking one focused question at a time, then giving a recommended answer and rationale
+- bounding traversal to the highest-impact decision branches
+- using the codebase to answer questions when read access is available
+- driving toward explicit consensus on each major decision
+
+The skill is intentionally collaborative, not adversarial. It works for bioinformatics pipelines, analysis plans, and software designs alike.
+
 ## Basic usage
 
 ### Interpret existing results
@@ -136,4 +152,15 @@ Requirements:
 
 ```text
 Use the consensus-mcp skill. Verify my Consensus MCP setup, repair OAuth if needed, then use Consensus to search for recent peer-reviewed human studies and systematic reviews on exercise for depression.
+```
+
+### Grill a plan or design
+
+```text
+Use the grill-me skill.
+
+Stress-test my plan below. Cover scope, requirements, assumptions, constraints, architecture, data flows, failure modes, testing, deployment, and monitoring. Ask one focused question at a time, then give your recommended answer and rationale before moving on. Start with the top 3 highest-impact decisions.
+
+Plan:
+...
 ```
