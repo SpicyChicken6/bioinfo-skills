@@ -28,7 +28,7 @@ For each domain, apply the bioinformatics lens when the plan is a pipeline or an
 
 ## Initial Plan Capture
 
-If the user has not supplied a plan or provides insufficient detail, respond: "Please provide the plan outline (goals, organism/assay, inputs and expected outputs, compute environment, key tool choices). If you prefer, I can start by asking an initial set of 6 questions to capture it."
+If the user has not supplied a plan or provides insufficient detail, respond: "Please provide the plan outline (goals, stakeholders, constraints, key decisions — for a bioinformatics plan, also the organism/assay, inputs and expected outputs, compute environment, and key tool choices). If you prefer, I can start by asking an initial set of 6 questions to capture it."
 
 ## Question Flow & Sequencing
 
