@@ -50,6 +50,21 @@ It focuses on:
 
 The skill is intentionally a packaging/conversion layer. It should not redesign statistical methods unless explicitly requested.
 
+### `over-representation-analysis`
+
+A compact Claude Code / Codex skill for running pathway over-representation analysis (ORA) on unranked foreground gene lists with GSEApy and MSigDB gene sets.
+
+It focuses on:
+
+- retrieving MSigDB GMT collections through GSEApy
+- running offline ORA with optional experiment-specific backgrounds
+- supporting single foreground lists and paired up/down contrast lists
+- writing TSV/CSV/JSON enrichment outputs
+- generating paired up/down pathway plots with threshold guide lines
+- producing 300 DPI PNG plots and vector PDF companions
+
+The skill is intentionally focused on ORA. If the input is a ranked statistic, use preranked GSEA instead.
+
 ### `semantic-scholar-literature-search`
 
 A compact Claude Code / Codex skill for running structured literature searches with the Semantic Scholar API.
@@ -132,6 +147,21 @@ Recommended Nextflow run style:
 
 ```bash
 nextflow run main.nf -resume -with-report -with-trace -with-timeline
+```
+
+### Run pathway ORA with GSEApy
+
+```text
+Use the over-representation-analysis skill.
+
+Run ORA for a patient-vs-control differential expression contrast.
+
+Inputs:
+- up-regulated genes in patient: results/de/patient_up.txt
+- down-regulated genes in patient: results/de/patient_down.txt
+- background/tested genes: results/de/tested_genes.txt
+
+Use human MSigDB Hallmark and Reactome gene sets. Retrieve GMT files through GSEApy. Generate paired up/down pathway plots with Control on the left and Patient on the right. Save tables, summaries, PNG plots, and PDF companions under results/ora_patient_vs_control.
 ```
 
 ### Search literature with Semantic Scholar
