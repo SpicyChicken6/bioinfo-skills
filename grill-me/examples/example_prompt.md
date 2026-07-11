@@ -1,23 +1,15 @@
-# Example prompt
+# Example Prompt
 
-Use the grill-me skill.
+Use the grill-me skill to stress-test this plan before implementation. Prioritize scientific and computational correctness over convenience. Ask one high-impact question at a time, and explain the rationale for your recommendations.
 
-Stress-test the design below. Cover scope, requirements, assumptions, constraints, architecture, data flows, failure modes, testing, deployment, and monitoring.
-
-Ask one focused question at a time and wait for my answer. After each answer, give your recommended answer and rationale, and flag any earlier decisions it depends on.
-
-Design:
+Plan:
 
 ```text
-A Nextflow pipeline that takes raw paired-end RNA-seq FASTQ files, runs QC and trimming,
-aligns to a reference genome, quantifies gene counts, and produces a DESeq2
-differential-expression report. It should be resumable and run on a SLURM cluster.
+Build a resumable Nextflow pipeline for a human bulk RNA-seq study. It will take a count
+matrix and sample metadata, run a DESeq2 patient-versus-control analysis, split significant
+genes into up- and down-regulated lists, and run Hallmark and Reactome over-representation
+analysis with GSEApy. Use package defaults where possible and produce result tables and plots
+for a biological interpretation report.
 ```
 
-Priorities:
-
-- focus on the top 3 highest-impact decisions first
-- explicitly call out assumptions I have not stated
-- stop and summarize once we have resolved the major decisions, then ask whether to continue
-
-If the workspace contains relevant code or config, inspect it to answer questions before asking me, and report what you found.
+Inspect relevant code, configuration, and metadata if available. Look up discoverable facts instead of asking me. Challenge any method, statistical test, hypothesis universe, threshold, or package parameter whose choice could materially change the result. Stop when the major correctness risks are resolved, then summarize decisions, assumptions, consequential parameters, open risks, and validation steps.

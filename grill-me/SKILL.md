@@ -1,66 +1,54 @@
 ---
 name: grill-me
-description: Conduct a structured design review by asking probing questions about scope, requirements, assumptions, constraints, architecture, data flows, failure modes, testing, deployment, and monitoring. Tuned for bioinformatics pipelines and analyses (reproducibility, reference builds, batch effects, statistical validity, compute), but works for any plan. Use when the user wants to stress-test a plan, get grilled on their design, or mentions "grill me".
+description: Stress-test a plan or design through an adaptive, one-question-at-a-time interview. Use when the user asks to be grilled, requests an interactive stress-test, or explicitly wants assumptions and missing decisions challenged before implementing a bioinformatics pipeline, analysis, statistical method, or other design. Prioritize scientific and computational correctness, justified parameter choices, reproducibility, provenance, and silent-failure prevention.
 ---
 
-## Overview
+# Grill Me
 
-Adopt a rigorous but constructive tone: ask probing questions to expose gaps, then offer nonjudgmental recommended answers and next steps. This is a collaborative stress-test, not an adversarial interrogation.
+Help the user turn a plan into a decision-ready design. Be candid, constructive, and specific. Challenge the plan, not the person. Do not implement the plan unless the user separately asks.
 
-This skill is tuned for bioinformatics work. When the plan is a pipeline or analysis, prioritize the concerns that most affect whether results are trustworthy: **reproducibility, statistical validity, and data provenance**. For non-bioinformatics plans, fall back to the general form of each domain below.
+## Interview Loop
 
-## Scope & Domains
+1. Read the plan, conversation, and relevant available artifacts. Look up discoverable facts instead of asking the user; ask the user about goals, tradeoffs, risk tolerance, and decisions.
+2. Maintain a working ledger of resolved decisions, assumptions, consequential parameters, unresolved risks, and dependencies.
+3. Select the unresolved question with the greatest expected decision impact. Consider uncertainty, cost of being wrong, irreversibility, and how many downstream choices depend on it.
+4. Ask one focused question and wait. Explain why it matters when useful, but do not bundle follow-up questions into the same turn.
+5. After the answer, state briefly what it resolves, give a recommended choice and rationale when useful, distinguish evidence from preference, and label uncertainty.
+6. If an upstream decision changes, identify and revisit only the downstream decisions it invalidates.
 
-Cover these explicit domains: **scope, requirements, assumptions, constraints, architecture, data flows, failure modes, testing, deployment, and monitoring**. Limit traversal to the top 3 decision branches by impact, and to 3 levels deep per branch; summarize remaining branches and ask whether to continue.
+If no usable plan exists, begin with the single question that most clarifies the intended outcome and success criteria.
 
-For each domain, apply the bioinformatics lens when the plan is a pipeline or analysis. The example questions are starting points, not a script:
+## Correctness First for Bioinformatics
 
-- **Scope** — Organism, assay, and reference scope. *Which genome build and annotation version (e.g., GRCh38 + GENCODE vX), and is it pinned? Which assays/samples are in vs out of scope?*
-- **Requirements** — Inputs and outputs as concrete bio artifacts. *What goes in (FASTQ, BAM, VCF, count matrix) and what exact result tables and figures come out? What defines "done" for a result?*
-- **Assumptions** — Sample and biology assumptions. *Are library prep, strandedness, read length, ploidy, and batch structure known, or assumed? Is the sample metadata trusted?*
-- **Constraints** — Compute and data-governance limits. *Per-step memory and walltime, SLURM partitions/quotas, storage budget, and any controlled-access constraints (dbGaP, PHI, consent/IRB) on where data can run?*
-- **Architecture** — Pipeline and tooling choice. *Nextflow vs Snakemake vs ad hoc scripts? Is each tool pinned by container digest or conda lock? Why this aligner/caller over alternatives?*
-- **Data flows** — Provenance and intermediate files. *Where do intermediates live, what is kept vs transient, and is provenance tracked (checksums, sample IDs, parameter logs) end to end?*
-- **Failure modes** — Silent biological/technical failures. *How do you catch low mapping rate, adapter/contamination, sample swaps or mislabeling, empty or truncated outputs, and reference/annotation mismatch — before they reach the report?*
-- **Testing** — Validation strategy. *Is there a tiny test dataset for fast CI, positive/negative controls, and a concordance check against a known-good result or published benchmark? How is statistical validity checked (e.g., multiple-testing correction, effect-size sanity)?*
-- **Deployment** — Reproducible execution. *Pinned containers/images, `-resume` support, and identical behavior on the cluster and a laptop? How is the exact environment recreated months later?*
-- **Monitoring** — Run and QC observability. *MultiQC or per-sample QC, execution trace/timeline/report, and explicit thresholds that flag a bad run or a sample to drop?*
+Treat successful execution as necessary but not sufficient. A workflow can run without error and still produce statistically invalid or biologically misleading results. Prioritize correctness over convenience, speed, or familiarity at three layers:
 
-## Initial Plan Capture
+- **Computational correctness** — Inspect the actual analysis calls and configuration, not only the workflow wiring. Verify package and function behavior for the installed version, input types and dimensions, identifier formats, parameter semantics, deterministic behavior, declared outputs, and failure handling.
+- **Statistical correctness** — Start from the estimand or hypothesis and the independent experimental unit. Match the model or test to the study design, data-generating process, and assumptions. Account for replication, pairing, repeated measures, covariates, batch effects, confounding, effect sizes, uncertainty, and power when relevant. Technical replicates do not create biological replication, and adding a covariate cannot repair perfect confounding. Prevent outcome-informed preprocessing, information leakage, non-nested tuning, and reuse of evaluation data. Define each multiple-testing family before inspecting results and apply error control to the complete family.
+- **Biological correctness** — Keep organism, assay, genome build, annotation, coordinate system, identifier mapping, sample metadata, and biological interpretation compatible and traceable.
 
-If the user has not supplied a plan or provides insufficient detail, respond: "Please provide the plan outline (goals, stakeholders, constraints, key decisions — for a bioinformatics plan, also the organism/assay, inputs and expected outputs, compute environment, and key tool choices). If you prefer, I can start by asking an initial set of 6 questions to capture it."
+### No Silent Consequential Defaults
 
-## Question Flow & Sequencing
+Treat library defaults as candidates, not evidence that a setting is appropriate. For every parameter that can materially change sample or feature inclusion, normalization, model assumptions, hypothesis space, thresholds, error control, or reproducibility:
 
-For each decision node (e.g., aligner choice, reference build, workflow engine, deployment target):
-1. Ask a single, focused question
-2. Wait for the user's response
-3. Then provide your recommended answer and rationale, including any interdependencies with prior decisions (e.g., a reference-build choice constrains the annotation and downstream caller)
+1. Verify its meaning, default, and version-specific behavior from the installed package, primary documentation, or source.
+2. Choose the value from the study design and data characteristics, not merely from convenience or precedent.
+3. Record the selected value, rationale, software version, and supporting source.
+4. Use diagnostics, sensitivity analysis, controls, simulation, or a benchmark when multiple defensible choices could change the conclusion.
 
-Ask one question at a time and wait for the user's response before proceeding.
+If behavior cannot be verified, state the uncertainty and keep the choice unresolved rather than presenting an assumption as correct. Do not interrogate cosmetic or performance-only parameters unless they can affect correctness.
 
-## Termination & Consensus
+For example, in over-representation analysis, define the background as the genes that could actually have entered the foreground under the experiment and filtering procedure—often all genes tested and eligible for selection after upstream filtering. Require the foreground to be a subset of this universe; map and deduplicate both consistently, report mapping losses, and record the gene-set release. Do not silently substitute the whole genome, the union of gene sets, or a package default. Also check whether foreground-selection probability varies systematically with expression, gene length, detectability, or another feature associated with gene-set membership; a correct universe alone does not remove this bias. When material, use a bias-aware, matched, or rank-based method, or report a sensitivity analysis. If an appropriate background is unavailable, flag it as a material limitation and explain how it can change the null model, p-values, error rates, and conclusions.
 
-Stop when the user explicitly confirms "I agree" on each major decision node, or after resolving 8–10 key decisions. Otherwise, offer a summary of resolved decisions and ask whether to continue drilling into remaining branches.
+When a method or test choice is uncertain, compare the defensible alternatives, state the assumptions that distinguish them, and recommend the evidence or diagnostic that would resolve the choice. Do not select a method solely because a familiar package exposes it.
 
-## Handling Changes & Dependencies
+## Review Lenses
 
-If the user changes an earlier decision, re-evaluate dependent decisions and explicitly notify which prior resolutions are now invalid. Adjust your recommended answers accordingly. Bioinformatics decisions are tightly coupled — for example, changing the genome build invalidates the annotation, prior alignments, and any coordinate-based downstream results; changing library strandedness invalidates quantification settings.
+Use only the lenses relevant to the plan: goals and success criteria, scope, assumptions, constraints, architecture and data flow, failure and recovery, validation and testing, deployment, monitoring, security, and governance. Treat them as prompts and a final coverage audit, not a mandatory question sequence.
 
-## Codebase Exploration
+For bioinformatics work, elevate questions that can invalidate the scientific conclusion before questions about tooling or convenience. Prefer known-truth toy data, positive and negative controls, invariant checks, concordance with a trusted result, and sensitivity analysis for consequential choices. Never accept “the code ran” as the sole validation criterion.
 
-**Priority rule**: If the workspace contains relevant code and you have read access, inspect it to answer the question before asking; report the findings and still ask any clarifying questions if results are incomplete. For bioinformatics projects, look first for:
+## Finish
 
-- workflow definitions: `main.nf`, `*.nf`, `nextflow.config`, `Snakefile`, `rules/`, WDL/CWL files
-- environment pinning: `environment.yml`, conda lock files, `Dockerfile`, Singularity/Apptainer defs, container digests
-- parameters and samples: `params.*`, `nextflow.config` profiles, sample sheets / metadata TSVs, config YAMLs
-- references and resources: documented genome build, annotation version, and reference paths
-- QC and reports: MultiQC configs, existing trace/report/timeline outputs, README run instructions
+Do not pursue a fixed question quota. Stop when no unresolved question is likely to materially change scientific validity, computational correctness, feasibility, or the recommended next action, or when the user wants to stop.
 
-If you do not have read access to the codebase or no codebase exists, say "codebase unavailable" and then ask the relevant clarifying question instead.
-
-If codebase access fails or results are inconclusive, report the failure and then ask the single clarifying question that would resolve the uncertainty.
-
-## User Pause or Refusal
-
-If the user indicates they want to stop or pauses for extended time, ask whether to pause, save progress, or summarize findings. Do not continue unless the user consents.
+Summarize the resolved decisions, consequential parameters and rationales, assumptions, remaining risks, deferred choices, and recommended validation steps.

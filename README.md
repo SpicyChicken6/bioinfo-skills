@@ -82,19 +82,19 @@ The skill is intentionally an API-assisted search and triage layer. It does not 
 
 ### `grill-me`
 
-A compact, domain-agnostic Claude Code / Codex skill for running a structured, constructive design review that stress-tests a plan and then recommends answers.
+A compact Claude Code / Codex skill for adaptively stress-testing a plan before implementation, with a strong bioinformatics emphasis on scientific and computational correctness.
 
 It focuses on:
 
-- scope, requirements, assumptions, and constraints
-- architecture, data flows, and failure modes
-- testing, deployment, and monitoring
-- asking one focused question at a time, then giving a recommended answer and rationale
-- bounding traversal to the highest-impact decision branches
-- using the codebase to answer questions when read access is available
-- driving toward explicit consensus on each major decision
+- asking the highest-impact unresolved question, one at a time
+- treating package defaults as candidates that require justification
+- matching statistical tests and models to the study design and assumptions
+- checking computational, statistical, and biological correctness separately
+- verifying consequential parameter semantics against the installed version or primary documentation
+- using appropriate hypothesis universes and selection-bias checks, such as experiment-specific eligible backgrounds for ORA
+- tracking dependencies, provenance, silent failure modes, and validation evidence
 
-The skill is intentionally collaborative, not adversarial. It works for bioinformatics pipelines, analysis plans, and software designs alike.
+The skill remains collaborative rather than adversarial and uses review domains as adaptive lenses instead of a fixed checklist.
 
 ## Basic usage
 
@@ -189,7 +189,7 @@ Use the consensus-mcp skill. Verify my Consensus MCP setup, repair OAuth if need
 ```text
 Use the grill-me skill.
 
-Stress-test my plan below. Cover scope, requirements, assumptions, constraints, architecture, data flows, failure modes, testing, deployment, and monitoring. Ask one focused question at a time, then give your recommended answer and rationale before moving on. Start with the top 3 highest-impact decisions.
+Stress-test my bioinformatics plan before implementation. Prioritize scientific and computational correctness over convenience. Ask the highest-impact unresolved question one at a time. Challenge consequential method, statistical-test, background-universe, threshold, and package-parameter choices instead of accepting defaults. Inspect available project evidence before asking me for facts, and summarize the decisions, rationales, risks, and validation steps when the major uncertainties are resolved.
 
 Plan:
 ...
