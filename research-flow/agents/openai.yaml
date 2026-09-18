@@ -1,0 +1,6 @@
+interface:
+  display_name: "Research Flow"
+  short_description: "Understand YAML pipeline plans as read-only context"
+  default_prompt: "Use $research-flow to read my workflow YAML and understand my pipeline; I will decide what to implement."
+policy:
+  allow_implicit_invocation: true

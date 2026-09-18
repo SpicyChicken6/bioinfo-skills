@@ -44,6 +44,15 @@ plan at `docs/workflow.yaml`.
 See the [skill](biofolder/SKILL.md), [full example tree](biofolder/references/project-layout.md),
 [project rules](biofolder/assets/AGENTS.md), and [starter packages](biofolder/references/pixi-environment.md).
 
+### `research-flow`
+
+Read Research Flow YAML plans to understand task dependencies, branch grouping,
+recorded progress, and input/output references. Provides context for requested
+work without automatically executing tasks or editing the plan.
+
+Use it alongside `biofolder` to read a project's `docs/workflow.yaml`. Includes
+the [skill](research-flow/SKILL.md) and [YAML reference](research-flow/references/yaml-contract.md).
+
 ### `semantic-scholar-literature-search`
 
 A compact Claude Code / Codex skill for running structured literature searches with the Semantic Scholar API.
@@ -69,6 +78,12 @@ Use the biofolder skill to initialize this project.
 We have bulk RNA-seq, proteomics, and clinical metadata. Our goal is to identify disease-associated pathways across modalities.
 
 Inspect the existing files, ask for missing information, and initialize the project using biofolder defaults. Reference existing datasets in place and verify the environment without running the analyses.
+```
+
+### Understand a research plan
+
+```text
+Use the research-flow skill to read docs/workflow.yaml and explain which tasks the multimodal integration depends on.
 ```
 
 ### Run pathway ORA with GSEApy
