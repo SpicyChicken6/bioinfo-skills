@@ -1,6 +1,6 @@
 ---
 name: biofolder
-description: Initialize and maintain organized bioinformatics research projects with modality modules, task-local agent/manual workspaces, shared data, a Research Flow plan, and a project-level Pixi environment. Use when starting a research project, choosing where analysis files belong, or reorganizing an existing project.
+description: Initialize and maintain organized bioinformatics research projects with modality modules, task-local agent/manual workspaces, shared data, Git tracking, a Research Flow plan, and a project-level Pixi environment. Use when starting a research project, choosing where analysis files belong, or reorganizing an existing project.
 ---
 
 # Biofolder
@@ -44,10 +44,12 @@ the modules, tasks, and deeper directories that the project currently needs.
 
 ## Initialize a project
 
-1. **Inspect first.** Read existing instructions, documentation, environment
-   files, and relevant input locations. Distinguish an empty project from an
-   existing analysis. Do not move, duplicate, or rename input datasets merely to
-   make the example tree look complete.
+1. **Inspect first.** Read existing instructions and check Git status, staged and
+   unstaged changes, and relevant untracked files before editing. Follow
+   [the Git tracking guidance](references/git-tracking.md) for session checkpoints.
+   Read documentation, environment files, and relevant input locations.
+   Distinguish an empty project from an existing analysis. Do not move, duplicate,
+   or rename input datasets merely to make the example tree look complete.
 2. **Ask for missing essentials.** Infer what is already documented; bundle the
    remaining questions into a short round:
    - Research goal and expected deliverables.
@@ -70,7 +72,7 @@ the modules, tasks, and deeper directories that the project currently needs.
    Copy or merge [the AGENTS.md template](assets/AGENTS.md) into the project root,
    preserving existing instructions. Use [the CLAUDE.md template](assets/CLAUDE.md)
    to import the shared rules with `@AGENTS.md`, retaining Claude-specific content.
-   These files keep the folder, ownership, and Pixi conventions active in later
+   These files keep the folder, ownership, Git, and Pixi conventions active in later
    sessions. Keep growing research notes in task docs, not in instruction files.
 6. **Draft the requested initial plan.** New-project initialization includes
    creating `docs/workflow.yaml` for the identified tasks. Read
@@ -85,6 +87,24 @@ the modules, tasks, and deeper directories that the project currently needs.
    created, what remains undecided, and any setup that could not be completed.
    Initializing a project does not itself authorize running its scientific
    analyses or publishing the repository.
+8. **Create the Git baseline.** Reuse the repository covering the project, or
+   initialize Git at its root if none exists. Review `.gitignore`, then commit
+   the scaffold, instructions, and actual environment manifest/lockfile with
+   explicit paths. Preserve unrelated existing work and staged selections. Report
+   incomplete setup truthfully; do not publish or configure a remote by default.
+
+## Git throughout the project
+
+Apply [the Git tracking guidance](references/git-tracking.md) at session start
+and end. Checkpoint eligible changes observed unchanged for at least 24 hours,
+using local first-observed metadata rather than guessing their age from the last
+commit or filesystem timestamps. Commit coherent completed agent work during the
+session without waiting for the age threshold. Preserve unrelated human work and
+report remaining changes; a clean status is not worth losing provenance or work.
+
+The persistent `AGENTS.md` template contains the session rules so they remain
+available without reloading this skill. These are agent instructions, not a
+background scheduler or Git hook. Respect explicit read-only/no-commit requests.
 
 ## Project environment
 
@@ -149,6 +169,9 @@ evidence that an analysis is obsolete.
   and paths relative to `docs/`. Preserve unrelated fields in an existing plan.
 - Confirm the persistent instruction files are present and consistent, and the
   `CLAUDE.md` import resolves to the shared root `AGENTS.md`.
+- Confirm Git covers the project, review the committed scope and final status,
+  and report any changes intentionally left uncommitted. Checkpoint commits do
+  not establish acceptance of scientific results.
 - Check the real Pixi manifest/lockfile and Python and R package imports after
   installation. Do not run an expensive analysis just to verify a scaffold.
 - After an authorized migration, check affected imports, paths, and run commands;

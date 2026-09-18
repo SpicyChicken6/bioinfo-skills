@@ -43,6 +43,7 @@ It focuses on:
 - shared task READMEs and explicit links to accepted results
 - immutable raw inputs, intermediate datasets, and processed data at the appropriate scope
 - persistent `AGENTS.md` rules, imported by `CLAUDE.md`, for consistent future work
+- Git checks at session start, reviewed checkpoints after 24 hours, and commits of completed agent work
 - one project-level Pixi workspace with an installed Python/R data-science baseline and a real lockfile
 - a Research Flow plan at `docs/workflow.yaml`, with detailed workflows in task-specific docs
 - a short initialization conversation and scoped reorganization that preserves existing work
@@ -50,6 +51,8 @@ It focuses on:
 See the [skill instructions](biofolder/SKILL.md), [full example project tree](biofolder/references/project-layout.md), and [illustrative workflow YAML](biofolder/examples/workflow.yaml). Create only the folders a project needs; the example modalities and tasks are not mandatory.
 
 Initialization uses reusable [AGENTS.md](biofolder/assets/AGENTS.md) and [CLAUDE.md](biofolder/assets/CLAUDE.md) templates. The [Pixi setup guide](biofolder/references/pixi-environment.md) lists the starter Python/R packages, installation commands, and verification checks. Analysis-specific packages are added as the project develops.
+
+The [Git policy](biofolder/references/git-tracking.md) tracks when unchanged edits are first observed, preserves unrelated human work and staged selections, and creates local checkpoints without automatically pushing.
 
 ### `semantic-scholar-literature-search`
 

@@ -6,6 +6,8 @@ Follow explicit user overrides and preserve existing work when applying changes.
 
 ## Orient before working
 
+- At every session start, before editing project files, perform the Git check
+  below. Respect an explicit read-only request or instruction not to commit.
 - Read the project `README.md`, `docs/workflow.yaml`, and the relevant module and
   task READMEs before analysis work. Inspect existing files before creating new
   ones; ask only for essential information that is still missing.
@@ -13,6 +15,57 @@ Follow explicit user overrides and preserve existing work when applying changes.
   does not request new analyses, tasks, metadata, directories, or plan changes.
 - Keep the hierarchy **project → module → task → agent/manual**. Use stable,
   zero-padded module/task names; preserve established identifiers and paths.
+
+## Track work with Git
+
+- Use Git throughout the project. Reuse the existing repository/worktree; during
+  initialization, create a repository if none covers the project and commit the
+  reviewed scaffold. Do not create nested repositories or change global identity.
+  If the repository also contains other projects, restrict commits to this one.
+- Start each session with `git status --short --branch --untracked-files=all`,
+  `git diff`, and `git diff --cached`. Inspect relevant untracked files and any
+  ongoing Git operation. Distinguish pre-existing changes from this session's work.
+- Make a local checkpoint before new edits when reviewed, attributable project
+  changes have been observed unchanged for at least 24 hours. This policy
+  authorizes those local commits without asking again. A checkpoint preserves
+  work; it does not establish scientific validation or completion.
+- Git does not record the age of uncommitted changes. Keep a small local record
+  at the path returned by `git rev-parse --git-path biofolder-session.json`.
+  Record the format and repository/worktree identity, plus a `first_seen_utc`
+  and a fingerprint for each eligible dirty path covering its HEAD, index, and
+  working-tree content/status/mode, including deletions.
+  Preserve the timestamp only while the fingerprint matches; reset it when the
+  change differs and prune paths that become clean. Treat absent or invalid
+  records, foreign worktrees, or future timestamps as unknown age and start
+  observing now. Do not infer age from the last commit or rely on file
+  modification times. Store metadata, not file contents.
+  Use ledger `version: 1`, `worktree` (canonical repository-root path), and
+  `entries` keyed by repository-relative path. Each entry has `first_seen_utc`
+  (ISO 8601 UTC) and a `fingerprint` object with `head`, `index`, and `working_tree`.
+  HEAD/index values are `[Git mode, object ID]` or `null` when absent; working-tree
+  values are `[Git mode, SHA-256 of raw file bytes]` or `null` when absent. For a
+  symlink, hash its target text bytes, not the target file. Use mode strings such
+  as `100644`, `100755`, or `120000`. Compare fields structurally, independent of
+  JSON formatting. Record both paths of a rename; defer unsupported file types.
+  In a shared repository, preserve observation entries for other projects.
+- Include only changes covered by the task or standing project tracking policy.
+  Leave unrelated human/manual changes alone and report them; age does not grant
+  permission to alter their contents. Preserve other people's staged selections.
+  Defer a checkpoint if the existing index contains changes outside its reviewed
+  eligible set, if HEAD is detached, or during a merge, rebase, cherry-pick,
+  revert, or unresolved conflict. Keep dependent changes and rename pairs together.
+- Review and stage explicit paths or hunks, check the entire staged diff, and
+  commit with a descriptive checkpoint message. Recheck content before committing
+  to avoid including concurrent edits. Do not blindly stage the whole tree, reset,
+  stash, delete work, or bypass hooks merely to produce a clean status.
+- Track code, tests, documentation, configuration, the Pixi manifest/lockfile,
+  and deliberately selected small artifacts. Keep raw/private/large datasets,
+  credentials, environments, and caches out of automatic commits; retain their
+  provenance and references. Respect the project's established data-tracking rules.
+- At session end, commit coherent changes made for the requested work after
+  appropriate checks; do not wait 24 hours for completed work. Report the commit,
+  checks, and remaining uncommitted paths or blockers. Leave nothing hidden just
+  to claim a clean tree. Do not push or create a remote unless authorized.
 
 ## Place files and preserve ownership
 

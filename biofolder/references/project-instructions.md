@@ -1,14 +1,14 @@
 # Persistent project instructions
 
 During initialization, install durable instructions at the **project root** so
-later sessions keep following the layout and environment policy without having
+later sessions keep following the layout, Git, and environment policy without having
 to reload biofolder. Use the exact filenames `AGENTS.md` and `CLAUDE.md`.
 
 ## One shared set of rules
 
 - Use [the AGENTS.md template](../assets/AGENTS.md) as the shared project policy.
   It covers orientation, file placement, human/agent ownership, data provenance,
-  Pixi, and the boundaries of the workflow plan.
+  Git session checks/checkpoints, Pixi, and the boundaries of the workflow plan.
 - Use [the CLAUDE.md template](../assets/CLAUDE.md) to import that policy with a
   standalone `@AGENTS.md` line outside a code fence. Keep Claude-specific additions
   below the import when needed; avoid copying the whole policy into both files.
@@ -27,6 +27,9 @@ Surface unresolved contradictions rather than silently changing their meaning.
 Keep stable operating rules in `AGENTS.md`:
 
 - Read the root README, `docs/workflow.yaml`, and relevant module/task READMEs.
+- Check Git before editing each session, checkpoint eligible changes observed
+  unchanged for 24 hours, and commit coherent completed agent work. Preserve
+  unrelated work and staged selections; see [Git tracking](git-tracking.md).
 - Put agent code and artifacts in the task's `agent/` workspace; protect `manual/`
   and raw inputs, and maintain the shared README and accepted-output references.
 - Use the project Pixi workspace for Python, R, notebooks, and scientific tools.

@@ -7,11 +7,12 @@ task names, and deeper directories are suggestions, not a required scaffold.
 ```text
 project/
 ├── README.md                          # Purpose, setup, module map, accepted results
-├── AGENTS.md                          # Shared folder, ownership, and Pixi rules
+├── AGENTS.md                          # Shared folder, ownership, Git, and Pixi rules
 ├── CLAUDE.md                          # Imports AGENTS.md; Claude-specific additions
 ├── pixi.toml                          # One project workspace and repeatable tasks
 ├── pixi.lock                          # Committed dependency resolution
 ├── .pixi/                             # Generated environments; Git-ignored
+├── .git/                              # Git metadata; may be a file in a worktree
 ├── .gitignore
 ├── config/                            # Shared configuration; no credentials
 ├── data/                              # Inputs and datasets shared across modules
@@ -123,6 +124,13 @@ those summaries from module and project READMEs as appropriate. Acceptance does
 not require moving files across ownership boundaries or creating duplicate outputs.
 
 ## Manage environments and retired work
+
+Use Git from initialization onward. Reuse the repository that covers the project
+or initialize one at its root. Track source, docs, configuration, and environment
+definitions; exclude raw/private/large data, caches, and environments from automatic
+commits. The [session Git policy](git-tracking.md) checks existing changes before
+work and makes reviewed local checkpoints. Its age-observation metadata lives
+inside Git's local metadata area, not in the project docs or committed history.
 
 Use one Pixi workspace at the project root. During initialization, install both
 Python and R with [the starter data-science packages](pixi-environment.md). Commit
