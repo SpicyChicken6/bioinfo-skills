@@ -1,16 +1,7 @@
-Use the over-representation-analysis skill.
+Use over-representation-analysis for a human patient-vs-control contrast:
 
-Run pathway ORA for a patient-vs-control differential expression contrast.
+- Patient-up genes: `results/de/patient_up.txt`
+- Patient-down genes: `results/de/patient_down.txt`
+- Tested background: `results/de/tested_genes.txt`
 
-Inputs:
-- Up-regulated genes in patient: `results/de/patient_up.txt`
-- Down-regulated genes in patient: `results/de/patient_down.txt`
-- Background/tested genes: `results/de/tested_genes.txt`
-
-Requirements:
-- Use human MSigDB Hallmark (`h.all`) and Reactome (`c2.cp.reactome`) collections.
-- Retrieve GMT files through GSEApy's MSigDB helper rather than requiring local GMT files.
-- Treat `patient_up.txt` as the right-side/positive direction and `patient_down.txt` as the left-side/negative direction.
-- Label the paired plot sides as `Control` and `Patient`.
-- Save all ORA tables, summaries, PNG plots, and PDF plot companions under `results/ora_patient_vs_control`.
-- Report the MSigDB version, foreground sizes, background definition, adjusted p-value cutoff, top enriched terms, and overlap genes.
+Use MSigDB Hallmark and Reactome. Save tables, summaries, and paired PNG/PDF plots to `results/ora_patient_vs_control`, with Control on the left and Patient on the right. Report the database version, background, FDR cutoff, top terms, and overlap genes.

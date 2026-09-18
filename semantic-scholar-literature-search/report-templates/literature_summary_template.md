@@ -1,63 +1,20 @@
 # Literature Search Summary
 
-## Research Question
+Adapt or omit sections to match the requested depth.
 
-Write the research question here.
+## Scope and search
 
-## Search Strategy
+Research question; retrieval date; queries, filters, endpoints, and selection criteria. Report retrieved, deduplicated, and selected counts.
 
-Summarize the query set, date range, filters, and Semantic Scholar API endpoints used.
+## Selected papers
 
-## Inclusion and Exclusion Criteria
+| Paper / link | Year | Method or finding | Why relevant |
+|---|---:|---|---|
 
-### Included
+## Synthesis and limitations
 
-- Papers matching the research topic.
-- Relevant method, review, benchmark, dataset, or application papers.
+Main themes, disagreements, and gaps in retrieved evidence. Note missing abstracts and whether full text was reviewed.
 
-### Excluded
+## Follow-up, if useful
 
-- Off-topic papers.
-- Papers without enough metadata to evaluate, unless specifically important.
-
-## Results Overview
-
-- Number of queries run:
-- Number of records retrieved:
-- Number of papers selected:
-- Number of recommendations retrieved:
-
-## Top Papers
-
-| Title | Year | Venue | Type | Citation Count | URL | Why Relevant |
-|---|---:|---|---|---:|---|---|
-| Example title | 2024 | Example venue | Method | 0 | URL | Relevance note |
-
-## Method Themes
-
-- Theme 1.
-- Theme 2.
-- Theme 3.
-
-## Evidence Gaps
-
-- Gap 1.
-- Gap 2.
-
-## Seed Papers for Follow-Up Recommendations
-
-| Title | Paper ID | Reason as seed |
-|---|---|---|
-| Example title | paperId | reason |
-
-## Suggested Next Searches
-
-- Search query refinement.
-- Related topic.
-- Missing method or dataset angle.
-
-## Limitations
-
-- Semantic Scholar metadata may miss some records.
-- Some papers may lack abstracts.
-- Full text was not reviewed unless explicitly retrieved and read.
+Seed paper IDs with reasons, or targeted query refinements. Link saved results.

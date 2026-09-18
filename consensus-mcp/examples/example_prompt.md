@@ -1,21 +1,6 @@
-# Example prompt
+# Example request
 
-Use the consensus-mcp skill.
-
-Verify that Consensus MCP is installed correctly. If OAuth has expired, repair it using the right flow for my client.
-
-Then use Consensus to find recent peer-reviewed human evidence on:
-
-```text
-exercise interventions for depression
-```
-
-Prioritize:
-
-- systematic reviews
-- meta-analyses
-- randomized controlled trials
-- papers since 2020
-- human studies
-
-Exclude preprints. Summarize the strongest evidence, cite the papers returned by Consensus, and separate direct findings from cautious interpretation.
+Use the consensus-mcp skill to verify my connection and repair expired OAuth for
+my client. Find human systematic reviews, meta-analyses, and randomized controlled
+trials since 2020 on exercise interventions for depression. Exclude preprints,
+cite returned papers, and distinguish direct findings from interpretation.
