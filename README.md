@@ -35,24 +35,14 @@ The skill is intentionally focused on ORA. If the input is a ranked statistic, u
 
 ### `biofolder`
 
-A compact Claude Code / Codex skill for initializing and maintaining organized bioinformatics research projects.
+Initialize and maintain bioinformatics projects with modality modules, task-local
+`agent/` and `manual/` workspaces, shared task READMEs, and scoped data directories.
+Persistent project rules cover Pixi, Git session checkpoints, and workflow docs.
+New projects start with a Python/R data-science environment and a Research Flow
+plan at `docs/workflow.yaml`.
 
-It focuses on:
-
-- modality and integration modules with task-local `agent/` and `manual/` workspaces
-- shared task READMEs and explicit links to accepted results
-- immutable raw inputs, intermediate datasets, and processed data at the appropriate scope
-- persistent `AGENTS.md` rules, imported by `CLAUDE.md`, for consistent future work
-- Git checks at session start, reviewed checkpoints after 24 hours, and commits of completed agent work
-- one project-level Pixi workspace with an installed Python/R data-science baseline and a real lockfile
-- a Research Flow plan at `docs/workflow.yaml`, with detailed workflows in task-specific docs
-- a short initialization conversation and scoped reorganization that preserves existing work
-
-See the [skill instructions](biofolder/SKILL.md), [full example project tree](biofolder/references/project-layout.md), and [illustrative workflow YAML](biofolder/examples/workflow.yaml). Create only the folders a project needs; the example modalities and tasks are not mandatory.
-
-Initialization uses reusable [AGENTS.md](biofolder/assets/AGENTS.md) and [CLAUDE.md](biofolder/assets/CLAUDE.md) templates. The [Pixi setup guide](biofolder/references/pixi-environment.md) lists the starter Python/R packages, installation commands, and verification checks. Analysis-specific packages are added as the project develops.
-
-The [Git policy](biofolder/references/git-tracking.md) tracks when unchanged edits are first observed, preserves unrelated human work and staged selections, and creates local checkpoints without automatically pushing.
+See the [skill](biofolder/SKILL.md), [full example tree](biofolder/references/project-layout.md),
+[project rules](biofolder/assets/AGENTS.md), and [starter packages](biofolder/references/pixi-environment.md).
 
 ### `semantic-scholar-literature-search`
 
@@ -78,7 +68,7 @@ Use the biofolder skill to initialize this project.
 
 We have bulk RNA-seq, proteomics, and clinical metadata. Our goal is to identify disease-associated pathways across modalities.
 
-Inspect the existing files, ask me for missing information, and propose the initial modules and tasks. Install the default Python/R data-science environment with Pixi and create persistent AGENTS.md/CLAUDE.md instructions. Use a shared README for each task and separate agent/manual workspaces. Keep the overall Research Flow plan in docs/workflow.yaml and detailed workflows in task-specific docs. Reference existing datasets without copying or moving them. Initialize the project structure and verify the environment without running the analyses.
+Inspect the existing files, ask for missing information, and initialize the project using biofolder defaults. Reference existing datasets in place and verify the environment without running the analyses.
 ```
 
 ### Run pathway ORA with GSEApy
