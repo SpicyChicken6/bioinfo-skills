@@ -26,9 +26,9 @@ when proposing a layout; create only what the project needs.
 5. Draft `docs/workflow.yaml` using the [Research Flow schema](references/workflow-yaml.md).
    New-project initialization includes this initial plan; existing plans change
    only when requested. Detailed workflows belong in task docs.
-6. Install the [Python/R starter environment](references/pixi-environment.md)
-   with Pixi unless the user specifies otherwise. Verify both runtimes and the
-   generated lockfile. Reuse existing manifests and constraints.
+6. Install the [starter environment](references/pixi-environment.md) with Python,
+   R, and Research Flow through Pixi unless the user specifies otherwise. Verify
+   the runtimes, Research Flow, and lockfile. Reuse existing manifests and constraints.
 7. Reuse the covering Git repository or initialize one at the project root.
    Review tracking exclusions and commit the scaffold and environment definitions,
    preserving unrelated work. Report checks, unresolved choices, and incomplete

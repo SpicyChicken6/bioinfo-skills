@@ -2,8 +2,8 @@
 
 `docs/workflow.yaml` is the canonical project plan; detailed methods belong in
 task docs.
-Research Flow installation is optional: use an available read-only validator or
-safely parse YAML against this version 1 contract.
+Validate read-only with Research Flow in the project's Pixi environment. If
+environment setup is blocked, safely parse YAML against this version 1 contract.
 
 | Field | Constraint |
 | --- | --- |

@@ -38,8 +38,8 @@ The skill is intentionally focused on ORA. If the input is a ranked statistic, u
 Initialize and maintain bioinformatics projects with modality modules, task-local
 `agent/` and `manual/` workspaces, shared task READMEs, and scoped data directories.
 Persistent project rules cover Pixi, Git session checkpoints, and workflow docs.
-New projects start with a Python/R data-science environment and a Research Flow
-plan at `docs/workflow.yaml`.
+New projects start with a Pixi environment containing Python/R data-science tools
+and Research Flow, with the plan at `docs/workflow.yaml`.
 
 See the [skill](biofolder/SKILL.md), [full example tree](biofolder/references/project-layout.md),
 [project rules](biofolder/assets/AGENTS.md), and [starter packages](biofolder/references/pixi-environment.md).

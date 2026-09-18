@@ -1,4 +1,4 @@
-# Python and R environment
+# Project environment
 
 New-project initialization installs both runtimes in one project-root Pixi
 workspace, shared across modules and human/agent work. Use the default environment;
@@ -19,6 +19,14 @@ them. Let Pixi resolve compatible versions within known project constraints.
 | Notebooks | `jupyterlab`, `ipykernel` | `r-irkernel` |
 | File formats | `pyyaml`, `openpyxl` | `r-readxl`, `r-jsonlite`, `r-yaml` |
 | Testing | `pytest` | Base R checks |
+
+## Research Flow
+
+Include `research-flow` in the project environment. If missing, install a
+versioned wheel from its [official GitHub releases](https://github.com/SpicyChicken6/research-flow/releases)
+as a Pixi-managed PyPI dependency; it is not published on the PyPI index.
+Preserve a compatible existing version. Verify the CLI and read-only YAML parser
+without starting the server.
 
 ## Setup and maintenance
 

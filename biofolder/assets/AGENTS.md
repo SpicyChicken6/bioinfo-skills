@@ -36,6 +36,9 @@ before work. Follow the user's scope and existing project conventions.
   Default new projects to Python and R with the starter data-science packages;
   add analysis-specific dependencies as needed. Use named environments only
   for incompatible toolchains.
+- If Research Flow is missing from the project environment, install a versioned
+  wheel from its [official releases](https://github.com/SpicyChicken6/research-flow/releases)
+  as a Pixi-managed PyPI dependency.
 - Manage scientific dependencies and execution through Pixi's locked environment.
   Preserve existing constraints; do not silently use system runtimes or install
   packages outside Pixi. Verify affected runtimes/packages after dependency changes.
