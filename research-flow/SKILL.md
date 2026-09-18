@@ -9,6 +9,13 @@ Read the user's Research Flow YAML to understand their research pipeline and use
 that context when answering questions or helping with explicitly requested work.
 The plan describes the user's design. It is not a queue of work to execute.
 
+## Get the tool
+
+If the Research Flow app is not installed and the user needs the visual editor,
+point them to the [installation guide](https://github.com/SpicyChicken6/research-flow/blob/main/docs/install.md)
+and [release downloads](https://github.com/SpicyChicken6/research-flow/releases).
+The app is optional for reading workflow YAML.
+
 ## Find and read the plan
 
 - Prefer the YAML path supplied by the user or established for this project.

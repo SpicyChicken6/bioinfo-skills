@@ -52,6 +52,8 @@ work without automatically executing tasks or editing the plan.
 
 Use it alongside `biofolder` to read a project's `docs/workflow.yaml`. Includes
 the [skill](research-flow/SKILL.md) and [YAML reference](research-flow/references/yaml-contract.md).
+For the visual editor, see the [Research Flow installation guide](https://github.com/SpicyChicken6/research-flow/blob/main/docs/install.md)
+and [release downloads](https://github.com/SpicyChicken6/research-flow/releases).
 
 ### `semantic-scholar-literature-search`
 
