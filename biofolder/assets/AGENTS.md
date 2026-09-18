@@ -3,6 +3,16 @@
 Read the project README, `docs/workflow.yaml`, and relevant module/task READMEs
 before work. Follow the user's scope and existing project conventions.
 
+## Communication and documentation
+
+- Default to concise, clear responses and documentation.
+- For task overviews, state the goal, a short sequence of major steps, and
+  expected outputs. Keep the overview high level and easy to scan.
+- Include decision points only when user input is needed or the choice
+  materially changes the analysis. Use sensible defaults for routine choices.
+- Keep implementation details, alternative approaches, and troubleshooting
+  out of the overview unless needed to understand the work. Expand when asked.
+
 ## Structure and ownership
 
 - Use `modules/<module>/tasks/<task>/`, with stable, zero-padded names. Each task
