@@ -1,7 +1,7 @@
 # Research Flow contract
 
 `docs/workflow.yaml` is the canonical project plan; detailed methods belong in
-task docs. Do not create a competing project-wide workflow or status document.
+task docs.
 Research Flow installation is optional: use an available read-only validator or
 safely parse YAML against this version 1 contract.
 

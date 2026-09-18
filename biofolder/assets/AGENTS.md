@@ -53,7 +53,7 @@ before work. Follow the user's scope and existing project conventions.
 ## Workflow documentation
 
 - Keep the canonical plan in `docs/workflow.yaml` and detailed workflows in task
-  workspace docs. Do not add a project-level `workflow.md` or `project-status.md`.
+  workspace docs.
 - Reading the plan does not authorize executing tasks or editing the plan.
   Change only requested fields and preserve unrelated content and layout.
 - YAML artifact paths are relative to `docs/`; commands run from the project root.
