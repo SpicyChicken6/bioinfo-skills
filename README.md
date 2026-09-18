@@ -33,6 +33,21 @@ It focuses on:
 
 The skill is intentionally focused on ORA. If the input is a ranked statistic, use preranked GSEA instead.
 
+### `biofolder`
+
+A compact Claude Code / Codex skill for initializing and maintaining organized bioinformatics research projects.
+
+It focuses on:
+
+- modality and integration modules with task-local `agent/` and `manual/` workspaces
+- shared task READMEs and explicit links to accepted results
+- immutable raw inputs, intermediate datasets, and processed data at the appropriate scope
+- one project-level Pixi workspace with a real lockfile
+- a Research Flow plan at `docs/workflow.yaml`, with detailed workflows in task-specific docs
+- a short initialization conversation and scoped reorganization that preserves existing work
+
+See the [skill instructions](biofolder/SKILL.md), [full example project tree](biofolder/references/project-layout.md), and [illustrative workflow YAML](biofolder/examples/workflow.yaml). Create only the folders a project needs; the example modalities and tasks are not mandatory.
+
 ### `semantic-scholar-literature-search`
 
 A compact Claude Code / Codex skill for running structured literature searches with the Semantic Scholar API.
@@ -49,6 +64,16 @@ It focuses on:
 The skill is intentionally an API-assisted search and triage layer. It does not claim full-text review unless full text is separately retrieved and read.
 
 ## Basic usage
+
+### Initialize a multimodal research project
+
+```text
+Use the biofolder skill to initialize this project.
+
+We have bulk RNA-seq, proteomics, and clinical metadata. Our goal is to identify disease-associated pathways across modalities.
+
+Inspect the existing files, ask me for missing information, and propose the initial modules and tasks. Use Pixi, a shared README for each task, and separate agent/manual workspaces. Keep the overall Research Flow plan in docs/workflow.yaml and detailed workflows in task-specific docs. Reference existing datasets without copying or moving them. Initialize the project structure without running the analyses.
+```
 
 ### Run pathway ORA with GSEApy
 
