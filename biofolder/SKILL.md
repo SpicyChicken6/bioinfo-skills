@@ -54,8 +54,9 @@ the modules, tasks, and deeper directories that the project currently needs.
    - Modalities, input locations, and shared sample/subject identifiers.
    - Known analysis tasks and dependencies; suggest a small provisional set when
      these are undecided, without inventing scientific methods or results.
-   - Required languages/tools and target compute environment, including local
-     versus HPC execution and relevant operating systems.
+   - Additional tools or runtime constraints and target compute environment,
+     including local versus HPC execution and relevant operating systems. Default
+     to both Python and R; ask about deviations only when the context calls for it.
 3. **Propose the smallest useful layout.** Explain the initial modules, tasks,
    shared inputs, and references to existing files. Resolve consequential unknowns
    before dependent work. When initialization is already requested and the scope
@@ -65,13 +66,12 @@ the modules, tasks, and deeper directories that the project currently needs.
    deeper directories only as needed. Document known sources and sample mappings
    without inventing metadata rows. Create project-wide methods/decision notes
    only when there is useful content to record.
-5. **Record persistent rules.** Merge a concise structure/ownership/environment
-   section into `AGENTS.md`; preserve existing instructions. Have `CLAUDE.md`
-   explicitly refer to those shared rules rather than maintaining a second copy.
-   Include where to read the workflow and relevant task README, where new files
-   belong, raw-input protection, manual-workspace ownership, Pixi commands, and
-   the boundary on changing the workflow plan. Keep growing research notes in
-   task docs, not in instruction files.
+5. **Record persistent rules.** Follow [the instruction-file guidance](references/project-instructions.md).
+   Copy or merge [the AGENTS.md template](assets/AGENTS.md) into the project root,
+   preserving existing instructions. Use [the CLAUDE.md template](assets/CLAUDE.md)
+   to import the shared rules with `@AGENTS.md`, retaining Claude-specific content.
+   These files keep the folder, ownership, and Pixi conventions active in later
+   sessions. Keep growing research notes in task docs, not in instruction files.
 6. **Draft the requested initial plan.** New-project initialization includes
    creating `docs/workflow.yaml` for the identified tasks. Read
    [the workflow YAML contract](references/workflow-yaml.md) first. An existing
@@ -79,26 +79,34 @@ the modules, tasks, and deeper directories that the project currently needs.
    create a root `workflow.yaml`, a project-level `workflow.md`, or a duplicate
    `project-status.md`. Detailed workflow explanations belong in task workspace
    docs and are linked from the shared task README.
-7. **Set up Pixi and verify.** Follow the environment and verification guidance
-   below. Report what was created, what remains undecided, and any environment
-   setup that could not be completed. Initializing a project does not itself
-   authorize running its scientific analyses or publishing the repository.
+7. **Install the default environment and verify.** Follow [the Pixi setup guide](references/pixi-environment.md)
+   to install both Python and R with the starter data-science packages unless the
+   user specifies otherwise. Verify both runtimes through Pixi. Report what was
+   created, what remains undecided, and any setup that could not be completed.
+   Initializing a project does not itself authorize running its scientific
+   analyses or publishing the repository.
 
 ## Project environment
 
 - Use one Pixi workspace at the project root, shared by modules and by human and
   agent work. Keep dependencies and repeatable tasks in `pixi.toml`; track the
-  generated `pixi.lock` in Git and ignore `.pixi/`.
-- Inspect and reuse an existing Pixi manifest. Add only dependencies needed for
-  known tasks. Use named environments within that workspace when toolchains need
-  incompatible dependencies; do not create a separate environment per task by
-  default or fall back silently to system Python, pip, or ad hoc conda installs.
+  generated `pixi.lock` in Git and ignore `.pixi/`. Reuse a Pixi-enabled
+  `pyproject.toml` when already present instead of creating a competing manifest.
+- Install the [Python/R starter set](references/pixi-environment.md) during new
+  project initialization. Reuse existing manifests and preserve their constraints;
+  add further dependencies for actual analysis needs. Use named environments when
+  toolchains need incompatible dependencies, not a separate environment per task.
+- Manage installations with `pixi add`, including `--pypi` when a required Python
+  package is unavailable through conda. Do not mutate environments with direct
+  pip/conda/R package installers or fall back silently to system Python/R.
 - Generate the lockfile through Pixi after dependency resolution. If Pixi is
-  unavailable or resolution fails, finish independent structure/documentation
-  work and report the environment as incomplete. Never fabricate a lockfile.
+  unavailable or resolution/installation fails, finish independent structure and
+  documentation work and report the environment as incomplete. A manifest alone
+  is not a completed setup. Never fabricate a lockfile.
 - Define and document task commands from the project root with explicit input
-  and output paths. Run project tools with `pixi run`; use `pixi run --locked`
-  for reproduction checks that should fail on a stale lockfile.
+  and output paths. Run scientific tools with `pixi run --locked`; resolve intended
+  dependency changes before execution. Ordinary shell inspection and Git do not
+  need to run through Pixi.
 - Ignore caches, secrets, local environments, and large/private data as
   appropriate. Preserve code, documentation, manifests, and small intentional
   test fixtures. Do not indiscriminately ignore all of `agent/` or `manual/`.
@@ -139,7 +147,9 @@ evidence that an analysis is obsolete.
   expected future artifacts from files that should already exist.
 - Validate workflow syntax, unique IDs, dependency references, acyclic graphs,
   and paths relative to `docs/`. Preserve unrelated fields in an existing plan.
-- Check the Pixi manifest/lockfile and a lightweight environment command when
-  setup succeeds. Do not run an expensive analysis just to verify a scaffold.
+- Confirm the persistent instruction files are present and consistent, and the
+  `CLAUDE.md` import resolves to the shared root `AGENTS.md`.
+- Check the real Pixi manifest/lockfile and Python and R package imports after
+  installation. Do not run an expensive analysis just to verify a scaffold.
 - After an authorized migration, check affected imports, paths, and run commands;
   report remaining breakage rather than claiming that a tidy tree proves success.

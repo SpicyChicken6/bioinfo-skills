@@ -42,11 +42,14 @@ It focuses on:
 - modality and integration modules with task-local `agent/` and `manual/` workspaces
 - shared task READMEs and explicit links to accepted results
 - immutable raw inputs, intermediate datasets, and processed data at the appropriate scope
-- one project-level Pixi workspace with a real lockfile
+- persistent `AGENTS.md` rules, imported by `CLAUDE.md`, for consistent future work
+- one project-level Pixi workspace with an installed Python/R data-science baseline and a real lockfile
 - a Research Flow plan at `docs/workflow.yaml`, with detailed workflows in task-specific docs
 - a short initialization conversation and scoped reorganization that preserves existing work
 
 See the [skill instructions](biofolder/SKILL.md), [full example project tree](biofolder/references/project-layout.md), and [illustrative workflow YAML](biofolder/examples/workflow.yaml). Create only the folders a project needs; the example modalities and tasks are not mandatory.
+
+Initialization uses reusable [AGENTS.md](biofolder/assets/AGENTS.md) and [CLAUDE.md](biofolder/assets/CLAUDE.md) templates. The [Pixi setup guide](biofolder/references/pixi-environment.md) lists the starter Python/R packages, installation commands, and verification checks. Analysis-specific packages are added as the project develops.
 
 ### `semantic-scholar-literature-search`
 
@@ -72,7 +75,7 @@ Use the biofolder skill to initialize this project.
 
 We have bulk RNA-seq, proteomics, and clinical metadata. Our goal is to identify disease-associated pathways across modalities.
 
-Inspect the existing files, ask me for missing information, and propose the initial modules and tasks. Use Pixi, a shared README for each task, and separate agent/manual workspaces. Keep the overall Research Flow plan in docs/workflow.yaml and detailed workflows in task-specific docs. Reference existing datasets without copying or moving them. Initialize the project structure without running the analyses.
+Inspect the existing files, ask me for missing information, and propose the initial modules and tasks. Install the default Python/R data-science environment with Pixi and create persistent AGENTS.md/CLAUDE.md instructions. Use a shared README for each task and separate agent/manual workspaces. Keep the overall Research Flow plan in docs/workflow.yaml and detailed workflows in task-specific docs. Reference existing datasets without copying or moving them. Initialize the project structure and verify the environment without running the analyses.
 ```
 
 ### Run pathway ORA with GSEApy

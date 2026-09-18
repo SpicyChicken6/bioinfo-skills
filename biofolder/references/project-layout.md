@@ -7,8 +7,8 @@ task names, and deeper directories are suggestions, not a required scaffold.
 ```text
 project/
 ├── README.md                          # Purpose, setup, module map, accepted results
-├── AGENTS.md                          # Durable instructions for agents
-├── CLAUDE.md                          # Consistent instructions for Claude
+├── AGENTS.md                          # Shared folder, ownership, and Pixi rules
+├── CLAUDE.md                          # Imports AGENTS.md; Claude-specific additions
 ├── pixi.toml                          # One project workspace and repeatable tasks
 ├── pixi.lock                          # Committed dependency resolution
 ├── .pixi/                             # Generated environments; Git-ignored
@@ -124,9 +124,13 @@ not require moving files across ownership boundaries or creating duplicate outpu
 
 ## Manage environments and retired work
 
-Use one Pixi workspace at the project root. Commit `pixi.toml` and `pixi.lock`,
-ignore `.pixi/`, and run project commands through Pixi. Use named environments
-inside that workspace when incompatible toolchains require different dependencies.
+Use one Pixi workspace at the project root. During initialization, install both
+Python and R with [the starter data-science packages](pixi-environment.md). Commit
+`pixi.toml` and `pixi.lock`, ignore `.pixi/`, and run scientific commands through
+`pixi run --locked`. Reuse a pre-existing Pixi-enabled `pyproject.toml` when present.
+Use named environments inside that workspace when incompatible toolchains require
+different dependencies. Install [persistent project instructions](project-instructions.md)
+so future sessions keep following these conventions.
 
 Archive superseded work under `.archive/<date>-<topic>/` with a README explaining
 what moved, why, and what replaces it. Active modules must not depend on archived
