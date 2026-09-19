@@ -20,9 +20,8 @@ when proposing a layout; create only what the project needs.
    datasets in place rather than moving them to fit the example.
 3. Create project/module README indexes and initial tasks. Each task has a shared
    README plus `agent/` and `manual/` workspaces; add deeper folders as needed.
-4. Merge [AGENTS.md](assets/AGENTS.md) into the project root and use
-   [CLAUDE.md](assets/CLAUDE.md) to import it with `@AGENTS.md`. Preserve existing
-   project and Claude-specific instructions. Keep research notes in task docs.
+4. Merge [AGENTS.md](assets/AGENTS.md) into the project root, preserving existing
+   project instructions. Keep research notes in task docs.
 5. Draft `docs/workflow.yaml` using the [Research Flow schema](references/workflow-yaml.md).
    New-project initialization includes this initial plan; existing plans change
    only when requested. Detailed workflows belong in task docs.

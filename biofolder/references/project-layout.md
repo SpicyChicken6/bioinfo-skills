@@ -8,7 +8,6 @@ task names, and deeper directories are suggestions, not a required scaffold.
 project/
 ├── README.md                          # Purpose, setup, module map, accepted results
 ├── AGENTS.md                          # Shared folder, ownership, Git, and Pixi rules
-├── CLAUDE.md                          # Imports AGENTS.md; Claude-specific additions
 ├── pixi.toml                          # One project workspace and repeatable tasks
 ├── pixi.lock                          # Committed dependency resolution
 ├── .pixi/                             # Generated environments; Git-ignored
