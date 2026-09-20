@@ -35,6 +35,26 @@ before work. Follow the user's scope and existing project conventions.
   and `tables/` for findings. Archive retired work under root `.archive/` with
   provenance; active work must not depend on archived files.
 
+## Analysis and execution
+
+- Use notebooks in agent/code/ for interactive analysis and figures.
+  Keep cells focused and runnable in order; save key outputs.
+- Use the configured Jupyter MCP connection and project Pixi kernel.
+  If unavailable, save executed notebooks and report the limitation.
+- On Slurm clusters, run notebook kernels in compute-node allocations.
+  Request suitable memory and walltime; reuse suitable existing sessions.
+- Extract reusable or complex logic into scripts while keeping the
+  notebook's parameters, steps, and results understandable.
+- Use Slurm for substantial unattended jobs and Nextflow for multi-step
+  or parallel workflows. Standalone scripts may use sbatch directly.
+- Reuse cluster profiles, record run details, and verify outputs.
+- Review persisted results in notebooks without automatically
+  resubmitting jobs. Save expensive intermediates.
+- Consult [Nextflow Agent Skills](https://github.com/nextflow-io/agent-skills)
+  when needed. Its launch-workflow skill targets Seqera Platform;
+  use the Slurm executor for direct cluster runs.
+- Preserve Nextflow caches and work directories while resume is needed.
+
 ## Pixi
 
 - Use one project-root Pixi workspace shared by all modules and both workspaces.
