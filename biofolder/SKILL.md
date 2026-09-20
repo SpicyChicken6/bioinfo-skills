@@ -27,7 +27,8 @@ when proposing a layout; create only what the project needs.
    only when requested. Detailed workflows belong in task docs.
 6. Install the [starter environment](references/pixi-environment.md) with Python,
    R, and Research Flow through Pixi unless the user specifies otherwise. Verify
-   the runtimes, Research Flow, and lockfile. Reuse existing manifests and constraints.
+   the runtimes, Research Flow, lockfile, and requested packages/data. Reuse existing
+   manifests and constraints; follow the reference's fallback and post-link rules.
 7. Reuse the covering Git repository or initialize one at the project root.
    Review tracking exclusions and commit the scaffold and environment definitions,
    preserving unrelated work. Report checks, unresolved choices, and incomplete

@@ -39,10 +39,18 @@ without starting the server.
   resolved runtime versions and verification in the root README.
 - Run analysis code, notebooks, tests, and scientific CLIs through Pixi with the
   lockfile enforced. Ordinary shell inspection and Git need no Pixi wrapper.
-- Manage dependencies through Pixi, including its PyPI support when needed.
-  Avoid direct pip, conda, or R package installs and user-wide configuration.
-  Add channels or named environments only as required, then verify affected
-  packages. Diagnose stale locks rather than bypassing them.
+- Prefer Pixi-managed dependencies, including PyPI support. Preserve constraints
+  and diagnose installation failures or stale locks before choosing a fallback.
+- If Pixi cannot provide a required package, use its native installer with the
+  Pixi runtime and a project-local library visible to project sessions. Do not
+  overwrite Pixi-managed packages or use user/system libraries. Track pinned
+  sources, versions/checksums, dependencies, and reproduction commands separately
+  from `pixi.lock`; ignore installed libraries and verify package functionality.
+- Agents may use command-scoped `--run-post-link-scripts` after reviewing package
+  provenance and hook contents for actions appropriate to the setup. Avoid
+  persistent opt-ins; verify package loading and any downloaded annotation data.
+  If execution policy denies the action, explain the blocker and request approval;
+  do not retry the denied action through another mechanism.
 - If installation or a dependency is unavailable, report the blocker and a
   reproducible resolution; finish independent scaffolding and mark environment
   setup incomplete. Do not silently omit packages or substitute system runtimes.
