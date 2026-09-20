@@ -14,11 +14,11 @@ tasks:
     depends_on: []
     inputs:
       - ../data/metadata/sample_manifest.tsv
-      - ../modules/01-transcriptomics/data/raw/counts.tsv
+      - ../modules/transcriptomics/data/raw/counts.tsv
     outputs:
-      - ../modules/01-transcriptomics/tasks/01-quality-control/agent/tables/sample_qc.tsv
+      - ../modules/transcriptomics/tasks/01-quality-control/agent/tables/sample_qc.tsv
     notes: >-
-      Task README: ../modules/01-transcriptomics/tasks/01-quality-control/README.md.
+      Task README: ../modules/transcriptomics/tasks/01-quality-control/README.md.
       The output is an anticipated agent candidate. Human comparison and accepted
       results are recorded in the shared task README; no acceptance is implied.
   - id: protein-qc
@@ -28,11 +28,11 @@ tasks:
     depends_on: []
     inputs:
       - ../data/metadata/sample_manifest.tsv
-      - ../modules/02-proteomics/data/raw/abundance.tsv
+      - ../modules/proteomics/data/raw/abundance.tsv
     outputs:
-      - ../modules/02-proteomics/tasks/01-quality-control/agent/tables/sample_qc.tsv
+      - ../modules/proteomics/tasks/01-quality-control/agent/tables/sample_qc.tsv
     notes: >-
-      Task README: ../modules/02-proteomics/tasks/01-quality-control/README.md.
+      Task README: ../modules/proteomics/tasks/01-quality-control/README.md.
       The output is an anticipated agent candidate, not an accepted result.
   - id: integration-sample-alignment
     title: Align samples across modalities
@@ -41,12 +41,12 @@ tasks:
     depends_on: [rna-qc, protein-qc]
     inputs:
       - ../data/metadata/modality_mapping.tsv
-      - Accepted RNA QC result referenced by ../modules/01-transcriptomics/tasks/01-quality-control/README.md
-      - Accepted proteomics QC result referenced by ../modules/02-proteomics/tasks/01-quality-control/README.md
+      - Accepted RNA QC result referenced by ../modules/transcriptomics/tasks/01-quality-control/README.md
+      - Accepted proteomics QC result referenced by ../modules/proteomics/tasks/01-quality-control/README.md
     outputs:
-      - ../modules/03-multimodal-integration/tasks/01-sample-alignment/agent/data/processed/matched_samples.tsv
+      - ../modules/multimodal-integration/tasks/01-sample-alignment/agent/data/processed/matched_samples.tsv
     notes: >-
-      Task README: ../modules/03-multimodal-integration/tasks/01-sample-alignment/README.md.
+      Task README: ../modules/multimodal-integration/tasks/01-sample-alignment/README.md.
       Resolve the accepted upstream artifacts before a requested run. Update this
       plan to concrete paths only when a plan update is requested. This example
       does not choose between human and agent results or prescribe a joint-analysis method.
