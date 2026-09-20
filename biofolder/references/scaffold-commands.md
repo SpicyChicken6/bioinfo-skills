@@ -27,9 +27,11 @@ pixi run add-task enrichment
 ```
 
 Modules have no automatic number. Tasks use the highest existing task number + 1
-within that module, starting at `01`; gaps are not reused. Names become lowercase
-hyphenated folder names; quote names containing spaces. Existing numbered modules
-can be selected by their full folder name or an unambiguous unnumbered name.
+within that module, starting at `01`; gaps are not reused. New names become
+lowercase hyphenated folder names; quote names containing spaces. Module lookup
+prefers an exact existing name, then a unique normalization-equivalent name;
+ambiguous matches require an exact name. Numeric prefixes are part of module
+names: select an older numbered module by its full name or from inside it.
 
 A module gets `README.md` and `tasks/`. A new task gets a shared `README.md` plus
 `agent/` and `manual/`, each with `code/`, `tests/`, `data/interim/`,

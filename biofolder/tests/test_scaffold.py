@@ -45,6 +45,61 @@ class ScaffoldTests(unittest.TestCase):
         self.assertTrue((module / "tasks").is_dir())
         self.assertIn("modules/rna-seq", result.stdout)
 
+    def test_existing_module_names_are_preserved_by_both_commands(self):
+        for name in ("RNA_Seq", "RNA Seq", "RNA-SEQ"):
+            with self.subTest(name=name):
+                module = self.root / "modules" / name
+                module.mkdir(parents=True)
+                (module / "README.md").write_text("Existing module notes\n")
+                self.run_helper("module", name)
+                self.run_helper("task", name, "qc")
+                self.assertTrue((module / "tasks/01-qc").is_dir())
+                self.assertEqual((module / "README.md").read_text(), "Existing module notes\n")
+                self.assertEqual(list((self.root / "modules").iterdir()), [module])
+            shutil.rmtree(self.root / "modules")
+
+    def test_unique_normalized_module_match_is_reused_by_both_commands(self):
+        module = self.root / "modules/RNA_Seq"
+        module.mkdir(parents=True)
+        self.run_helper("module", "rna-seq")
+        self.run_helper("task", "RNA Seq", "qc")
+        self.assertTrue((module / "tasks/01-qc").is_dir())
+        self.assertEqual(list((self.root / "modules").iterdir()), [module])
+
+    def test_exact_module_name_wins_over_normalization_equivalents(self):
+        names = ("RNA_Seq", "RNA Seq", "rna-seq")
+        for name in names:
+            (self.root / "modules" / name).mkdir(parents=True)
+        for name in names:
+            with self.subTest(name=name):
+                self.run_helper("module", name)
+                self.run_helper("task", name, "qc")
+                self.assertTrue((self.root / "modules" / name / "tasks/01-qc").is_dir())
+
+    def test_ambiguous_normalized_module_matches_fail_before_writes(self):
+        for name in ("RNA_Seq", "RNA Seq"):
+            (self.root / "modules" / name).mkdir(parents=True)
+        before_files = self.snapshot()
+        before_paths = set(self.root.rglob("*"))
+        for args in (("module", "rna-seq"), ("task", "rna-seq", "qc")):
+            with self.subTest(args=args):
+                result = self.run_helper(*args, success=False)
+                self.assertIn("Ambiguous module", result.stderr)
+                self.assertEqual(self.snapshot(), before_files)
+                self.assertEqual(set(self.root.rglob("*")), before_paths)
+
+    def test_unrelated_non_sluggable_directories_do_not_break_module_lookup(self):
+        for name in ("notes.v1", "!!!", "RNA_Seq"):
+            (self.root / "modules" / name).mkdir(parents=True)
+        self.run_helper("module", "rna-seq")
+        self.run_helper("task", "RNA Seq", "qc")
+        self.run_helper("task", "Protein Study", "qc")
+        self.assertTrue((self.root / "modules/RNA_Seq/tasks/01-qc").is_dir())
+        self.assertTrue((self.root / "modules/protein-study/tasks/01-qc").is_dir())
+        self.assertFalse((self.root / "modules/rna-seq").exists())
+        for name in ("notes.v1", "!!!"):
+            self.assertEqual(list((self.root / "modules" / name).iterdir()), [])
+
     def test_root_task_creates_module_and_both_workspaces(self):
         self.run_helper("task", "transcriptomics", "Differential Expression")
         task = self.root / "modules/transcriptomics/tasks/01-differential-expression"
@@ -69,6 +124,9 @@ class ScaffoldTests(unittest.TestCase):
         self.run_helper("task", "protein", "qc")
         self.assertTrue((tasks / "08-de").is_dir())
         self.assertTrue((self.root / "modules/protein/tasks/01-qc").is_dir())
+        (tasks / "100-older").mkdir()
+        self.run_helper("task", "rna", "enrichment")
+        self.assertTrue((tasks / "101-enrichment").is_dir())
 
     def test_repeat_calls_preserve_custom_files_and_existing_task_structure(self):
         self.run_helper("task", "rna", "qc")
@@ -97,20 +155,29 @@ class ScaffoldTests(unittest.TestCase):
                 self.run_helper(*args, success=False)
                 self.assertFalse((self.root / "modules").exists())
 
-    def test_legacy_numbered_module_is_reused(self):
-        module = self.root / "modules/01-rna"
+    def test_old_module_is_reused_by_full_name_and_inferred_cwd(self):
+        module = self.root / "modules/01-RNA_Seq"
         module.mkdir(parents=True)
-        self.run_helper("task", "rna", "qc")
+        self.run_helper("module", module.name)
+        self.run_helper("task", module.name, "qc")
         self.run_helper("task", "de", caller=module)
+        self.run_helper("task", "enrichment", caller=module / "tasks/02-de/manual/code")
         self.assertTrue((module / "tasks/02-de").is_dir())
-        self.assertFalse((self.root / "modules/rna").exists())
+        self.assertTrue((module / "tasks/03-enrichment").is_dir())
+        self.assertEqual(list((self.root / "modules").iterdir()), [module])
 
-    def test_ambiguous_legacy_modules_require_full_folder_name(self):
-        for name in ("01-rna", "02-rna"):
-            (self.root / "modules" / name).mkdir(parents=True)
-        self.run_helper("task", "rna", "qc", success=False)
-        self.run_helper("task", "02-rna", "qc")
-        self.assertTrue((self.root / "modules/02-rna/tasks/01-qc").is_dir())
+    def test_numeric_module_prefix_is_never_treated_as_an_alias(self):
+        for name in ("2024-rna", "24-rna", "01-rna"):
+            with self.subTest(name=name):
+                existing = self.root / "modules" / name
+                existing.mkdir(parents=True)
+                self.run_helper("module", "rna")
+                self.run_helper("task", "rna", "qc")
+                self.assertTrue((self.root / "modules/rna/tasks/01-qc").is_dir())
+                self.assertEqual(list(existing.iterdir()), [])
+                self.run_helper("task", name, "qc")
+                self.assertTrue((existing / "tasks/01-qc").is_dir())
+            shutil.rmtree(self.root / "modules")
 
     def test_symlinked_module_cannot_write_outside_project(self):
         with tempfile.TemporaryDirectory() as outside:

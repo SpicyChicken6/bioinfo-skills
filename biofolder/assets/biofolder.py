@@ -48,21 +48,29 @@ def project_root():
 
 
 def module_path(root, name):
+    normalized = slug(name)  # Validate before using the original name as a path.
     modules = root / "modules"
     if modules.is_symlink():
         raise ValueError(f"Refusing to scaffold through a symbolic link: {modules}")
-    exact = modules / name
-    if exact.exists() or exact.is_symlink() or not modules.exists():
-        return exact
-    # Reuse modules made by earlier biofolder versions without renaming them.
-    matches = [
-        path for path in modules.iterdir()
-        if (path.is_dir() or path.is_symlink())
-        and (match := NUMBERED.fullmatch(path.name)) and match[2] == name
-    ]
+    if not modules.exists():
+        return modules / normalized
+    entries = list(modules.iterdir())
+    for path in entries:
+        if path.name == name:
+            return path
+    matches = []
+    for path in entries:
+        if not (path.is_dir() or path.is_symlink()):
+            continue
+        try:
+            existing = slug(path.name)
+        except ValueError:
+            continue
+        if existing == normalized:
+            matches.append(path)
     if len(matches) > 1:
-        raise ValueError(f"Ambiguous module '{name}'; use its full folder name.")
-    return matches[0] if matches else exact
+        raise ValueError(f"Ambiguous module '{name}'; use an exact existing folder name.")
+    return matches[0] if matches else modules / normalized
 
 
 def add_module(root, name):
@@ -72,7 +80,7 @@ def add_module(root, name):
     directory(path)
     directory(path / "tasks")
     write_missing(path / "tasks" / ".gitkeep", "")
-    write_missing(path / "README.md", f"# {name}\n\n## Scope\n\n## Inputs\n\n## Tasks\n\nSee [tasks/](tasks/).\n")
+    write_missing(path / "README.md", f"# {path.name}\n\n## Scope\n\n## Inputs\n\n## Tasks\n\nSee [tasks/](tasks/).\n")
     return path, existed
 
 
@@ -133,12 +141,12 @@ def main():
     try:
         root = project_root()
         if args.command == "module":
-            path, existed = add_module(root, slug(args.name))
+            path, existed = add_module(root, args.name)
         else:
             if len(args.names) not in (1, 2):
                 raise ValueError("Supply TASK inside a module, or MODULE TASK from the project root.")
             name = slug(args.names[-1])
-            module = slug(args.names[0]) if len(args.names) == 2 else infer_module(root)
+            module = args.names[0] if len(args.names) == 2 else infer_module(root)
             path, existed = add_task(root, module, name)
     except (ValueError, OSError) as error:
         parser.exit(2, f"biofolder: {error}\n")
