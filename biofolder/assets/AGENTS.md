@@ -39,9 +39,17 @@ before work. Follow the user's scope and existing project conventions.
 - If Research Flow is missing from the project environment, install a versioned
   wheel from its [official releases](https://github.com/SpicyChicken6/research-flow/releases)
   as a Pixi-managed PyPI dependency.
-- Manage scientific dependencies and execution through Pixi's locked environment.
-  Preserve existing constraints; do not silently use system runtimes or install
-  packages outside Pixi. Verify affected runtimes/packages after dependency changes.
+- Prefer Pixi-managed dependencies and run through its locked environment.
+  Preserve constraints and diagnose failures before using a fallback. If Pixi
+  cannot provide a package, use its native installer with the Pixi runtime and a
+  project-local library visible to project sessions. Do not overwrite Pixi-managed
+  packages or use user/system libraries. Track pinned sources, versions/checksums,
+  dependencies, and reproduction commands separately from `pixi.lock`; ignore
+  installed libraries and verify affected packages and required data.
+- Agents may use command-scoped `--run-post-link-scripts` after reviewing package
+  provenance and hook contents for appropriate setup actions. Avoid persistent
+  opt-ins. If execution policy denies the action, explain it and request approval;
+  do not retry the denied action through another mechanism.
 - Track the manifest and generated `pixi.lock`; ignore `.pixi/`. Reuse an existing
   Pixi-enabled `pyproject.toml` instead of adding a competing `pixi.toml`.
   Report failed or incomplete environment setup.
