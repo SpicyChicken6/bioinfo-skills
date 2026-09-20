@@ -10,6 +10,20 @@ Organize projects as **project → module → task → agent/manual**. Follow th
 existing conventions. Use the [full example tree](references/project-layout.md)
 when proposing a layout; create only what the project needs.
 
+## Update source
+
+The canonical source is the `biofolder/` directory in
+[SpicyChicken6/bioinfo-skills](https://github.com/SpicyChicken6/bioinfo-skills).
+When an update is requested or newer guidance is needed, fetch the repository's
+default branch and compare the complete skill directory, including its bundled
+resources, with the local copy. Honor explicit version pins and preserve local
+customizations.
+
+For a clean checkout on the default branch, use `git pull --ff-only`; for a
+copied installation, refresh the complete `biofolder/` directory from that source
+after reviewing the differences. Updating the skill does not automatically
+migrate existing project files; apply those changes only within the requested scope.
+
 ## Initialize a project
 
 1. Inspect existing instructions, files, Git changes, and environments. Ask only
