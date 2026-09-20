@@ -13,6 +13,8 @@ project/
 ├── .pixi/                             # Generated environments; Git-ignored
 ├── .git/                              # Git metadata; may be a file in a worktree
 ├── .gitignore
+├── scripts/
+│   └── biofolder.py                   # Pixi add-module and add-task commands
 ├── config/                            # Shared configuration; no credentials
 ├── data/                              # Inputs and datasets shared across modules
 │   ├── README.md                      # Sources, locations, provenance, access notes
@@ -25,7 +27,7 @@ project/
 │   ├── methods.md                     # Project methods and reproducibility notes
 │   └── decisions.md                   # Decisions that affect multiple tasks
 ├── modules/
-│   ├── 01-transcriptomics/
+│   ├── transcriptomics/
 │   │   ├── README.md                  # Module scope, inputs, task map, accepted results
 │   │   ├── config/                    # Modality-specific parameters, if needed
 │   │   ├── data/                      # Data specific to this module
@@ -63,14 +65,14 @@ project/
 │   │           ├── README.md
 │   │           ├── agent/             # Add the same internal categories as needed
 │   │           └── manual/
-│   ├── 02-proteomics/
+│   ├── proteomics/
 │   │   ├── README.md
 │   │   ├── config/
 │   │   ├── data/                      # README.md, raw/, metadata/, interim/, processed/
 │   │   └── tasks/
 │   │       ├── 01-quality-control/    # README.md + agent/ + manual/
 │   │       └── 02-differential-abundance/ # README.md + agent/ + manual/
-│   └── 03-multimodal-integration/
+│   └── multimodal-integration/
 │       ├── README.md
 │       ├── config/
 │       ├── data/                      # Same data categories, only where needed
@@ -82,8 +84,10 @@ project/
         └── README.md                  # Retirement reason, original paths, replacements
 ```
 
-Create each task's shared README and both workspace roots; populate deeper folders
-only as needed. Module/task numbers are stable identifiers, not dependency order.
+The [scaffold commands](scaffold-commands.md) create each task's shared README and
+both workspaces with the standard subfolders shown above. For manual scaffolding,
+add deeper folders as needed. Modules are unnumbered; task numbers are stable
+identifiers, not dependency order.
 The [project rules](../assets/AGENTS.md) define ownership, data placement, Git,
 and Pixi conventions. See the [starter packages](pixi-environment.md) and
 [workflow schema](workflow-yaml.md) when initializing those parts.

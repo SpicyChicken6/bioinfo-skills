@@ -16,8 +16,8 @@ when proposing a layout; create only what the project needs.
    for missing essentials: research goal, modalities, input locations and sample
    identifiers, initial tasks, and compute/runtime constraints.
 2. Propose modules for each modality or major analysis component, including
-   integration where needed. Use stable, zero-padded names. Reference existing
-   datasets in place rather than moving them to fit the example.
+   integration where needed. Use unnumbered module names and stable, zero-padded
+   task numbers. Preserve existing names and reference datasets in place.
 3. Create project/module README indexes and initial tasks. Each task has a shared
    README plus `agent/` and `manual/` workspaces; add deeper folders as needed.
 4. Merge [AGENTS.md](assets/AGENTS.md) into the project root, preserving existing
@@ -29,6 +29,7 @@ when proposing a layout; create only what the project needs.
    R, and Research Flow through Pixi unless the user specifies otherwise. Verify
    the runtimes, Research Flow, lockfile, and requested packages/data. Reuse existing
    manifests and constraints; follow the reference's fallback and post-link rules.
+   Install the [module/task commands](references/scaffold-commands.md) for later additions.
 7. Reuse the covering Git repository or initialize one at the project root.
    Review tracking exclusions and commit the scaffold and environment definitions,
    preserving unrelated work. Report checks, unresolved choices, and incomplete
@@ -40,6 +41,11 @@ Apply the project rules for file placement, ownership, Pixi, and session Git
 checkpoints. Keep task READMEs current with inputs, methods, reproducible commands,
 validation, and accepted output links. Downstream tasks should reference the
 selected upstream artifacts with their provenance.
+
+For new modules/tasks, use the [scaffold commands](references/scaffold-commands.md):
+`pixi run add-module <module>` or `pixi run add-task <module> <task>`.
+Inside a module, `pixi run add-task <task>` infers the module. Install the commands
+if missing when adding a module/task; preserve existing work and task numbering.
 
 For a requested reorganization, review affected paths and consumers, preserve
 existing work, update references, and verify what moved. Archive retired work

@@ -24,6 +24,17 @@ Biofolder includes a [full example tree](biofolder/references/project-layout.md)
 [starter environment](biofolder/references/pixi-environment.md) with Python, R,
 and Research Flow. The project plan lives at `docs/workflow.yaml`.
 
+Initialization also installs [module/task commands](biofolder/references/scaffold-commands.md):
+
+```bash
+pixi run add-module transcriptomics
+pixi run add-task transcriptomics differential-expression
+cd modules/transcriptomics
+pixi run add-task enrichment
+```
+
+Modules are unnumbered; tasks receive the next number within their module.
+
 To read that plan:
 
 ```text
