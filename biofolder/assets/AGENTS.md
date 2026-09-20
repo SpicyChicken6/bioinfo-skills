@@ -61,6 +61,10 @@ before work. Follow the user's scope and existing project conventions.
   Default new projects to Python and R with the starter data-science packages;
   add analysis-specific dependencies as needed. Use named environments only
   for incompatible toolchains.
+- During project setup, provision JupyterLab, collaboration support,
+  kernels, and the required Jupyter MCP components through Pixi.
+  Reuse compatible installations and verify shared notebook editing
+  and execution. Configure the agent's MCP connection separately.
 - If Research Flow is missing from the project environment, install a versioned
   wheel from its [official releases](https://github.com/SpicyChicken6/research-flow/releases)
   as a Pixi-managed PyPI dependency.

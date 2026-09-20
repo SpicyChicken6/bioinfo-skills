@@ -20,6 +20,21 @@ them. Let Pixi resolve compatible versions within known project constraints.
 | File formats | `pyyaml`, `openpyxl` | `r-readxl`, `r-jsonlite`, `r-yaml` |
 | Testing | `pytest` | Base R checks |
 
+## Jupyter and MCP
+
+- Add `jupyter-collaboration` and `jupyter-mcp-tools` to the JupyterLab
+  environment, and install `jupyter-mcp-server` in the connector's environment.
+  Manage these through Pixi, using PyPI dependencies where needed; reuse
+  compatible installations and lock the resolved versions.
+- Follow the [official setup guide](https://github.com/datalayer/jupyter-mcp-server#-getting-started)
+  for the selected deployment. The connector may run alongside Jupyter or in
+  a separate Pixi environment on its host.
+- Register the connection in the agent client separately; installing packages
+  alone does not enable MCP tools.
+- Verify shared notebook editing, saved cell outputs, and execution in the
+  project's kernel. Report unavailable connections or failed checks as incomplete
+  setup.
+
 ## Research Flow
 
 Include `research-flow` in the project environment. If missing, install a

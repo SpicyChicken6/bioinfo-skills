@@ -40,9 +40,10 @@ migrate existing project files; apply those changes only within the requested sc
    New-project initialization includes this initial plan; existing plans change
    only when requested. Detailed workflows belong in task docs.
 6. Install the [starter environment](references/pixi-environment.md) with Python,
-   R, and Research Flow through Pixi unless the user specifies otherwise. Verify
-   the runtimes, Research Flow, lockfile, and requested packages/data. Reuse existing
-   manifests and constraints; follow the reference's fallback and post-link rules.
+   R, Jupyter/MCP, and Research Flow through Pixi unless the user specifies otherwise.
+   Verify the runtimes, shared notebook connection, Research Flow, lockfile, and
+   requested packages/data. Reuse existing manifests and constraints; follow the
+   reference's fallback and post-link rules.
    Install the [module/task commands](references/scaffold-commands.md) for later additions.
 7. Reuse the covering Git repository or initialize one at the project root.
    Review tracking exclusions and commit the scaffold and environment definitions,
