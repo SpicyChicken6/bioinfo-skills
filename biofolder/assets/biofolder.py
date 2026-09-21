@@ -119,8 +119,7 @@ def add_task(root, module, name):
     task.mkdir()
     write_missing(
         task / "README.md",
-        f"# {name}\n\n## Goal\n\n## Inputs\n\n## Methods\n\n## Validation\n\n## Accepted outputs\n\n"
-        "## Workspaces\n\n- [agent/](agent/)\n- [manual/](manual/)\n",
+        f"# {name}\n\n## Description\n\n## Plan\n\n## Output\n",
     )
     for workspace in ("agent", "manual"):
         base = directory(task / workspace)

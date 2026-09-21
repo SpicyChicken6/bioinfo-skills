@@ -1,6 +1,6 @@
 ---
 name: biofolder
-description: Initialize and maintain bioinformatics projects with root READMEs for project background and research questions, modality modules, agent/manual workspaces, Git, Pixi, and manual-result cloud uploads. Use when starting a project, documenting its purpose, placing analysis files, reorganizing work, or setting up result sync.
+description: Initialize and maintain bioinformatics projects with root READMEs for project background and research questions, concise task READMEs, modality modules, agent/manual workspaces, Git, Pixi, and manual-result cloud uploads. Use when starting a project, documenting its purpose or tasks, placing analysis files, reorganizing work, or setting up result sync.
 ---
 
 # Biofolder
@@ -35,7 +35,8 @@ migrate existing project files; apply those changes only within the requested sc
 3. Adapt the [project README template](assets/project-README.md) into root `README.md`,
    containing only project background and research questions to state the project's
    high-level purpose. Create module README indexes and initial tasks. Each task
-   has a shared README plus `agent/` and `manual/` workspaces; add deeper folders as needed.
+   has a shared README with **Description**, **Plan**, and **Output**, plus `agent/`
+   and `manual/` workspaces; add deeper folders as needed.
 4. Merge [AGENTS.md](assets/AGENTS.md) into the project root, preserving existing
    project instructions. Keep research notes in task docs.
 5. Draft the canonical task list and dependencies in `docs/workflow.yaml` using
@@ -57,9 +58,11 @@ migrate existing project files; apply those changes only within the requested sc
 ## Maintain or reorganize a project
 
 Apply the project rules for file placement, ownership, Pixi, and session Git
-checkpoints. Keep task READMEs current with inputs, methods, reproducible commands,
-validation, and accepted output links. Downstream tasks should reference the
-selected upstream artifacts with their provenance.
+checkpoints. Keep task READMEs concise: **Description** states what the task does
+and why, **Plan** lists the main steps, and **Output** describes expected deliverables
+and links accepted artifacts when available. Put detailed inputs, methods,
+reproduction commands, and validation in workspace notebooks or reports.
+Downstream tasks should reference selected upstream artifacts with their provenance.
 
 For new modules/tasks, use the [scaffold commands](references/scaffold-commands.md):
 `pixi run add-module <module>` or `pixi run add-task <module> <task>`.

@@ -39,7 +39,7 @@ project/
 │   │   │   └── processed/             # Analysis-ready data reused across tasks
 │   │   └── tasks/
 │   │       ├── 01-quality-control/
-│   │       │   ├── README.md          # Shared task brief, branch links, accepted outputs
+│   │       │   ├── README.md          # Task description, plan, and output
 │   │       │   ├── agent/             # Agent-owned work and its artifacts
 │   │       │   │   ├── code/
 │   │       │   │   ├── tests/

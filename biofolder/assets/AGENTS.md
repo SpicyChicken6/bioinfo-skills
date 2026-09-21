@@ -9,8 +9,8 @@ before work. Follow the user's scope and existing project conventions.
 - Keep root `README.md` limited to project background and research questions.
   Track tasks and dependencies in `docs/workflow.yaml`, with details in
   module/task READMEs.
-- For task overviews, state the goal, a short sequence of major steps, and
-  expected outputs. Keep the overview high level and easy to scan.
+- Task READMEs use **Description**, **Plan**, and **Output**: briefly state
+  what the task does and why, its main steps, and expected deliverables.
 - Include decision points only when user input is needed or the choice
   materially changes the analysis. Use sensible defaults for routine choices.
 - Keep implementation details, alternative approaches, and troubleshooting
@@ -28,9 +28,9 @@ before work. Follow the user's scope and existing project conventions.
 - Put agent work in `agent/`, using `code/`, `tests/`, `data/interim/`,
   `data/processed/`, `figures/`, `tables/`, `docs/`, and `logs/` as needed.
   Read human work for context; change `manual/` only when explicitly requested.
-- Keep the shared task README current with inputs, methods, reproduction commands,
-  validation, and accepted output links. Preserve human notes. Ownership does not
-  imply validation; identify which results downstream work should use.
+- Keep the task README's **Output** section current with links to accepted artifacts;
+  preserve human notes. Put detailed inputs, methods, reproduction commands, and
+  validation in workspace notebooks or reports. Ownership does not imply validation.
 - Keep data at its shared scope: project data across modules, module data across
   tasks, and task derivatives in their producing workspace. Reference one
   authoritative copy and preserve raw inputs unchanged.

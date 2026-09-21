@@ -19,8 +19,9 @@ tasks:
       - ../modules/transcriptomics/tasks/01-quality-control/agent/tables/sample_qc.tsv
     notes: >-
       Task README: ../modules/transcriptomics/tasks/01-quality-control/README.md.
-      The output is an anticipated agent candidate. Human comparison and accepted
-      results are recorded in the shared task README; no acceptance is implied.
+      The output is an anticipated agent candidate. Comparison and validation
+      details belong in workspace notebooks or reports; accepted results are linked
+      in the task README's Output section. No acceptance is implied.
   - id: protein-qc
     title: Proteomics quality control
     goal: Produce quality assessments and identify usable proteomics samples.
