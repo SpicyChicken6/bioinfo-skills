@@ -1,6 +1,6 @@
 ---
 name: biofolder
-description: Initialize and maintain bioinformatics project layouts with modality modules, agent/manual task workspaces, Git tracking, Pixi environments, and manual-result uploads to configured cloud drives. Use when starting a project, placing analysis files, reorganizing existing work, or setting up result sync commands.
+description: Initialize and maintain bioinformatics projects with root READMEs for project background and research questions, concise module/task READMEs, modality modules, agent/manual workspaces, Git, Pixi, and manual-result cloud uploads. Use when starting a project, documenting its purpose or tasks, placing analysis files, reorganizing work, or setting up result sync.
 ---
 
 # Biofolder
@@ -32,11 +32,16 @@ migrate existing project files; apply those changes only within the requested sc
 2. Propose modules for each modality or major analysis component, including
    integration where needed. Use unnumbered module names and stable, zero-padded
    task numbers. Preserve existing names and reference datasets in place.
-3. Create project/module README indexes and initial tasks. Each task has a shared
-   README plus `agent/` and `manual/` workspaces; add deeper folders as needed.
+3. Adapt the [project README template](assets/project-README.md) into root `README.md`,
+   containing only project background and research questions to state the project's
+   high-level purpose. Module READMEs use **Description**, **Requirements**, and
+   **Tasks**. Create initial tasks with a shared README containing **Description**,
+   **Plan**, and **Output**, plus `agent/` and `manual/` workspaces; add deeper
+   folders as needed.
 4. Merge [AGENTS.md](assets/AGENTS.md) into the project root, preserving existing
    project instructions. Keep research notes in task docs.
-5. Draft `docs/workflow.yaml` using the [Research Flow schema](references/workflow-yaml.md).
+5. Draft the canonical task list and dependencies in `docs/workflow.yaml` using
+   the [Research Flow schema](references/workflow-yaml.md).
    New-project initialization includes this initial plan; existing plans change
    only when requested. Detailed workflows belong in task docs.
 6. Install the [starter environment](references/pixi-environment.md) with Python,
@@ -54,9 +59,19 @@ migrate existing project files; apply those changes only within the requested sc
 ## Maintain or reorganize a project
 
 Apply the project rules for file placement, ownership, Pixi, and session Git
-checkpoints. Keep task READMEs current with inputs, methods, reproducible commands,
-validation, and accepted output links. Downstream tasks should reference the
-selected upstream artifacts with their provenance.
+checkpoints. Module READMEs describe the module's role, record applicable
+requirements, and link task READMEs for navigation. Requirements can cover group
+labels, color palettes, or output conventions; omit the section if none apply.
+Define shared conventions once in project configuration (for example,
+`config/plotting.yaml` for sample-group colors) and reference them from modules.
+Keep detailed input information in the module's `data/README.md` and task status
+and dependencies in `docs/workflow.yaml`.
+
+Keep task READMEs concise: **Description** states what the task does
+and why, **Plan** lists the main steps, and **Output** describes expected deliverables
+and links accepted artifacts when available. Put detailed inputs, methods,
+reproduction commands, and validation in workspace notebooks or reports.
+Downstream tasks should reference selected upstream artifacts with their provenance.
 
 For new modules/tasks, use the [scaffold commands](references/scaffold-commands.md):
 `pixi run add-module <module>` or `pixi run add-task <module> <task>`.

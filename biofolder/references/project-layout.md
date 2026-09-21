@@ -6,7 +6,7 @@ task names, and deeper directories are suggestions, not a required scaffold.
 
 ```text
 project/
-├── README.md                          # Purpose, setup, module map, accepted results
+├── README.md                          # Project background and research questions only
 ├── AGENTS.md                          # Shared folder, ownership, Git, and Pixi rules
 ├── pixi.toml                          # One project workspace and repeatable tasks
 ├── pixi.lock                          # Committed dependency resolution
@@ -23,12 +23,13 @@ project/
 │   ├── interim/                       # Shared intermediate datasets
 │   └── processed/                     # Shared analysis-ready datasets
 ├── docs/
-│   ├── workflow.yaml                  # Canonical Research Flow graph
+│   ├── workflow.yaml                  # Canonical task list and dependencies (Research Flow)
+│   ├── environment.md                 # Optional notes for nonstandard setup
 │   ├── methods.md                     # Project methods and reproducibility notes
 │   └── decisions.md                   # Decisions that affect multiple tasks
 ├── modules/
 │   ├── transcriptomics/
-│   │   ├── README.md                  # Module scope, inputs, task map, accepted results
+│   │   ├── README.md                  # Module description, requirements, task links
 │   │   ├── config/                    # Modality-specific parameters, if needed
 │   │   ├── data/                      # Data specific to this module
 │   │   │   ├── README.md
@@ -38,7 +39,7 @@ project/
 │   │   │   └── processed/             # Analysis-ready data reused across tasks
 │   │   └── tasks/
 │   │       ├── 01-quality-control/
-│   │       │   ├── README.md          # Shared task brief, branch links, accepted outputs
+│   │       │   ├── README.md          # Task description, plan, and output
 │   │       │   ├── agent/             # Agent-owned work and its artifacts
 │   │       │   │   ├── code/
 │   │       │   │   ├── tests/
