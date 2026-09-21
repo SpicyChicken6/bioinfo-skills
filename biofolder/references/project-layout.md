@@ -6,7 +6,7 @@ task names, and deeper directories are suggestions, not a required scaffold.
 
 ```text
 project/
-├── README.md                          # Purpose, setup, module map, accepted results
+├── README.md                          # Project background and research questions only
 ├── AGENTS.md                          # Shared folder, ownership, Git, and Pixi rules
 ├── pixi.toml                          # One project workspace and repeatable tasks
 ├── pixi.lock                          # Committed dependency resolution
@@ -24,6 +24,7 @@ project/
 │   └── processed/                     # Shared analysis-ready datasets
 ├── docs/
 │   ├── workflow.yaml                  # Canonical Research Flow graph
+│   ├── environment.md                 # Setup, runtime versions, environment verification
 │   ├── methods.md                     # Project methods and reproducibility notes
 │   └── decisions.md                   # Decisions that affect multiple tasks
 ├── modules/

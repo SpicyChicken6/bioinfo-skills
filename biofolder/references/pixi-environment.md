@@ -56,7 +56,7 @@ without starting the server.
 - Track the manifest and generated `pixi.lock`; ignore `.pixi/`. Initialization
   requires a real installation and lightweight Python/R package-loading checks,
   with interpreters and libraries coming from the project environment. Record
-  resolved runtime versions and verification in the root README.
+  setup steps, resolved runtime versions, and verification in `docs/environment.md`.
 - Run analysis code, notebooks, tests, and scientific CLIs through Pixi with the
   lockfile enforced. Ordinary shell inspection and Git need no Pixi wrapper.
 - Prefer Pixi-managed dependencies, including PyPI support. Preserve constraints

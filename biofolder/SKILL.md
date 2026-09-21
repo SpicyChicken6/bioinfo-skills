@@ -1,6 +1,6 @@
 ---
 name: biofolder
-description: Initialize and maintain bioinformatics project layouts with modality modules, agent/manual task workspaces, Git tracking, Pixi environments, and manual-result uploads to configured cloud drives. Use when starting a project, placing analysis files, reorganizing existing work, or setting up result sync commands.
+description: Initialize and maintain bioinformatics projects with root READMEs for project background and research questions, modality modules, agent/manual workspaces, Git, Pixi, and manual-result cloud uploads. Use when starting a project, documenting its purpose, placing analysis files, reorganizing work, or setting up result sync.
 ---
 
 # Biofolder
@@ -32,8 +32,10 @@ migrate existing project files; apply those changes only within the requested sc
 2. Propose modules for each modality or major analysis component, including
    integration where needed. Use unnumbered module names and stable, zero-padded
    task numbers. Preserve existing names and reference datasets in place.
-3. Create project/module README indexes and initial tasks. Each task has a shared
-   README plus `agent/` and `manual/` workspaces; add deeper folders as needed.
+3. Adapt the [project README template](assets/project-README.md) into root `README.md`,
+   containing only project background and research questions to state the project's
+   high-level purpose. Create module README indexes and initial tasks. Each task
+   has a shared README plus `agent/` and `manual/` workspaces; add deeper folders as needed.
 4. Merge [AGENTS.md](assets/AGENTS.md) into the project root, preserving existing
    project instructions. Keep research notes in task docs.
 5. Draft `docs/workflow.yaml` using the [Research Flow schema](references/workflow-yaml.md).

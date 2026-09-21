@@ -19,7 +19,9 @@ Inspect existing files, ask for missing information, and use the default
 Pixi environment. Reference datasets in place; do not run analyses yet.
 ```
 
-Biofolder includes a [full example tree](biofolder/references/project-layout.md),
+Biofolder includes a [project README template](biofolder/assets/project-README.md)
+for project background and research questions, a
+[full example tree](biofolder/references/project-layout.md),
 [project instruction template](biofolder/assets/AGENTS.md), and
 [starter environment](biofolder/references/pixi-environment.md) with Python, R,
 and Research Flow. The project plan lives at `docs/workflow.yaml`.

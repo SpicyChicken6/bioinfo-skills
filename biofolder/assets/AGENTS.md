@@ -6,6 +6,9 @@ before work. Follow the user's scope and existing project conventions.
 ## Communication and documentation
 
 - Default to concise, clear responses and documentation.
+- Keep root `README.md` limited to project background and research questions.
+  Record setup and environment verification in `docs/environment.md`; keep
+  workflow details and results in project docs and module/task READMEs.
 - For task overviews, state the goal, a short sequence of major steps, and
   expected outputs. Keep the overview high level and easy to scan.
 - Include decision points only when user input is needed or the choice
