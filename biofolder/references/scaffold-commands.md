@@ -1,20 +1,24 @@
-# Module and task commands
+# Project commands
 
 During project initialization, copy [the helper](../assets/biofolder.py) to
-`scripts/biofolder.py` in the project. It uses only Python's standard library.
+`scripts/biofolder.py` in the project. The helper uses Python's standard library;
+result uploads also require the Pixi-managed `rclone` executable.
 Register these tasks in the existing Pixi manifest, preserving other tasks and
-any customized helper. For an existing project, install them when adding a
-module/task or when requested.
+any customized helper. For an existing project, install module/task commands
+when adding a module/task; add result sync when requested.
 
 ```toml
 [tasks]
 add-module = "python scripts/biofolder.py module"
 add-task = "python scripts/biofolder.py task"
+sync-results = "python scripts/biofolder.py sync-results"
 ```
 
 For a Pixi-enabled `pyproject.toml`, use `[tool.pixi.tasks]` instead. Keep the
 default task working directory and do not override `INIT_CWD`: the helper uses
-Pixi's original invocation directory to identify the module.
+Pixi's original invocation directory to identify the module for `add-task`.
+`sync-results` always selects from the project root, regardless of invocation
+directory; use its explicit `--module` option to limit scope.
 
 ```bash
 # From the project root; add-task also creates a missing module.
@@ -39,6 +43,10 @@ A module gets `README.md` and `tasks/`. A new task gets a shared `README.md` plu
 contain `.gitkeep` so they survive Git checkout. Existing tasks are returned
 unchanged, and existing files are never overwritten. Commands print the path;
 workflow plans and analysis execution remain separate from folder creation.
+
+See [result sync](sync-results.md) for cloud destination options, selection rules,
+and setup in existing projects. Initialization registers all three commands and
+installs rclone; it does not configure cloud credentials or upload files.
 
 Verify both root and module-local invocations in a temporary project before
 reporting command setup complete; also check repeat calls preserve existing work.

@@ -34,6 +34,9 @@ before work. Follow the user's scope and existing project conventions.
 - Use `interim/` for intermediate datasets, `processed/` for analysis-ready data,
   and `tables/` for findings. Archive retired work under root `.archive/` with
   provenance; active work must not depend on archived files.
+- For requested uploads, use `pixi run sync-results --remote <name> --destination <folder>`
+  (preview; add `--upload` to copy). Only manual `results/`, `figures/`, and `tables/`
+  are included; use `--help` for options.
 
 ## Analysis and execution
 

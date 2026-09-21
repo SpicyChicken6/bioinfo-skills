@@ -20,6 +20,11 @@ them. Let Pixi resolve compatible versions within known project constraints.
 | File formats | `pyyaml`, `openpyxl` | `r-readxl`, `r-jsonlite`, `r-yaml` |
 | Testing | `pytest` | Base R checks |
 
+Also install `rclone` from conda-forge for the [result sync command](sync-results.md).
+In an existing project, add it with `pixi add rclone` when result sync setup is
+requested, preserving manifest constraints and tracking the updated lockfile.
+Verify `pixi run rclone version`; cloud credential setup is a separate action.
+
 ## Jupyter and MCP
 
 - Add `jupyter-collaboration` and `jupyter-mcp-tools` to the JupyterLab

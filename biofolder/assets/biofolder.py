@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
-"""Copy to <project>/scripts/biofolder.py and register the two Pixi tasks."""
+"""Copy to <project>/scripts/biofolder.py and register the bundled Pixi tasks."""
 
 import argparse
 import os
 from pathlib import Path
 import re
+import shutil
+import subprocess
 
 
 WORKSPACE_DIRS = (
@@ -130,16 +132,90 @@ def add_task(root, module, name):
     return task, False
 
 
+def sync_results(root, remote, destination, module=None, upload=False):
+    """Copy manual outputs with project-relative paths; preview unless requested."""
+    remote = remote[:-1] if remote.endswith(":") else remote
+    # Accept configured remote names, not backend connection strings or paths.
+    # https://rclone.org/docs/#valid-remote-names
+    if (not remote or remote.startswith(("-", " ")) or remote.endswith(" ")
+            or any(not (char.isalnum() or char in "_-.+@ ") for char in remote)):
+        raise ValueError("Use an rclone remote name, such as box or box:, without a path.")
+    if not destination.strip() or any(ord(char) < 32 for char in destination):
+        raise ValueError("Supply a nonempty destination folder without control characters.")
+    modules = root / "modules"
+    if modules.is_symlink() or not modules.is_dir():
+        raise ValueError(f"Expected a modules directory, not a symbolic link: {modules}")
+    selected_module = "*"
+    if module is not None:
+        selected = module_path(root, module)
+        if selected.is_symlink() or not selected.is_dir():
+            raise ValueError(f"Module does not exist or is a symbolic link: {module}")
+        selected_module = selected.name
+    rclone = shutil.which("rclone")
+    if rclone is None:
+        raise ValueError("rclone is not installed; run pixi add rclone and configure a remote with rclone config.")
+
+    # Start at the project root to keep module names in the destination layout.
+    # Ordered inclusions let rclone prune everything outside these output trees.
+    filters = ["- .gitkeep", "- .ipynb_checkpoints/**", "- .DS_Store"]
+    filters.extend(
+        f"+ /modules/{selected_module}/tasks/*/manual/{output}/**"
+        for output in ("results", "figures", "tables")
+    )
+    filters.append("- **")
+    target = f"{remote}:{destination}"
+    command = [rclone, "copy", str(root), target]
+    for rule in filters:
+        command.extend(("--filter", rule))
+    command.extend((
+        f"--dry-run={'false' if upload else 'true'}",
+        "--copy-links=false", "--links=false", "--local-links=false", "--checksum",
+        "--transfers", "4", "--checkers", "4",
+        "--contimeout", "15s", "--timeout", "2m",
+        "--retries", "3", "--low-level-retries", "5",
+        "--stats", "30s", "--stats-one-line", "--log-level", "INFO",
+    ))
+    print(f"Source:      {root}", flush=True)
+    print(f"Destination: {target}", flush=True)
+    print(f"Scope:       {selected_module} module(s), manual results/figures/tables only", flush=True)
+    print("Mode:        upload (keeps destination-only files)" if upload
+          else "Mode:        preview only; add --upload to copy files", flush=True)
+    # Rclone combines inherited filter arrays with CLI rules, so they can widen
+    # this command's scope. Keep only our selection while retaining remote
+    # configuration, credentials, and unrelated transport settings.
+    selection_options = (
+        "FILTER", "FILTER_FROM", "INCLUDE", "INCLUDE_FROM",
+        "EXCLUDE", "EXCLUDE_FROM", "EXCLUDE_IF_PRESENT",
+        "FILES_FROM", "FILES_FROM_RAW", "FILES_FROM0",
+        "IGNORE_CASE", "HASH_FILTER", "MIN_AGE", "MAX_AGE",
+        "MIN_SIZE", "MAX_SIZE", "MAX_DEPTH",
+    )
+    env = os.environ.copy()
+    for option in selection_options:
+        env.pop(f"RCLONE_{option}", None)
+    # Argument lists preserve spaces and never interpret destination text as shell code.
+    return subprocess.run(command, env=env, check=False).returncode
+
+
 def main():
-    parser = argparse.ArgumentParser(description="Create biofolder modules and numbered task workspaces.")
+    parser = argparse.ArgumentParser(description="Manage biofolder workspaces and copy manual results to cloud storage.")
     commands = parser.add_subparsers(dest="command", required=True)
     module = commands.add_parser("module", help="Create an unnumbered module.")
     module.add_argument("name")
     task = commands.add_parser("task", help="Create the next numbered task; infer the module when inside one.")
     task.add_argument("names", nargs="+", metavar="NAME", help="TASK, or MODULE TASK from the project root")
+    sync = commands.add_parser("sync-results", help="Preview or upload manual results with rclone.")
+    sync.add_argument("--remote", required=True, help="Configured rclone remote name, with optional trailing colon")
+    sync.add_argument("--destination", required=True, help="Destination folder on the remote; quote spaces")
+    sync.add_argument("--module", help="Limit to one existing module; default: all modules regardless of current directory")
+    mode = sync.add_mutually_exclusive_group()
+    mode.add_argument("--dry-run", action="store_true", help="Preview without uploading (default)")
+    mode.add_argument("--upload", action="store_true", help="Copy new/changed files; never delete destination-only files")
     args = parser.parse_args()
     try:
         root = project_root()
+        if args.command == "sync-results":
+            return sync_results(root, args.remote, args.destination, args.module, args.upload)
         if args.command == "module":
             path, existed = add_module(root, args.name)
         else:
@@ -154,4 +230,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())
