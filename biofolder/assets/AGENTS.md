@@ -9,6 +9,8 @@ before work. Follow the user's scope and existing project conventions.
 - Keep root `README.md` limited to project background and research questions.
   Track tasks and dependencies in `docs/workflow.yaml`, with details in
   module/task READMEs.
+- Module READMEs use **Description**, optional **Requirements**, and **Tasks** links.
+  Reference shared configuration for conventions such as sample-group colors.
 - Task READMEs use **Description**, **Plan**, and **Output**: briefly state
   what the task does and why, its main steps, and expected deliverables.
 - Include decision points only when user input is needed or the choice

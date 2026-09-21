@@ -1,6 +1,6 @@
 ---
 name: biofolder
-description: Initialize and maintain bioinformatics projects with root READMEs for project background and research questions, concise task READMEs, modality modules, agent/manual workspaces, Git, Pixi, and manual-result cloud uploads. Use when starting a project, documenting its purpose or tasks, placing analysis files, reorganizing work, or setting up result sync.
+description: Initialize and maintain bioinformatics projects with root READMEs for project background and research questions, concise module/task READMEs, modality modules, agent/manual workspaces, Git, Pixi, and manual-result cloud uploads. Use when starting a project, documenting its purpose or tasks, placing analysis files, reorganizing work, or setting up result sync.
 ---
 
 # Biofolder
@@ -34,9 +34,10 @@ migrate existing project files; apply those changes only within the requested sc
    task numbers. Preserve existing names and reference datasets in place.
 3. Adapt the [project README template](assets/project-README.md) into root `README.md`,
    containing only project background and research questions to state the project's
-   high-level purpose. Create module README indexes and initial tasks. Each task
-   has a shared README with **Description**, **Plan**, and **Output**, plus `agent/`
-   and `manual/` workspaces; add deeper folders as needed.
+   high-level purpose. Module READMEs use **Description**, **Requirements**, and
+   **Tasks**. Create initial tasks with a shared README containing **Description**,
+   **Plan**, and **Output**, plus `agent/` and `manual/` workspaces; add deeper
+   folders as needed.
 4. Merge [AGENTS.md](assets/AGENTS.md) into the project root, preserving existing
    project instructions. Keep research notes in task docs.
 5. Draft the canonical task list and dependencies in `docs/workflow.yaml` using
@@ -58,7 +59,15 @@ migrate existing project files; apply those changes only within the requested sc
 ## Maintain or reorganize a project
 
 Apply the project rules for file placement, ownership, Pixi, and session Git
-checkpoints. Keep task READMEs concise: **Description** states what the task does
+checkpoints. Module READMEs describe the module's role, record applicable
+requirements, and link task READMEs for navigation. Requirements can cover group
+labels, color palettes, or output conventions; omit the section if none apply.
+Define shared conventions once in project configuration (for example,
+`config/plotting.yaml` for sample-group colors) and reference them from modules.
+Keep detailed input information in the module's `data/README.md` and task status
+and dependencies in `docs/workflow.yaml`.
+
+Keep task READMEs concise: **Description** states what the task does
 and why, **Plan** lists the main steps, and **Output** describes expected deliverables
 and links accepted artifacts when available. Put detailed inputs, methods,
 reproduction commands, and validation in workspace notebooks or reports.

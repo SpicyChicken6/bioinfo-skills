@@ -29,7 +29,7 @@ project/
 │   └── decisions.md                   # Decisions that affect multiple tasks
 ├── modules/
 │   ├── transcriptomics/
-│   │   ├── README.md                  # Module scope, inputs, task map, accepted results
+│   │   ├── README.md                  # Module description, requirements, task links
 │   │   ├── config/                    # Modality-specific parameters, if needed
 │   │   ├── data/                      # Data specific to this module
 │   │   │   ├── README.md

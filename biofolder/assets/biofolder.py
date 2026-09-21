@@ -82,7 +82,10 @@ def add_module(root, name):
     directory(path)
     directory(path / "tasks")
     write_missing(path / "tasks" / ".gitkeep", "")
-    write_missing(path / "README.md", f"# {path.name}\n\n## Scope\n\n## Inputs\n\n## Tasks\n\nSee [tasks/](tasks/).\n")
+    write_missing(
+        path / "README.md",
+        f"# {path.name}\n\n## Description\n\n## Requirements\n\n## Tasks\n\nSee [tasks/](tasks/).\n",
+    )
     return path, existed
 
 
