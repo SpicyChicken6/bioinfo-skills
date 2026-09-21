@@ -6,7 +6,7 @@ Portable skills for bioinformatics and research, usable by Codex and Claude Code
 | --- | --- |
 | [biofolder](biofolder/SKILL.md) | Organize modality modules and agent/manual task workspaces; initialize Pixi, Git, and persistent project rules. |
 | [research-flow](research-flow/SKILL.md) | Read workflow YAML as context for requested work, without automatically executing or changing the plan. |
-| [consensus-mcp](consensus-mcp/SKILL.md) | Set up, repair, and use Consensus MCP for peer-reviewed literature search. |
+| [consensus-mcp](consensus-mcp/SKILL.md) | Search academic literature and retrieve full-text excerpts through Consensus MCP or its API. |
 | [semantic-scholar-literature-search](semantic-scholar-literature-search/SKILL.md) | Search the Semantic Scholar API, enrich records, and export literature tables. |
 | [over-representation-analysis](over-representation-analysis/SKILL.md) | Run unranked-gene pathway ORA with GSEApy and MSigDB, including paired plots. |
 
