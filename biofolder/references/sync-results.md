@@ -20,6 +20,8 @@ The command selects files in each task's `manual/results/`, `manual/figures/`,
 and `manual/tables/` across all modules. Running from a module or task directory
 does not narrow the selection; use `--module` explicitly. Existing numbered
 modules retain their full names.
+Inherited rclone file-selection settings are ignored; remote configuration and
+credentials remain available.
 
 Paths are preserved relative to the project root. For example:
 

@@ -169,7 +169,7 @@ def sync_results(root, remote, destination, module=None, upload=False):
         command.extend(("--filter", rule))
     command.extend((
         f"--dry-run={'false' if upload else 'true'}",
-        "--copy-links=false", "--links=false", "--checksum",
+        "--copy-links=false", "--links=false", "--local-links=false", "--checksum",
         "--transfers", "4", "--checkers", "4",
         "--contimeout", "15s", "--timeout", "2m",
         "--retries", "3", "--low-level-retries", "5",
@@ -180,8 +180,21 @@ def sync_results(root, remote, destination, module=None, upload=False):
     print(f"Scope:       {selected_module} module(s), manual results/figures/tables only", flush=True)
     print("Mode:        upload (keeps destination-only files)" if upload
           else "Mode:        preview only; add --upload to copy files", flush=True)
+    # Rclone combines inherited filter arrays with CLI rules, so they can widen
+    # this command's scope. Keep only our selection while retaining remote
+    # configuration, credentials, and unrelated transport settings.
+    selection_options = (
+        "FILTER", "FILTER_FROM", "INCLUDE", "INCLUDE_FROM",
+        "EXCLUDE", "EXCLUDE_FROM", "EXCLUDE_IF_PRESENT",
+        "FILES_FROM", "FILES_FROM_RAW", "FILES_FROM0",
+        "IGNORE_CASE", "HASH_FILTER", "MIN_AGE", "MAX_AGE",
+        "MIN_SIZE", "MAX_SIZE", "MAX_DEPTH",
+    )
+    env = os.environ.copy()
+    for option in selection_options:
+        env.pop(f"RCLONE_{option}", None)
     # Argument lists preserve spaces and never interpret destination text as shell code.
-    return subprocess.run(command, check=False).returncode
+    return subprocess.run(command, env=env, check=False).returncode
 
 
 def main():

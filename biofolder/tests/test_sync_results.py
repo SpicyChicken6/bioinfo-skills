@@ -143,6 +143,55 @@ class SyncResultsTests(unittest.TestCase):
         self.sync("--module", "rna-seq", "--upload")
         self.assertEqual(self.destination_files(), {selected: b"result\n"})
 
+    def test_inherited_filters_cannot_change_selected_upload_scope(self):
+        selected = "modules/rna/tasks/01-de/manual/results/effects.csv"
+        self.write_source(selected)
+        excluded = (
+            "data/raw/private.csv",
+            "modules/rna/tasks/01-de/agent/results/private.csv",
+            "modules/atac/tasks/01-peaks/manual/results/peaks.csv",
+            "modules/rna/tasks/01-de/manual/results/.gitkeep",
+            "modules/rna/tasks/01-de/manual/results/.DS_Store",
+            "modules/rna/tasks/01-de/manual/results/.ipynb_checkpoints/analysis.ipynb",
+        )
+        for relative in excluded:
+            self.write_source(relative, "excluded\n")
+        filter_file = self.base / "inherited filters.txt"
+        filter_file.write_text("!\n+ **\n")
+        include_file = self.base / "inherited includes.txt"
+        include_file.write_text("**\n")
+        files_file = self.base / "inherited files.txt"
+        files_file.write_text(excluded[0] + "\n")
+        cases = {
+            "RCLONE_FILTER": "+ **",
+            "RCLONE_INCLUDE": "**",
+            "RCLONE_FILTER_FROM": str(filter_file),
+            "RCLONE_INCLUDE_FROM": str(include_file),
+            "RCLONE_FILES_FROM": str(files_file),
+            "RCLONE_FILES_FROM_RAW": str(files_file),
+        }
+        for variable, value in cases.items():
+            with self.subTest(variable=variable):
+                self.env[variable] = value
+                try:
+                    self.sync("--module", "rna", "--upload")
+                    self.assertEqual(self.destination_files(), {selected: b"result\n"})
+                finally:
+                    self.env.pop(variable)
+                    if self.destination.exists():
+                        shutil.rmtree(self.destination)
+
+    def test_environment_configured_remote_survives_filter_sanitization(self):
+        selected = "modules/rna/tasks/01-de/manual/results/effects.csv"
+        self.write_source(selected)
+        self.write_source("data/raw/private.csv", "excluded\n")
+        self.config.write_text("")
+        self.env.update(RCLONE_CONFIG_ENVDRIVE_TYPE="local", RCLONE_INCLUDE="**")
+        self.run_helper(
+            "--remote", "envdrive", "--destination", str(self.destination), "--upload",
+        )
+        self.assertEqual(self.destination_files(), {selected: b"result\n"})
+
     def test_exact_module_name_wins_when_normalized_names_are_ambiguous(self):
         selected = "modules/RNA_Seq/tasks/01-de/manual/tables/effects.csv"
         self.write_source(selected)
@@ -209,8 +258,12 @@ class SyncResultsTests(unittest.TestCase):
         (results / "linked-directory").symlink_to(outside, target_is_directory=True)
         (results / "linked-result.csv").symlink_to(source)
         (results / "broken.csv").symlink_to(outside / "missing.csv")
-        self.sync("--upload")
-        self.assertEqual(self.destination_files(), {relative: b"result\n"})
+        for local_links in ("false", "true"):
+            with self.subTest(local_links=local_links):
+                self.env["RCLONE_LOCAL_LINKS"] = local_links
+                self.sync("--upload")
+                self.assertEqual(self.destination_files(), {relative: b"result\n"})
+                shutil.rmtree(self.destination)
 
     def test_symlinked_scope_directories_never_upload_their_contents(self):
         cases = (
