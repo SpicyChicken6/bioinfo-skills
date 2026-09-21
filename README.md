@@ -4,7 +4,7 @@ Portable skills for bioinformatics and research, usable by Codex and Claude Code
 
 | Skill | Purpose |
 | --- | --- |
-| [biofolder](biofolder/SKILL.md) | Organize modality modules and agent/manual task workspaces; initialize Pixi, Git, and persistent project rules. |
+| [biofolder](biofolder/SKILL.md) | Organize modality modules and agent/manual task workspaces; initialize Pixi and Git; upload manual results to a configured cloud drive. |
 | [research-flow](research-flow/SKILL.md) | Read workflow YAML as context for requested work, without automatically executing or changing the plan. |
 | [consensus-mcp](consensus-mcp/SKILL.md) | Set up, repair, and use Consensus MCP for peer-reviewed literature search. |
 | [semantic-scholar-literature-search](semantic-scholar-literature-search/SKILL.md) | Search the Semantic Scholar API, enrich records, and export literature tables. |
@@ -34,6 +34,21 @@ pixi run add-task enrichment
 ```
 
 Modules are unnumbered; tasks receive the next number within their module.
+
+Upload manual results with the [result sync command](biofolder/references/sync-results.md):
+
+```bash
+# Preview all modules, using a remote already configured in rclone.
+pixi run sync-results --remote my-box --destination Project_Results
+
+# Upload when ready; optionally select one module with --module.
+pixi run sync-results --remote my-box --destination Project_Results --upload
+```
+
+The command copies `manual/results/`, `manual/figures/`, and `manual/tables/`,
+preserving paths from `modules/` onward. Agent outputs are excluded, and files
+already on the cloud drive are never deleted. Any configured rclone remote can
+be used, including Box, OneDrive, and Google Drive.
 
 To read that plan:
 

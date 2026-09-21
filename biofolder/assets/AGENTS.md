@@ -34,6 +34,12 @@ before work. Follow the user's scope and existing project conventions.
 - Use `interim/` for intermediate datasets, `processed/` for analysis-ready data,
   and `tables/` for findings. Archive retired work under root `.archive/` with
   provenance; active work must not depend on archived files.
+- For requested cloud uploads, use `pixi run sync-results --remote <name>
+  --destination <folder>`. It previews by default; add `--upload` to copy files.
+  Select a configured rclone remote, optionally limit scope with `--module`, and
+  preserve full `modules/<module>/tasks/<task>/manual/...` paths. Include only
+  manual `results/`, `figures/`, and `tables/`; exclude agent outputs and never
+  delete destination files. Initialization does not configure credentials or upload.
 
 ## Analysis and execution
 
@@ -68,6 +74,8 @@ before work. Follow the user's scope and existing project conventions.
 - If Research Flow is missing from the project environment, install a versioned
   wheel from its [official releases](https://github.com/SpicyChicken6/research-flow/releases)
   as a Pixi-managed PyPI dependency.
+- Include `rclone` in new project environments for result uploads. Add it through
+  Pixi in existing projects when result sync setup is requested.
 - Prefer Pixi-managed dependencies and run through its locked environment.
   Preserve constraints and diagnose failures before using a fallback. If Pixi
   cannot provide a package, use its native installer with the Pixi runtime and a

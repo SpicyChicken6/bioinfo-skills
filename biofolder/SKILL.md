@@ -1,6 +1,6 @@
 ---
 name: biofolder
-description: Initialize and maintain bioinformatics project layouts with modality modules, agent/manual task workspaces, Git tracking, and Pixi environments. Use when starting a project, placing analysis files, or reorganizing existing work.
+description: Initialize and maintain bioinformatics project layouts with modality modules, agent/manual task workspaces, Git tracking, Pixi environments, and manual-result uploads to configured cloud drives. Use when starting a project, placing analysis files, reorganizing existing work, or setting up result sync commands.
 ---
 
 # Biofolder
@@ -40,11 +40,12 @@ migrate existing project files; apply those changes only within the requested sc
    New-project initialization includes this initial plan; existing plans change
    only when requested. Detailed workflows belong in task docs.
 6. Install the [starter environment](references/pixi-environment.md) with Python,
-   R, Jupyter/MCP, and Research Flow through Pixi unless the user specifies otherwise.
+   R, Jupyter/MCP, Research Flow, and rclone through Pixi unless the user specifies otherwise.
    Verify the runtimes, shared notebook connection, Research Flow, lockfile, and
    requested packages/data. Reuse existing manifests and constraints; follow the
    reference's fallback and post-link rules.
-   Install the [module/task commands](references/scaffold-commands.md) for later additions.
+   Install the [module/task and result sync commands](references/scaffold-commands.md).
+   Cloud credentials and uploads are separate from initialization.
 7. Reuse the covering Git repository or initialize one at the project root.
    Review tracking exclusions and commit the scaffold and environment definitions,
    preserving unrelated work. Report checks, unresolved choices, and incomplete
@@ -61,6 +62,14 @@ For new modules/tasks, use the [scaffold commands](references/scaffold-commands.
 `pixi run add-module <module>` or `pixi run add-task <module> <task>`.
 Inside a module, `pixi run add-task <task>` infers the module. Install the commands
 if missing when adding a module/task; preserve existing work and task numbering.
+
+For cloud result uploads, use the [result sync command](references/sync-results.md):
+`pixi run sync-results --remote <name> --destination <folder>` previews manual
+results across all modules; `--module <name>` narrows the selection and `--upload`
+copies them. Preserve the full `modules/<module>/tasks/<task>/manual/...` paths.
+Use an existing configured rclone remote and upload only when requested. Install
+or update the helper, Pixi task, and rclone dependency in existing projects only
+within the requested scope, preserving customizations.
 
 For a requested reorganization, review affected paths and consumers, preserve
 existing work, update references, and verify what moved. Archive retired work

@@ -14,7 +14,7 @@ project/
 ├── .git/                              # Git metadata; may be a file in a worktree
 ├── .gitignore
 ├── scripts/
-│   └── biofolder.py                   # Pixi add-module and add-task commands
+│   └── biofolder.py                   # Pixi add-module, add-task, sync-results
 ├── config/                            # Shared configuration; no credentials
 ├── data/                              # Inputs and datasets shared across modules
 │   ├── README.md                      # Sources, locations, provenance, access notes
