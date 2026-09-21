@@ -23,8 +23,8 @@ project/
 │   ├── interim/                       # Shared intermediate datasets
 │   └── processed/                     # Shared analysis-ready datasets
 ├── docs/
-│   ├── workflow.yaml                  # Canonical Research Flow graph
-│   ├── environment.md                 # Setup, runtime versions, environment verification
+│   ├── workflow.yaml                  # Canonical task list and dependencies (Research Flow)
+│   ├── environment.md                 # Optional notes for nonstandard setup
 │   ├── methods.md                     # Project methods and reproducibility notes
 │   └── decisions.md                   # Decisions that affect multiple tasks
 ├── modules/

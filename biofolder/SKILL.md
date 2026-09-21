@@ -38,7 +38,8 @@ migrate existing project files; apply those changes only within the requested sc
    has a shared README plus `agent/` and `manual/` workspaces; add deeper folders as needed.
 4. Merge [AGENTS.md](assets/AGENTS.md) into the project root, preserving existing
    project instructions. Keep research notes in task docs.
-5. Draft `docs/workflow.yaml` using the [Research Flow schema](references/workflow-yaml.md).
+5. Draft the canonical task list and dependencies in `docs/workflow.yaml` using
+   the [Research Flow schema](references/workflow-yaml.md).
    New-project initialization includes this initial plan; existing plans change
    only when requested. Detailed workflows belong in task docs.
 6. Install the [starter environment](references/pixi-environment.md) with Python,
