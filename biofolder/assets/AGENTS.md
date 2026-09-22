@@ -30,6 +30,10 @@ before work. Follow the user's scope and existing project conventions.
 - Put agent work in `agent/`, using `code/`, `tests/`, `data/interim/`,
   `data/processed/`, `figures/`, `tables/`, `docs/`, and `logs/` as needed.
   Read human work for context; change `manual/` only when explicitly requested.
+- Human reviews and next-task guidance live in each task's `agent/docs/review.md`.
+  Read relevant reviews, when present, before continuing work or starting a
+  dependent task. These files are human-written; preserve them unless asked to
+  edit. Agents do not need to create or update reviews.
 - Keep the task README's **Output** section current with links to accepted artifacts;
   preserve human notes. Put detailed inputs, methods, reproduction commands, and
   validation in workspace notebooks or reports. Ownership does not imply validation.

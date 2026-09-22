@@ -73,6 +73,12 @@ and links accepted artifacts when available. Put detailed inputs, methods,
 reproduction commands, and validation in workspace notebooks or reports.
 Downstream tasks should reference selected upstream artifacts with their provenance.
 
+Human reviews and next-task guidance live in each task's `agent/docs/review.md`;
+the [simple review template](assets/task-review.md) is optional. Read relevant
+reviews, when present, before continuing work or starting a dependent task.
+These files are human-written; preserve them unless asked to edit. Agents do not
+need to create or update reviews.
+
 For new modules/tasks, use the [scaffold commands](references/scaffold-commands.md):
 `pixi run add-module <module>` or `pixi run add-task <module> <task>`.
 Inside a module, `pixi run add-task <task>` infers the module. Install the commands

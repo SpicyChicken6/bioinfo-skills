@@ -49,6 +49,7 @@ project/
 │   │       │   │   ├── figures/
 │   │       │   │   ├── tables/
 │   │       │   │   ├── docs/
+│   │       │   │   │   ├── review.md   # Optional human-written review and next-task guidance
 │   │       │   │   │   └── workflow.md # Optional explanation of this branch's steps
 │   │       │   │   └── logs/
 │   │       │   └── manual/            # Human-owned work and its artifacts
@@ -89,6 +90,8 @@ The [scaffold commands](scaffold-commands.md) create each task's shared README a
 both workspaces with the standard subfolders shown above. For manual scaffolding,
 add deeper folders as needed. Modules are unnumbered; task numbers are stable
 identifiers, not dependency order.
+Human-written `agent/docs/review.md` files remain human-owned within the agent
+workspace; the [simple review template](../assets/task-review.md) is optional.
 The [project rules](../assets/AGENTS.md) define ownership, data placement, Git,
 and Pixi conventions. See the [starter packages](pixi-environment.md) and
 [workflow schema](workflow-yaml.md) when initializing those parts.
