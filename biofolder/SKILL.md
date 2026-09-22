@@ -37,7 +37,8 @@ migrate existing project files; apply those changes only within the requested sc
    high-level purpose. Module READMEs use **Description**, **Requirements**, and
    **Tasks**. Create initial tasks with a shared README containing **Description**,
    **Plan**, and **Output**, plus `agent/` and `manual/` workspaces; add deeper
-   folders as needed.
+   folders as needed. Create each task's `agent/docs/methods.md` from the
+   [methods template](assets/task-methods.md), labeling unexecuted steps as planned.
 4. Merge [AGENTS.md](assets/AGENTS.md) into the project root, preserving existing
    project instructions. Keep research notes in task docs.
 5. Draft the canonical task list and dependencies in `docs/workflow.yaml` using
@@ -69,8 +70,15 @@ and dependencies in `docs/workflow.yaml`.
 
 Keep task READMEs concise: **Description** states what the task does
 and why, **Plan** lists the main steps, and **Output** describes expected deliverables
-and links accepted artifacts when available. Put detailed inputs, methods,
-reproduction commands, and validation in workspace notebooks or reports.
+and links accepted artifacts when available. Create and maintain
+`agent/docs/methods.md` for each task using the [methods template](assets/task-methods.md);
+add it when first working on an existing task if missing, and link it from the
+task README's **Plan** section. Record actual inputs, ordered data processing,
+analysis methods, reproduction commands, and validation, with links to supporting
+code, notebooks, and outputs. Distinguish inherited preprocessing from steps
+performed in this task; document normalization and transformations precisely,
+including parameters, formulas, data scale, and checks. Mark unknowns and planned
+steps explicitly, and update the record when methods or inputs change.
 Downstream tasks should reference selected upstream artifacts with their provenance.
 
 Human reviews and next-task guidance live in each task's `agent/docs/review.md`;

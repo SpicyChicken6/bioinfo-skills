@@ -25,7 +25,7 @@ project/
 ├── docs/
 │   ├── workflow.yaml                  # Canonical task list and dependencies (Research Flow)
 │   ├── environment.md                 # Optional notes for nonstandard setup
-│   ├── methods.md                     # Project methods and reproducibility notes
+│   ├── methods.md                     # Optional cross-task methods overview
 │   └── decisions.md                   # Decisions that affect multiple tasks
 ├── modules/
 │   ├── transcriptomics/
@@ -49,8 +49,9 @@ project/
 │   │       │   │   ├── figures/
 │   │       │   │   ├── tables/
 │   │       │   │   ├── docs/
+│   │       │   │   │   ├── methods.md  # Task inputs, data processing, analysis, and validation
 │   │       │   │   │   ├── review.md   # Optional human-written review and next-task guidance
-│   │       │   │   │   └── workflow.md # Optional explanation of this branch's steps
+│   │       │   │   │   └── workflow.md # Optional orchestration notes; links to methods.md
 │   │       │   │   └── logs/
 │   │       │   └── manual/            # Human-owned work and its artifacts
 │   │       │       ├── code/
@@ -90,6 +91,11 @@ The [scaffold commands](scaffold-commands.md) create each task's shared README a
 both workspaces with the standard subfolders shown above. For manual scaffolding,
 add deeper folders as needed. Modules are unnumbered; task numbers are stable
 identifiers, not dependency order.
+Create and maintain `agent/docs/methods.md` for each task using the
+[methods template](../assets/task-methods.md), and link it from the task README's
+**Plan** section. The agent fills this record after scaffolding and keeps planned
+steps distinct from executed methods. When working on existing tasks, add it if
+missing and preserve existing documentation.
 Human-written `agent/docs/review.md` files remain human-owned within the agent
 workspace; the [simple review template](../assets/task-review.md) is optional.
 The [project rules](../assets/AGENTS.md) define ownership, data placement, Git,
