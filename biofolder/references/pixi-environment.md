@@ -27,6 +27,8 @@ Verify `pixi run rclone version`; cloud credential setup is a separate action.
 
 ## Jupyter and MCP
 
+Apply this section only when the user requests Jupyter MCP use or setup.
+
 - Add `jupyter-collaboration` and `jupyter-mcp-tools` to the JupyterLab
   environment, and install `jupyter-mcp-server` in the connector's environment.
   Manage these through Pixi, using PyPI dependencies where needed; reuse
@@ -38,7 +40,7 @@ Verify `pixi run rclone version`; cloud credential setup is a separate action.
   alone does not enable MCP tools.
 - Verify shared notebook editing, saved cell outputs, and execution in the
   project's kernel. Report unavailable connections or failed checks as incomplete
-  setup.
+  MCP setup; ordinary script execution can proceed through Pixi.
 
 ## Research Flow
 

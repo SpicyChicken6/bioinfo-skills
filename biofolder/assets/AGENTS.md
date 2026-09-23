@@ -60,19 +60,22 @@ before work. Follow the user's scope and existing project conventions.
 
 ## Analysis and execution
 
-- Use notebooks in agent/code/ for interactive analysis and figures.
-  Keep cells focused and runnable in order; save key outputs.
-- Use the configured Jupyter MCP connection and project Pixi kernel.
-  If unavailable, save executed notebooks and report the limitation.
+- Use scripts or notebooks in `agent/code/` for analysis and figures.
+  Agents may run scripts directly through the project Pixi environment.
+  For notebooks, use the project Pixi kernel, keep cells focused and runnable
+  in order, and save key outputs.
+- Use the configured Jupyter MCP connection only when instructed by the user.
+  If a requested connection is unavailable, report the limitation and use
+  scripts or executed notebooks as appropriate.
 - On Slurm clusters, run notebook kernels in compute-node allocations.
   Request suitable memory and walltime; reuse suitable existing sessions.
-- Extract reusable or complex logic into scripts while keeping the
-  notebook's parameters, steps, and results understandable.
+- Extract reusable or complex logic into scripts. When using notebooks, keep
+  their parameters, steps, and results understandable.
 - Use Slurm for substantial unattended jobs and Nextflow for multi-step
   or parallel workflows. Standalone scripts may use sbatch directly.
 - Reuse cluster profiles, record run details, and verify outputs.
-- Review persisted results in notebooks without automatically
-  resubmitting jobs. Save expensive intermediates.
+- Review persisted results without automatically resubmitting jobs.
+  Save expensive intermediates.
 - Consult [Nextflow Agent Skills](https://github.com/nextflow-io/agent-skills)
   when needed. Its launch-workflow skill targets Seqera Platform;
   use the Slurm executor for direct cluster runs.
@@ -84,10 +87,10 @@ before work. Follow the user's scope and existing project conventions.
   Default new projects to Python and R with the starter data-science packages;
   add analysis-specific dependencies as needed. Use named environments only
   for incompatible toolchains.
-- During project setup, provision JupyterLab, collaboration support,
-  kernels, and the required Jupyter MCP components through Pixi.
-  Reuse compatible installations and verify shared notebook editing
-  and execution. Configure the agent's MCP connection separately.
+- During project setup, provision JupyterLab and kernels through Pixi.
+  Set up Jupyter MCP and collaboration support only when the user requests
+  MCP use or setup. Reuse compatible installations, configure the agent's
+  MCP connection separately, and verify shared notebook editing and execution.
 - If Research Flow is missing from the project environment, install a versioned
   wheel from its [official releases](https://github.com/SpicyChicken6/research-flow/releases)
   as a Pixi-managed PyPI dependency.
