@@ -87,15 +87,16 @@ project/
         └── README.md                  # Retirement reason, original paths, replacements
 ```
 
-The [scaffold commands](scaffold-commands.md) create each task's shared README and
-both workspaces with the standard subfolders shown above. For manual scaffolding,
-add deeper folders as needed. Modules are unnumbered; task numbers are stable
-identifiers, not dependency order.
-Create and maintain `agent/docs/methods.md` for each task using the
-[methods template](../assets/task-methods.md), and link it from the task README's
-**Plan** section. The agent fills this record after scaffolding and keeps planned
-steps distinct from executed methods. When working on existing tasks, add it if
-missing and preserve existing documentation.
+The [scaffold commands](scaffold-commands.md) create each new task's shared README,
+both workspaces with the standard subfolders shown above, and
+`agent/docs/methods.md` from the [methods template](../assets/task-methods.md),
+linked from the README's **Plan** section. For manual scaffolding, include the
+methods file and link; add deeper folders as needed. Modules are unnumbered;
+task numbers are stable identifiers, not dependency order.
+The agent fills the methods record after scaffolding and keeps planned steps
+distinct from executed methods. Existing tasks are returned unchanged; when
+working on them, add a missing methods file and **Plan** link, preserving existing
+documentation.
 Human-written `agent/docs/review.md` files remain human-owned within the agent
 workspace; the [simple review template](../assets/task-review.md) is optional.
 The [project rules](../assets/AGENTS.md) define ownership, data placement, Git,

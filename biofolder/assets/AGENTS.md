@@ -41,6 +41,7 @@ before work. Follow the user's scope and existing project conventions.
   Inside a module or its descendants, `pixi run add-task <task>` infers the module.
   Tasks use the next number; repeated names reuse existing tasks. The commands
   create both workspaces with the standard subfolders, preserving existing files.
+  New tasks include `agent/docs/methods.md` and a link from the README's **Plan**.
 - Put agent work in `agent/`, using `code/`, `tests/`, `data/interim/`,
   `data/processed/`, `figures/`, `tables/`, `docs/`, and `logs/` as needed.
   Read human work for context; change `manual/` only when explicitly requested.

@@ -10,6 +10,7 @@ import unittest
 
 
 HELPER = Path(__file__).resolve().parents[1] / "assets" / "biofolder.py"
+METHODS_TEMPLATE = HELPER.with_name("task-methods.md")
 LEAVES = ("code", "tests", "data/interim", "data/processed", "figures", "tables", "docs", "logs")
 
 
@@ -108,12 +109,26 @@ class ScaffoldTests(unittest.TestCase):
             for leaf in LEAVES:
                 self.assertTrue((task / owner / leaf / ".gitkeep").is_file())
 
+    def test_installed_helper_creates_methods_from_template_and_readme_link(self):
+        self.run_helper("task", "rna", "Differential Expression")
+        task = self.root / "modules/rna/tasks/01-differential-expression"
+        methods = task / "agent/docs/methods.md"
+        expected = METHODS_TEMPLATE.read_text(encoding="utf-8").replace(
+            "<task name>", "differential-expression", 1,
+        )
+        self.assertEqual(methods.read_text(encoding="utf-8"), expected)
+        self.assertIn("[methods and run summaries](agent/docs/methods.md)",
+                      (task / "README.md").read_text())
+        self.assertFalse((task / "manual/docs/methods.md").exists())
+        self.assertFalse((task / "agent/docs/review.md").exists())
+
     def test_module_inferred_from_original_cwd_not_pixi_task_cwd(self):
         self.run_helper("module", "rna")
         module = self.root / "modules/rna"
         self.run_helper("task", "qc", caller=module)
         self.run_helper("task", "enrichment", caller=module / "tasks/01-qc/manual/code")
         self.assertTrue((module / "tasks/02-enrichment").is_dir())
+        self.assertTrue((module / "tasks/02-enrichment/agent/docs/methods.md").is_file())
 
     def test_numbering_uses_maximum_and_is_per_module(self):
         self.run_helper("task", "rna", "qc")
@@ -134,6 +149,7 @@ class ScaffoldTests(unittest.TestCase):
         task = module / "tasks/01-qc"
         (module / "README.md").write_text("Human module notes\n")
         (task / "README.md").write_text("Human task notes\n")
+        (task / "agent/docs/methods.md").write_text("Recorded methods and unresolved caveats\n")
         (task / "manual/code/script.R").write_text("# Human code\n")
         shutil.rmtree(task / "agent/tests")
         before = self.snapshot()
@@ -141,6 +157,16 @@ class ScaffoldTests(unittest.TestCase):
         result = self.run_helper("task", "rna", "qc")
         self.assertEqual(before, self.snapshot())
         self.assertFalse((task / "agent/tests").exists())
+        self.assertIn("Existing:", result.stdout)
+
+    def test_existing_task_without_methods_is_returned_unchanged(self):
+        self.run_helper("task", "rna", "qc")
+        task = self.root / "modules/rna/tasks/01-qc"
+        (task / "agent/docs/methods.md").unlink()
+        (task / "README.md").write_text("Existing task without methods\n")
+        before = self.snapshot()
+        result = self.run_helper("task", "rna", "qc")
+        self.assertEqual(before, self.snapshot())
         self.assertIn("Existing:", result.stdout)
 
     def test_missing_module_context_gives_usage_without_creating_folders(self):
@@ -197,11 +223,12 @@ class ScaffoldTests(unittest.TestCase):
         (self.root / "pixi.toml").rename(self.root / "pyproject.toml")
         env = {key: value for key, value in os.environ.items() if key not in ("PIXI_PROJECT_ROOT", "INIT_CWD")}
         result = subprocess.run(
-            [sys.executable, str(self.helper), "module", "rna"], cwd=self.root,
+            [sys.executable, str(self.helper), "task", "rna", "qc"], cwd=self.root,
             env=env, capture_output=True, text=True,
         )
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertTrue((self.root / "modules/rna").is_dir())
+        self.assertTrue((self.root / "modules/rna/tasks/01-qc/agent/docs/methods.md").is_file())
 
 
 if __name__ == "__main__":

@@ -42,17 +42,17 @@ plus a `tasks/` directory. Fill in applicable requirements and task README links
 omit Requirements if none apply. A new task gets a shared `README.md` plus
 `agent/` and `manual/`, each with `code/`, `tests/`, `data/interim/`,
 `data/processed/`, `figures/`, `tables/`, `docs/`, and `logs/`. The task README has
-**Description**, **Plan**, and **Output** sections for a concise task brief.
+**Description**, **Plan**, and **Output** sections for a concise task brief. New
+tasks also get `agent/docs/methods.md` from the [methods template](../assets/task-methods.md),
+with the task title filled in and a link from the README's **Plan** section.
 Empty directories contain `.gitkeep` so they survive Git checkout. Existing tasks
 are returned unchanged, and existing files are never overwritten. Commands print
 the path; workflow plans and analysis execution remain separate from folder creation.
 
-After scaffolding a task, create `agent/docs/methods.md` from the
-[methods template](../assets/task-methods.md) and link it from the task README's
-**Plan** section. This is an agent documentation step; the helper creates the
-folders. Label unexecuted procedures as planned, then update the record with
-actual processing, parameters, and checks as work proceeds. Preserve an existing
-methods file; add a missing one when working on that task.
+The agent fills in the generated methods file: label unexecuted procedures as
+planned, then record actual processing, parameters, checks, and run summaries
+with caveats as work proceeds. For an existing task missing the file, create it
+from the template and link it from **Plan** when working on that task.
 
 See [result sync](sync-results.md) for cloud destination options, selection rules,
 and setup in existing projects. Initialization registers all three commands and
