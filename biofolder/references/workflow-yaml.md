@@ -1,7 +1,8 @@
 # Research Flow contract
 
-`docs/workflow.yaml` is the canonical project plan; detailed methods belong in
-task docs.
+`docs/workflow.yaml` is the canonical project plan; each task's actual inputs,
+ordered data processing, analysis methods, and validation belong in
+`agent/docs/methods.md`, linked from its task README.
 Validate read-only with Research Flow in the project's Pixi environment. If
 environment setup is blocked, safely parse YAML against this version 1 contract.
 

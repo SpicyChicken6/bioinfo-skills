@@ -47,6 +47,13 @@ Empty directories contain `.gitkeep` so they survive Git checkout. Existing task
 are returned unchanged, and existing files are never overwritten. Commands print
 the path; workflow plans and analysis execution remain separate from folder creation.
 
+After scaffolding a task, create `agent/docs/methods.md` from the
+[methods template](../assets/task-methods.md) and link it from the task README's
+**Plan** section. This is an agent documentation step; the helper creates the
+folders. Label unexecuted procedures as planned, then update the record with
+actual processing, parameters, and checks as work proceeds. Preserve an existing
+methods file; add a missing one when working on that task.
+
 See [result sync](sync-results.md) for cloud destination options, selection rules,
 and setup in existing projects. Initialization registers all three commands and
 installs rclone; it does not configure cloud credentials or upload files.

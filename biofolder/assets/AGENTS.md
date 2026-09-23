@@ -13,6 +13,20 @@ before work. Follow the user's scope and existing project conventions.
   Reference shared configuration for conventions such as sample-group colors.
 - Task READMEs use **Description**, **Plan**, and **Output**: briefly state
   what the task does and why, its main steps, and expected deliverables.
+- Create and maintain `agent/docs/methods.md` in each task; add it if missing when
+  working on an existing task and link it from the task README's **Plan** section.
+  Document actual inputs, data processing in execution order, analysis methods,
+  reproduction commands, and validation, with links to code and outputs. Identify
+  upstream preprocessing and incoming data scale. For normalization and
+  transformations, record exact methods, parameters/formulas, reference or
+  scaling factors, applicable axes/groups, and resulting scale. Include filtering,
+  missing-value handling, and other processing when used, plus observed checks.
+  Identify the data version used by each analysis and figure. Mark unknowns and
+  unexecuted steps explicitly; update this record when methods or inputs change.
+  After each agent run on a task, including partial or failed runs, append a dated
+  summary of outcomes, output links, checks, caveats, and follow-ups before the final
+  response. Preserve earlier entries and unresolved caveats, record evidence for
+  resolutions, and link the record in the response.
 - Include decision points only when user input is needed or the choice
   materially changes the analysis. Use sensible defaults for routine choices.
 - Keep implementation details, alternative approaches, and troubleshooting
@@ -30,9 +44,13 @@ before work. Follow the user's scope and existing project conventions.
 - Put agent work in `agent/`, using `code/`, `tests/`, `data/interim/`,
   `data/processed/`, `figures/`, `tables/`, `docs/`, and `logs/` as needed.
   Read human work for context; change `manual/` only when explicitly requested.
+- Human reviews and next-task guidance live in each task's `agent/docs/review.md`.
+  Read relevant reviews, when present, before continuing work or starting a
+  dependent task. These files are human-written; preserve them unless asked to
+  edit. Agents do not need to create or update reviews.
 - Keep the task README's **Output** section current with links to accepted artifacts;
-  preserve human notes. Put detailed inputs, methods, reproduction commands, and
-  validation in workspace notebooks or reports. Ownership does not imply validation.
+  preserve human notes. Keep the methods record in `agent/docs/methods.md`, with
+  supporting evidence in workspace notebooks or reports. Ownership does not imply validation.
 - Keep data at its shared scope: project data across modules, module data across
   tasks, and task derivatives in their producing workspace. Reference one
   authoritative copy and preserve raw inputs unchanged.
@@ -110,8 +128,9 @@ before work. Follow the user's scope and existing project conventions.
 
 ## Workflow documentation
 
-- Keep the canonical plan in `docs/workflow.yaml` and detailed workflows in task
-  workspace docs.
+- Keep the canonical plan in `docs/workflow.yaml` and task methods in
+  `agent/docs/methods.md`. An optional `agent/docs/workflow.md` can describe
+  orchestration and link to the methods record.
 - Reading the plan does not authorize executing tasks or editing the plan.
   Change only requested fields and preserve unrelated content and layout.
 - YAML artifact paths are relative to `docs/`; commands run from the project root.
