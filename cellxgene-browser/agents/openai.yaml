@@ -1,0 +1,4 @@
+interface:
+  display_name: "CELLxGENE Browser"
+  short_description: "Set up and launch CELLxGENE for single-cell data"
+  default_prompt: "Use $cellxgene-browser to check my H5AD and launch a CELLxGENE browser locally or over SSH."
