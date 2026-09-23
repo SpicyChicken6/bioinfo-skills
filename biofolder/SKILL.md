@@ -37,8 +37,9 @@ migrate existing project files; apply those changes only within the requested sc
    high-level purpose. Module READMEs use **Description**, **Requirements**, and
    **Tasks**. Create initial tasks with a shared README containing **Description**,
    **Plan**, and **Output**, plus `agent/` and `manual/` workspaces; add deeper
-   folders as needed. Create each task's `agent/docs/methods.md` from the
-   [methods template](assets/task-methods.md), labeling unexecuted steps as planned.
+   folders as needed. For manual scaffolding, create `agent/docs/methods.md` from the
+   [methods template](assets/task-methods.md) and link it from **Plan**. Label
+   unexecuted steps as planned.
 4. Merge [AGENTS.md](assets/AGENTS.md) into the project root, preserving existing
    project instructions. Keep research notes in task docs.
 5. Draft the canonical task list and dependencies in `docs/workflow.yaml` using
@@ -96,6 +97,8 @@ For new modules/tasks, use the [scaffold commands](references/scaffold-commands.
 `pixi run add-module <module>` or `pixi run add-task <module> <task>`.
 Inside a module, `pixi run add-task <task>` infers the module. Install the commands
 if missing when adding a module/task; preserve existing work and task numbering.
+New tasks include `agent/docs/methods.md` from the template and a README **Plan**
+link; existing tasks are returned unchanged.
 
 For cloud result uploads, use the [result sync command](references/sync-results.md):
 `pixi run sync-results --remote <name> --destination <folder>` previews manual
