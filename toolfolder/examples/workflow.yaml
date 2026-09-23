@@ -1,0 +1,61 @@
+# Illustrative only. Adapt into a generated project's docs/workflow.yaml.
+# Paths resolve from docs/; components and outputs below are planned examples.
+schema_version: 1
+project:
+  id: example-tool
+  name: Example tabular validation tool
+  description: |-
+    Purpose: Parse and validate tabular inputs through a command-line interface.
+
+    Planned components:
+    - ../src/my_tool/core.py: Parsing and validation logic.
+    - ../src/my_tool/cli.py: Arguments, file IO, and user-facing errors.
+    - ../tests/: Behavioral tests and small input fixtures.
+
+    Planned runtime relationships:
+    - CLI passes input records to core and presents its results.
+    - Core does not depend on CLI.
+    - Tests exercise both the core API and the CLI.
+tasks:
+  - id: core-parser
+    title: Implement parser and validation
+    goal: Parse supported records and report invalid input clearly.
+    status: todo
+    depends_on: []
+    inputs:
+      - Representative valid and invalid tabular input cases to be defined
+    outputs:
+      - ../src/my_tool/core.py
+      - ../tests/test_core.py
+      - ../tests/fixtures/
+    notes: >-
+      Task README: ../tasks/01-parser/README.md.
+      Outputs are expected; observed validation belongs in the task README.
+  - id: cli
+    title: Expose the parser through a command-line interface
+    goal: Provide useful output, actionable errors, and documented exit behavior.
+    status: todo
+    depends_on: [core-parser]
+    inputs:
+      - ../src/my_tool/core.py
+    outputs:
+      - ../src/my_tool/cli.py
+      - ../tests/test_cli.py
+    notes: >-
+      Task README: ../tasks/02-cli/README.md.
+      This dependency describes development order, not the runtime component graph.
+  - id: quickstart
+    title: Document and verify a runnable example
+    goal: Let a new user install the tool and validate a small example input.
+    status: todo
+    depends_on: [cli]
+    inputs:
+      - ../src/my_tool/cli.py
+    outputs:
+      - ../README.md
+      - ../examples/
+    notes: >-
+      Record the commands and observed result when verification is performed.
+      This small task does not need a separate workspace initially.
+layout:
+  positions: {}
