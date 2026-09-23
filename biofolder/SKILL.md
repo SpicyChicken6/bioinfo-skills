@@ -79,6 +79,11 @@ code, notebooks, and outputs. Distinguish inherited preprocessing from steps
 performed in this task; document normalization and transformations precisely,
 including parameters, formulas, data scale, and checks. Mark unknowns and planned
 steps explicitly, and update the record when methods or inputs change.
+After each agent run on a task, including partial or failed runs, append a dated run
+summary and caveats to this file before the final response: outcomes, output
+links, validation status, limitations, and remaining work. Preserve earlier
+entries and relevant unresolved caveats; mark caveats resolved or superseded with
+supporting evidence, and link the record in the response.
 Downstream tasks should reference selected upstream artifacts with their provenance.
 
 Human reviews and next-task guidance live in each task's `agent/docs/review.md`;

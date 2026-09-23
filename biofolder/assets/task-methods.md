@@ -49,4 +49,20 @@ with their parameters and place in the processing sequence.
   environment/lockfile reference, and random seeds where applicable.
 - Output paths, what they contain, and their processing state/units for reuse.
 - Validation criteria and observed results, with links to evidence.
-- Checks not performed, known limitations, and unresolved issues.
+
+## Run summary and caveats
+
+After each agent run on this task, including partial or failed runs, append a
+concise dated entry before the final response. Preserve earlier entries and
+carry forward relevant unresolved caveats; link evidence when marking them
+resolved or superseded. Link this record from the final response.
+
+### <date/time or run ID>
+
+- **Status and outcome:** completed, partial, or failed; what ran, what changed,
+  and the main observed findings.
+- **Outputs and checks:** links to produced artifacts and validation evidence;
+  checks that passed, failed, or were not performed.
+- **Caveats:** warnings, limitations, and unresolved issues, including their
+  effect on interpretation or reuse of the results.
+- **Follow-up:** remaining work or decisions needed, if any.

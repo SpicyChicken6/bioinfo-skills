@@ -23,6 +23,10 @@ before work. Follow the user's scope and existing project conventions.
   missing-value handling, and other processing when used, plus observed checks.
   Identify the data version used by each analysis and figure. Mark unknowns and
   unexecuted steps explicitly; update this record when methods or inputs change.
+  After each agent run on a task, including partial or failed runs, append a dated
+  summary of outcomes, output links, checks, caveats, and follow-ups before the final
+  response. Preserve earlier entries and unresolved caveats, record evidence for
+  resolutions, and link the record in the response.
 - Include decision points only when user input is needed or the choice
   materially changes the analysis. Use sensible defaults for routine choices.
 - Keep implementation details, alternative approaches, and troubleshooting
