@@ -24,6 +24,7 @@ project/
 │   └── processed/                     # Shared analysis-ready datasets
 ├── docs/
 │   ├── workflow.yaml                  # Canonical task list and dependencies (Research Flow)
+│   ├── workflow-preview.html          # Generated offline viewer; refresh after YAML edits
 │   ├── environment.md                 # Optional notes for nonstandard setup
 │   ├── methods.md                     # Optional cross-task methods overview
 │   └── decisions.md                   # Decisions that affect multiple tasks

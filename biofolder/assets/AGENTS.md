@@ -133,5 +133,12 @@ before work. Follow the user's scope and existing project conventions.
   orchestration and link to the methods record.
 - Reading the plan does not authorize executing tasks or editing the plan.
   Change only requested fields and preserve unrelated content and layout.
+- After creating or updating the YAML, run Research Flow through the project
+  Pixi environment to regenerate `docs/workflow-preview.html`, a self-contained,
+  read-only viewer. Use the
+  [preview recipe](https://github.com/SpicyChicken6/bioinfo-skills/blob/main/biofolder/references/workflow-yaml.md#regenerate-the-preview);
+  it also supports an SVG figure when needed. Verify and link the refreshed file
+  in the response. If generation fails, report it and mark any old preview stale.
+  Keep YAML canonical; preview generation must not rewrite it or execute tasks.
 - YAML artifact paths are relative to `docs/`; commands run from the project root.
   Preserve another path base if an existing plan explicitly declares one.

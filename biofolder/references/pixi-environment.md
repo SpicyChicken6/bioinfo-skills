@@ -50,6 +50,16 @@ as a Pixi-managed PyPI dependency; it is not published on the PyPI index.
 Preserve a compatible existing version. Verify the CLI and read-only YAML parser
 without starting the server.
 
+Workflow previews also require `research_flow.workflow_html.render_workflow_html`
+(and `research_flow.workflow_plot.render_workflow_svg` for figures). Check these
+imports through `pixi run --locked python`; a version string alone does not prove
+support. The published v0.8.7 wheel predates these renderers. Use a compatible
+release containing them, or, while unreleased, an official source build pinned to
+a full commit SHA as a Pixi-managed PyPI dependency. Preserve explicit project pins
+and record the resolved source in the manifest and lockfile. If constraints prevent
+installation, report preview generation as blocked. Verify the installation by
+[generating the workflow preview](workflow-yaml.md#regenerate-the-preview).
+
 ## Setup and maintenance
 
 - Reuse an existing Pixi manifest (`pixi.toml` or Pixi-enabled `pyproject.toml`),
