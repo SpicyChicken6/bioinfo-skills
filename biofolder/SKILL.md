@@ -53,6 +53,8 @@ migrate existing project files; apply those changes only within the requested sc
    Reuse existing manifests and constraints; follow the reference's fallback and
    post-link rules.
    Install the [module/task and result sync commands](references/scaffold-commands.md).
+   Generate the initial offline workflow preview using the
+   [preview instructions](references/workflow-yaml.md#regenerate-the-preview).
    Cloud credentials and uploads are separate from initialization.
 7. Reuse the covering Git repository or initialize one at the project root.
    Review tracking exclusions and commit the scaffold and environment definitions,
@@ -68,7 +70,12 @@ labels, color palettes, or output conventions; omit the section if none apply.
 Define shared conventions once in project configuration (for example,
 `config/plotting.yaml` for sample-group colors) and reference them from modules.
 Keep detailed input information in the module's `data/README.md` and task status
-and dependencies in `docs/workflow.yaml`.
+and dependencies in `docs/workflow.yaml`. After each authorized YAML update,
+regenerate the read-only `docs/workflow-preview.html` with Research Flow and link
+it in the response so the user can view the current plan without running the app.
+Follow the [preview instructions](references/workflow-yaml.md#regenerate-the-preview)
+for generation, optional SVG figures, and verification; report a failed refresh
+as incomplete and identify any existing preview as stale.
 
 Keep task READMEs concise: **Description** states what the task does
 and why, **Plan** lists the main steps, and **Output** describes expected deliverables
@@ -114,6 +121,7 @@ existing work, update references, and verify what moved. Archive retired work
 with its original location, reason, and replacement documented. A placement
 question alone does not authorize a bulk migration.
 
-Verify the actual change: layout and links for scaffolds, YAML validity for plan
-edits, runtime/package checks for environment changes, and affected consumers
-for moves. Report remaining problems without claiming unperformed validation.
+Verify the actual change: layout and links for scaffolds, YAML validity and a
+refreshed preview for plan edits, runtime/package checks for environment changes,
+and affected consumers for moves. Report remaining problems without claiming
+unperformed validation.
