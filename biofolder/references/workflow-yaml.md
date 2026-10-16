@@ -52,17 +52,42 @@ root, adapting the paths to an existing project's conventions:
 ```bash
 pixi run --locked python - <<'PY'
 from datetime import datetime, timezone
+from hashlib import sha256
 from pathlib import Path
+import os
+import stat
 from research_flow.server import parse_project
 from research_flow.workflow_html import render_workflow_html
 
 source = Path("docs/workflow.yaml")
 document = parse_project(source.read_text(encoding="utf-8"))
+marker = ("<!-- biofolder-workflow-preview source-sha256:"
+          + sha256(source.name.encode("utf-8")).hexdigest() + " -->\n").encode("ascii")
+
+def write_preview(path, content):
+    payload = marker + content.encode("utf-8")
+    try:
+        fd = os.open(path, os.O_RDWR | os.O_CREAT | os.O_EXCL, 0o600)
+        created = True
+    except FileExistsError:
+        fd = os.open(path, os.O_RDWR | os.O_NOFOLLOW | os.O_NONBLOCK)
+        created = False
+    info = os.fstat(fd)
+    if not stat.S_ISREG(info.st_mode) or info.st_nlink != 1:
+        os.close(fd)
+        raise FileExistsError(f"Refusing non-regular or linked output: {path}")
+    with os.fdopen(fd, "r+b") as output:
+        if not created and output.read(len(marker)) != marker:
+            raise FileExistsError(f"Refusing output not owned by this workflow: {path}")
+        output.seek(0)
+        output.write(payload)
+        output.truncate()
+
 preview = source.with_name(source.stem + "-preview.html")
-preview.write_text(render_workflow_html(
+write_preview(preview, render_workflow_html(
     document, read_only=True, layout_mode="stages",
     saved_at=datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z"),
-), encoding="utf-8")
+))
 print(preview)
 PY
 ```
@@ -70,17 +95,21 @@ PY
 This uses the installed package's renderer without starting a server or executing
 workflow tasks. It validates and reads the YAML without reserializing it, preserving
 comments and layout. Use `layout_mode="freeform"` to preview saved node positions.
-Reserve `workflow-preview.html` for this generated output; preserve unrelated files
-at that path. The app manages `workflow.html` with its own ownership marker, so do
-not write direct renderer output there.
+The shared writer creates new files exclusively and refreshes only regular,
+unlinked files with this workflow's ownership marker. It refuses unmarked files
+(including older previews), another workflow's marker, and symbolic or hard links.
+On a collision, choose an unused output basename and link that actual path; preserve
+the existing file. Do not add a marker to bypass the check. The app manages
+`workflow.html` with its own ownership marker, so do not write direct renderer
+output there.
 
 When a figure is useful, add the following inside the Python block to generate
 `docs/workflow-preview.svg` from the same validated document:
 
 ```python
 from research_flow.workflow_plot import render_workflow_svg
-preview.with_suffix(".svg").write_text(
-    render_workflow_svg(document, layout_mode="stages"), encoding="utf-8",
+write_preview(
+    preview.with_suffix(".svg"), render_workflow_svg(document, layout_mode="stages"),
 )
 ```
 
