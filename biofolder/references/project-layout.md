@@ -14,7 +14,7 @@ project/
 ├── .git/                              # Git metadata; may be a file in a worktree
 ├── .gitignore
 ├── scripts/
-│   └── biofolder.py                   # Pixi add-module, add-task, sync-results
+│   └── biofolder.py                   # Pixi add-module, add-task, add-run, sync-results
 ├── config/                            # Shared configuration; no credentials
 ├── data/                              # Inputs and datasets shared across modules
 │   ├── README.md                      # Sources, locations, provenance, access notes
@@ -48,12 +48,17 @@ project/
 │   │       │   │   │   ├── interim/
 │   │       │   │   │   └── processed/
 │   │       │   │   ├── figures/
+│   │       │   │   │   └── run-001/   # Figures for this analysis attempt
 │   │       │   │   ├── tables/
+│   │       │   │   │   └── run-001/   # Findings for the same attempt
 │   │       │   │   ├── docs/
-│   │       │   │   │   ├── methods.md  # Task inputs, data processing, analysis, and validation
+│   │       │   │   │   ├── methods.md  # Methods and cumulative run summaries
 │   │       │   │   │   ├── review.md   # Optional human-written review and next-task guidance
-│   │       │   │   │   └── workflow.md # Optional orchestration notes; links to methods.md
+│   │       │   │   │   ├── workflow.md # Optional orchestration notes; links to methods.md
+│   │       │   │   │   └── runs/
+│   │       │   │   │       └── run-001/ # Run reservation and optional reports
 │   │       │   │   └── logs/
+│   │       │   │       └── run-001/
 │   │       │   └── manual/            # Human-owned work and its artifacts
 │   │       │       ├── code/
 │   │       │       ├── tests/
@@ -89,7 +94,7 @@ project/
 ```
 
 The [scaffold commands](scaffold-commands.md) create each new task's shared README,
-both workspaces with the standard subfolders shown above, and
+both workspaces with the standard subfolders shown above (without run directories), and
 `agent/docs/methods.md` from the [methods template](../assets/task-methods.md),
 linked from the README's **Plan** section. For manual scaffolding, include the
 methods file and link; add deeper folders as needed. Modules are unnumbered;
@@ -98,6 +103,14 @@ The agent fills the methods record after scaffolding and keeps planned steps
 distinct from executed methods. Existing tasks are returned unchanged; when
 working on them, add a missing methods file and **Plan** link, preserving existing
 documentation.
+Before analysis, `pixi run add-run <module> <task>` creates the matching run
+directories shown above. Later attempts use `run-002`, `run-003`, and so on,
+preserving finalized results. Use run subdirectories under `agent/code/` and
+`agent/data/{interim,processed}/` only when those files need run-specific versions;
+reference shared inputs and reusable caches in place. Existing custom `results/`
+folders may retain matching run subdirectories. Existing unversioned outputs stay
+in place; version new work without automatically migrating old files.
+See [run versioning](run-versioning.md) for attempt boundaries and run records.
 Human-written `agent/docs/review.md` files remain human-owned within the agent
 workspace; the [simple review template](../assets/task-review.md) is optional.
 The [project rules](../assets/AGENTS.md) define ownership, data placement, Git,

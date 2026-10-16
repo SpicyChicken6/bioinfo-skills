@@ -23,9 +23,10 @@ before work. Follow the user's scope and existing project conventions.
   missing-value handling, and other processing when used, plus observed checks.
   Identify the data version used by each analysis and figure. Mark unknowns and
   unexecuted steps explicitly; update this record when methods or inputs change.
-  After each agent run on a task, including partial or failed runs, append a dated
-  summary of outcomes, output links, checks, caveats, and follow-ups before the final
-  response. Preserve earlier entries and unresolved caveats, record evidence for
+  After working on an analysis run, including partial or failed runs, append a dated
+  summary with its exact run ID, commands, code revision, environment/input versions,
+  outcomes, output links, checks, caveats, and follow-ups before the final response.
+  Preserve earlier entries and unresolved caveats, record evidence for
   resolutions, and link the record in the response.
 - Include decision points only when user input is needed or the choice
   materially changes the analysis. Use sensible defaults for routine choices.
@@ -38,9 +39,23 @@ before work. Follow the user's scope and existing project conventions.
   numbers. Preserve existing names. Each task has a shared `README.md` plus
   `agent/` and `manual/` workspaces.
 - Use `pixi run add-module <module>` and `pixi run add-task <module> <task>`.
+- Before a new analysis attempt, reserve a task-local `run-NNN` with
+  `pixi run add-run <module> <task>`; inside a module use `<task>`, or inside the
+  task use no arguments. This creates run directories for an existing task only.
 - Put agent work in `agent/`, using `code/`, `tests/`, `data/interim/`,
   `data/processed/`, `figures/`, `tables/`, `docs/`, and `logs/` as needed.
   Read human work for context; change `manual/` only when explicitly requested.
+- Put each run's figures, tables, and logs in `agent/{figures,tables,logs}/run-NNN/`;
+  optional reports go in `agent/docs/runs/run-NNN/`. Use `agent/code/run-NNN/`
+  or `agent/data/{interim,processed}/run-NNN/` for run-specific files as needed.
+  Reference shared inputs and reusable caches in place; do not duplicate them.
+  Existing custom `results/` directories may retain matching run subdirectories.
+- Preserve finalized run outputs. Changed inputs/methods or a rerun after
+  completion gets a new ID; deliberately resuming the same incomplete attempt
+  may reuse its ID. Runs represent analysis attempts, not chat messages. Record
+  resumptions in methods.md, keep prior summaries, and never reuse an old ID for
+  unrelated work. Preserve legacy unversioned outputs in place and version new
+  work; do not migrate existing results without a request.
 - Human reviews and next-task guidance live in each task's `agent/docs/review.md`.
   Read relevant reviews, when present, before continuing work or starting a
   dependent task. These files are human-written; preserve them unless asked to

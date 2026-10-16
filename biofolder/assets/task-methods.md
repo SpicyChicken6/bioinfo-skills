@@ -1,7 +1,8 @@
 # Methods: <task name>
 
 Record what actually ran. Label planned steps and unknown details explicitly;
-update this document when inputs or methods change.
+update this document when inputs or methods change. Keep the run summaries below
+as a cumulative record; never replace earlier entries with the latest run.
 
 ## Inputs
 
@@ -45,22 +46,28 @@ with their parameters and place in the processing sequence.
 
 ## Reproduction and outputs
 
-- Code/notebook links, execution commands and working directory, run/version,
-  environment/lockfile reference, and random seeds where applicable.
+- Code/notebook links, execution commands and working directory, exact run ID,
+  code revision (and any uncommitted changes), environment/lockfile version or
+  checksum, and random seeds where applicable.
 - Output paths, what they contain, and their processing state/units for reuse.
+  Link the exact run directories, not an ambiguous latest result.
 - Validation criteria and observed results, with links to evidence.
 
 ## Run summary and caveats
 
-After each agent run on this task, including partial or failed runs, append a
-concise dated entry before the final response. Preserve earlier entries and
+After working on an analysis run, including partial or failed runs, append a
+concise dated entry before the final response. A run is an analysis attempt, not
+a chat message. Preserve earlier entries and
 carry forward relevant unresolved caveats; link evidence when marking them
 resolved or superseded. Link this record from the final response.
 
-### <date/time or run ID>
+### <run-NNN> — <date/time with timezone>
 
 - **Status and outcome:** completed, partial, or failed; what ran, what changed,
-  and the main observed findings.
+  and the main observed findings. Identify a resumed attempt explicitly.
+- **Reproduction:** exact commands and working directory, code revision or
+  snapshot, environment/lockfile version or checksum, input/reference versions,
+  and parameters/seeds; link preserved details if recorded in a per-run report.
 - **Outputs and checks:** links to produced artifacts and validation evidence;
   checks that passed, failed, or were not performed.
 - **Caveats:** warnings, limitations, and unresolved issues, including their

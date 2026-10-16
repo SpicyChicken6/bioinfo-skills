@@ -5,18 +5,21 @@ During project initialization, copy [the helper](../assets/biofolder.py) to
 result uploads also require the Pixi-managed `rclone` executable.
 Register these tasks in the existing Pixi manifest, preserving other tasks and
 any customized helper. For an existing project, install module/task commands
-when adding a module/task; add result sync when requested.
+when adding a module/task, add the run command when adopting run versioning,
+and add result sync when requested.
 
 ```toml
 [tasks]
 add-module = "python scripts/biofolder.py module"
 add-task = "python scripts/biofolder.py task"
+add-run = "python scripts/biofolder.py run"
 sync-results = "python scripts/biofolder.py sync-results"
 ```
 
 For a Pixi-enabled `pyproject.toml`, use `[tool.pixi.tasks]` instead. Keep the
 default task working directory and do not override `INIT_CWD`: the helper uses
-Pixi's original invocation directory to identify the module for `add-task`.
+Pixi's original invocation directory to identify the module for `add-task`
+and the module/task for `add-run`.
 `sync-results` always selects from the project root, regardless of invocation
 directory; use its explicit `--module` option to limit scope.
 
@@ -29,6 +32,28 @@ pixi run add-task transcriptomics differential-expression
 cd modules/transcriptomics
 pixi run add-task enrichment
 ```
+
+Reserve a run for an existing task before analysis:
+
+```bash
+# From the project root:
+pixi run add-run transcriptomics 01-differential-expression
+
+# From that module:
+pixi run add-run 01-differential-expression
+
+# From the task or any directory below it:
+pixi run add-run
+```
+
+Each call reserves a new task-local `run-NNN` and creates matching directories in
+`agent/figures/`, `agent/tables/`, `agent/logs/`, and `agent/docs/runs/`, with
+`.gitkeep` files. IDs start at `run-001` and advance past existing run IDs; gaps
+are not reused. The command requires an existing task and prints the reserved
+run's docs path. It does not execute analysis or edit the task README, methods,
+or human review. To resume an incomplete attempt, deliberately use its existing
+ID without calling `add-run` again. See [run versioning](run-versioning.md) for
+output placement and provenance.
 
 Modules have no automatic number. Tasks use the highest existing task number + 1
 within that module, starting at `01`; gaps are not reused. New names become
@@ -55,8 +80,9 @@ with caveats as work proceeds. For an existing task missing the file, create it
 from the template and link it from **Plan** when working on that task.
 
 See [result sync](sync-results.md) for cloud destination options, selection rules,
-and setup in existing projects. Initialization registers all three commands and
+and setup in existing projects. Initialization registers all four commands and
 installs rclone; it does not configure cloud credentials or upload files.
 
-Verify both root and module-local invocations in a temporary project before
-reporting command setup complete; also check repeat calls preserve existing work.
+Verify root and module-local invocations, plus task-local `add-run`, in a temporary
+project before reporting command setup complete. Check that repeated scaffolds
+preserve existing work and repeated `add-run` calls allocate distinct IDs.

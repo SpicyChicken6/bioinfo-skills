@@ -14,12 +14,19 @@ WORKSPACE_DIRS = (
     "figures", "tables", "docs", "logs",
 )
 NUMBERED = re.compile(r"^(\d+)-(.+)$")
+RUN_NUMBERED = re.compile(r"^run-(\d+)$")
+RUN_CATEGORIES = (
+    "code", "figures", "tables", "logs", "data/interim", "data/processed",
+    "docs/runs", "results",
+)
+RUN_OUTPUT_DIRS = ("figures", "tables", "logs")
 
 # Keep in sync with task-methods.md; embed it so the installed helper is standalone.
 TASK_METHODS_TEMPLATE = """# Methods: <task name>
 
 Record what actually ran. Label planned steps and unknown details explicitly;
-update this document when inputs or methods change.
+update this document when inputs or methods change. Keep the run summaries below
+as a cumulative record; never replace earlier entries with the latest run.
 
 ## Inputs
 
@@ -63,22 +70,28 @@ with their parameters and place in the processing sequence.
 
 ## Reproduction and outputs
 
-- Code/notebook links, execution commands and working directory, run/version,
-  environment/lockfile reference, and random seeds where applicable.
+- Code/notebook links, execution commands and working directory, exact run ID,
+  code revision (and any uncommitted changes), environment/lockfile version or
+  checksum, and random seeds where applicable.
 - Output paths, what they contain, and their processing state/units for reuse.
+  Link the exact run directories, not an ambiguous latest result.
 - Validation criteria and observed results, with links to evidence.
 
 ## Run summary and caveats
 
-After each agent run on this task, including partial or failed runs, append a
-concise dated entry before the final response. Preserve earlier entries and
+After working on an analysis run, including partial or failed runs, append a
+concise dated entry before the final response. A run is an analysis attempt, not
+a chat message. Preserve earlier entries and
 carry forward relevant unresolved caveats; link evidence when marking them
 resolved or superseded. Link this record from the final response.
 
-### <date/time or run ID>
+### <run-NNN> — <date/time with timezone>
 
 - **Status and outcome:** completed, partial, or failed; what ran, what changed,
-  and the main observed findings.
+  and the main observed findings. Identify a resumed attempt explicitly.
+- **Reproduction:** exact commands and working directory, code revision or
+  snapshot, environment/lockfile version or checksum, input/reference versions,
+  and parameters/seeds; link preserved details if recorded in a per-run report.
 - **Outputs and checks:** links to produced artifacts and validation evidence;
   checks that passed, failed, or were not performed.
 - **Caveats:** warnings, limitations, and unresolved issues, including their
@@ -210,6 +223,94 @@ def add_task(root, module, name):
     return task, False
 
 
+def check_directory_chain(root, path):
+    """Check existing ancestors before writing or scanning run directories."""
+    current = root
+    for part in path.relative_to(root).parts:
+        current = current / part
+        if current.is_symlink() or (current.exists() and not current.is_dir()):
+            raise ValueError(f"Expected a directory, not a symbolic link or file: {current}")
+
+
+def existing_task(root, module, name):
+    normalized = slug(name)
+    tasks = module_path(root, module) / "tasks"
+    check_directory_chain(root, tasks)
+    if not tasks.is_dir():
+        raise ValueError(f"No existing task directory: {tasks}")
+    exact = tasks / name
+    if exact.exists() or exact.is_symlink():
+        selected = exact
+    else:
+        matches = []
+        for candidate in tasks.iterdir():
+            match = NUMBERED.fullmatch(candidate.name)
+            if ((candidate.is_dir() or candidate.is_symlink())
+                    and (candidate.name == normalized or (match and match[2] == normalized))):
+                matches.append(candidate)
+        if len(matches) != 1:
+            raise ValueError(f"Expected one existing task matching '{name}' in {tasks}; use its full folder name.")
+        selected = matches[0]
+    check_directory_chain(root, selected)
+    return selected
+
+
+def run_context(root, names):
+    if len(names) == 2:
+        return names
+    if len(names) > 2:
+        raise ValueError("Supply MODULE TASK, TASK inside a module, or no names inside a task.")
+    # Keep lexical path components so a symlinked task is rejected, not followed.
+    caller = Path(os.path.abspath(os.environ.get("INIT_CWD") or Path.cwd()))
+    try:
+        parts = caller.relative_to(root / "modules").parts
+    except ValueError:
+        parts = ()
+    if names and parts:
+        return parts[0], names[0]
+    if not names and len(parts) >= 3 and parts[1] == "tasks":
+        return parts[0], parts[2]
+    raise ValueError("Use: pixi run add-run <module> <task>; inside a module supply TASK, or inside a task supply no names.")
+
+
+def add_run(root, module, name):
+    task = existing_task(root, module, name)
+    agent = task / "agent"
+    categories = [agent / relative for relative in RUN_CATEGORIES]
+    # Preflight every category before creating anything; legacy outputs remain in place.
+    for category in categories:
+        check_directory_chain(root, category)
+    highest = 0
+    for category in categories:
+        if category.is_dir():
+            for entry in category.iterdir():
+                match = RUN_NUMBERED.fullmatch(entry.name)
+                if match:
+                    highest = max(highest, int(match[1]))
+    for relative in ("docs/runs", *RUN_OUTPUT_DIRS):
+        leaf = agent
+        directory(leaf)
+        for part in Path(relative).parts:
+            leaf = directory(leaf / part)
+    # Atomic reservation gives simultaneous callers different IDs. A partial setup
+    # keeps its reservation, so a later call cannot reuse or overwrite its output.
+    number = highest + 1
+    while True:
+        run_id = f"run-{number:03d}"
+        run = agent / "docs/runs" / run_id
+        try:
+            run.mkdir()
+            break
+        except FileExistsError:
+            number += 1
+    write_missing(run / ".gitkeep", "")
+    for relative in RUN_OUTPUT_DIRS:
+        output = agent / relative / run_id
+        output.mkdir()
+        write_missing(output / ".gitkeep", "")
+    return run, False
+
+
 def sync_results(root, remote, destination, module=None, upload=False):
     """Copy manual outputs with project-relative paths; preview unless requested."""
     remote = remote[:-1] if remote.endswith(":") else remote
@@ -282,6 +383,8 @@ def main():
     module.add_argument("name")
     task = commands.add_parser("task", help="Create the next numbered task; infer the module when inside one.")
     task.add_argument("names", nargs="+", metavar="NAME", help="TASK, or MODULE TASK from the project root")
+    run = commands.add_parser("run", help="Create versioned output directories for a new run of an existing task.")
+    run.add_argument("names", nargs="*", metavar="NAME", help="MODULE TASK, TASK inside a module, or no names inside a task")
     sync = commands.add_parser("sync-results", help="Preview or upload manual results with rclone.")
     sync.add_argument("--remote", required=True, help="Configured rclone remote name, with optional trailing colon")
     sync.add_argument("--destination", required=True, help="Destination folder on the remote; quote spaces")
@@ -296,6 +399,9 @@ def main():
             return sync_results(root, args.remote, args.destination, args.module, args.upload)
         if args.command == "module":
             path, existed = add_module(root, args.name)
+        elif args.command == "run":
+            module, name = run_context(root, args.names)
+            path, existed = add_run(root, module, name)
         else:
             if len(args.names) not in (1, 2):
                 raise ValueError("Supply TASK inside a module, or MODULE TASK from the project root.")

@@ -4,7 +4,7 @@ Portable skills for bioinformatics and research, usable by Codex and Claude Code
 
 | Skill | Purpose |
 | --- | --- |
-| [biofolder](biofolder/SKILL.md) | Organize modality modules and agent/manual task workspaces; initialize Pixi and Git; upload manual results to a configured cloud drive. |
+| [biofolder](biofolder/SKILL.md) | Organize modality modules and agent/manual task workspaces; version outputs by run; initialize Pixi and Git; upload manual results to a configured cloud drive. |
 | [toolfolder](toolfolder/SKILL.md) | Organize reusable tools with shared source and tests, task workspaces, and components and development plans in workflow YAML. |
 | [research-flow](research-flow/SKILL.md) | Read workflow YAML as context for requested work, without automatically executing or changing the plan. |
 | [cellxgene-browser](cellxgene-browser/SKILL.md) | Set up and launch CELLxGENE Annotate for single-cell H5AD data, locally or over SSH. |
@@ -28,7 +28,7 @@ for project background and research questions, a
 [starter environment](biofolder/references/pixi-environment.md) with Python, R,
 and Research Flow. The project plan lives at `docs/workflow.yaml`.
 
-Initialization also installs [module/task commands](biofolder/references/scaffold-commands.md):
+Initialization also installs [module/task/run commands](biofolder/references/scaffold-commands.md):
 
 ```bash
 pixi run add-module transcriptomics
@@ -38,6 +38,20 @@ pixi run add-task enrichment
 ```
 
 Modules are unnumbered; tasks receive the next number within their module.
+
+Reserve an analysis run for an existing task:
+
+```bash
+pixi run add-run transcriptomics 01-differential-expression
+```
+
+[Run versioning](biofolder/references/run-versioning.md) preserves each attempt's
+figures, tables, logs, and optional reports under matching `run-NNN` directories
+in the task's `agent/` workspace. Run IDs are task-local; each new attempt gets a
+new ID, while an incomplete attempt may be deliberately resumed. The helper
+creates directories only. Record commands, input/environment versions, outcomes,
+and caveats in the cumulative `agent/docs/methods.md` run summaries. Existing
+unversioned outputs and human work stay in place.
 
 Upload manual results with the [result sync command](biofolder/references/sync-results.md):
 

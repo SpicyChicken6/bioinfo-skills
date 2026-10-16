@@ -1,6 +1,6 @@
 ---
 name: biofolder
-description: Initialize and maintain bioinformatics projects with root READMEs for project background and research questions, concise module/task READMEs, modality modules, agent/manual workspaces, Git, Pixi, and manual-result cloud uploads. Use when starting a project, documenting its purpose or tasks, placing analysis files, reorganizing work, or setting up result sync.
+description: Initialize and maintain bioinformatics projects with root READMEs for project background and research questions, concise module/task READMEs, modality modules, agent/manual workspaces, run-versioned outputs, Git, Pixi, and manual-result cloud uploads. Use when starting a project, documenting its purpose or tasks, placing analysis files, versioning analysis runs, reorganizing work, or setting up result sync.
 ---
 
 # Biofolder
@@ -52,7 +52,7 @@ migrate existing project files; apply those changes only within the requested sc
    Configure and verify Jupyter MCP only when the user requests MCP use or setup.
    Reuse existing manifests and constraints; follow the reference's fallback and
    post-link rules.
-   Install the [module/task and result sync commands](references/scaffold-commands.md).
+   Install the [module/task/run and result sync commands](references/scaffold-commands.md).
    Generate the initial offline workflow preview using the
    [preview instructions](references/workflow-yaml.md#regenerate-the-preview).
    Cloud credentials and uploads are separate from initialization.
@@ -88,9 +88,15 @@ code, notebooks, and outputs. Distinguish inherited preprocessing from steps
 performed in this task; document normalization and transformations precisely,
 including parameters, formulas, data scale, and checks. Mark unknowns and planned
 steps explicitly, and update the record when methods or inputs change.
-After each agent run on a task, including partial or failed runs, append a dated run
-summary and caveats to this file before the final response: outcomes, output
-links, validation status, limitations, and remaining work. Preserve earlier
+For each analysis attempt, follow [run versioning](references/run-versioning.md).
+Reserve a task-local `run-NNN` before execution and put new figures, tables, logs,
+and supporting reports in their matching run directories. Preserve finalized
+outputs and existing unversioned files; a completed rerun or changed inputs or
+methods gets a new ID. A chat message alone does not create a run.
+After working on an analysis run, including partial or failed runs, append a dated
+summary and caveats to `agent/docs/methods.md` before the final response: exact run
+ID, commands, code revision, environment/input versions, outcomes, output links,
+validation status, limitations, and remaining work. Preserve earlier
 entries and relevant unresolved caveats; mark caveats resolved or superseded with
 supporting evidence, and link the record in the response.
 Downstream tasks should reference selected upstream artifacts with their provenance.
@@ -107,6 +113,11 @@ Inside a module, `pixi run add-task <task>` infers the module. Install the comma
 if missing when adding a module/task; preserve existing work and task numbering.
 New tasks include `agent/docs/methods.md` from the template and a README **Plan**
 link; existing tasks are returned unchanged.
+For an existing task, `pixi run add-run <module> <task>` reserves the next run;
+inside a module use `<task>`, or inside the task use no arguments. It creates
+directories only; it does not execute analysis or update documentation. Install
+or update the helper and Pixi task when adopting run versioning, preserving
+project customizations and existing results.
 
 For cloud result uploads, use the [result sync command](references/sync-results.md):
 `pixi run sync-results --remote <name> --destination <folder>` previews manual
