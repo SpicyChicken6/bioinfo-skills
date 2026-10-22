@@ -72,6 +72,10 @@ and automatic previews on Save. Use a release that includes them or an official
 source build pinned to a full commit SHA, preserving explicit project constraints
 and recording the resolved source in the environment manifest and lockfile. If
 those constraints prevent setup, report preview generation as incomplete.
+Current upstream builds import Unix-only `fcntl` in the parser; on Windows, run
+the full recipe in WSL unless the installed build passes these imports natively.
+The file writer below supports both Windows and Unix, independently of that
+upstream dependency.
 
 After every authorized save of `docs/workflow.yaml`, including initial creation,
 regenerate an offline, read-only HTML before reporting the work complete. App
@@ -98,19 +102,36 @@ marker = ("<!-- toolfolder-workflow-preview source-sha256:"
 
 def write_preview(path, content):
     payload = marker + content.encode("utf-8")
+    flags = os.O_RDWR | getattr(os, "O_BINARY", 0)
+    expected = None
+
+    def check_file(info):
+        reparse = getattr(info, "st_file_attributes", 0) & getattr(
+            stat, "FILE_ATTRIBUTE_REPARSE_POINT", 0
+        )
+        if not stat.S_ISREG(info.st_mode) or info.st_nlink != 1 or reparse:
+            raise FileExistsError(f"Refusing non-regular or linked output: {path}")
+
     try:
-        fd = os.open(path, os.O_RDWR | os.O_CREAT | os.O_EXCL, 0o600)
+        fd = os.open(path, flags | os.O_CREAT | os.O_EXCL, 0o600)
         created = True
     except FileExistsError:
-        fd = os.open(path, os.O_RDWR | os.O_NOFOLLOW | os.O_NONBLOCK)
+        expected = path.lstat()
+        check_file(expected)
+        fd = os.open(path, flags | getattr(os, "O_NOFOLLOW", 0)
+                     | getattr(os, "O_NONBLOCK", 0))
         created = False
-    info = os.fstat(fd)
-    if not stat.S_ISREG(info.st_mode) or info.st_nlink != 1:
-        os.close(fd)
-        raise FileExistsError(f"Refusing non-regular or linked output: {path}")
     with os.fdopen(fd, "r+b") as output:
+        opened = os.fstat(output.fileno())
+        check_file(opened)
         if not created and output.read(len(marker)) != marker:
             raise FileExistsError(f"Refusing output not owned by this workflow: {path}")
+        current = path.lstat()
+        check_file(current)
+        check_file(os.fstat(output.fileno()))
+        if (not opened.st_ino or not os.path.samestat(opened, current)
+                or (expected is not None and not os.path.samestat(opened, expected))):
+            raise FileExistsError(f"Output changed or identity is unavailable: {path}")
         output.seek(0)
         output.write(payload)
         output.truncate()
@@ -130,6 +151,8 @@ comments and layout. Use `layout_mode="freeform"` to preview saved node position
 The writer creates new files exclusively and refreshes only regular,
 unlinked files with this workflow's ownership marker. It refuses unmarked files
 (including older previews), another workflow's marker, and symbolic or hard links.
+Platform-specific flags are optional; path and open-file identity checks guard
+refreshes before any writes even when `O_NOFOLLOW` is unavailable.
 On a collision, choose an unused output basename and link that actual path; preserve
 the existing file. Do not add a marker to bypass the check. The app manages
 `workflow.html` with its own ownership marker, so do not write direct renderer
