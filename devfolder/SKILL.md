@@ -1,9 +1,9 @@
 ---
-name: development
+name: devfolder
 description: Start a new software project with a suitable stack, lightweight structure, and development guidance.
 ---
 
-# Development
+# Devfolder
 
 1. If the brief is missing or unclear, ask focused questions about the goal,
    users, main workflow, and constraints before recommending a stack.

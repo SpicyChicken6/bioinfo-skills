@@ -1,17 +1,17 @@
-name: Development preview writer
+name: Devfolder preview writer
 
 on:
   pull_request:
     paths:
-      - development/assets/preview_workflow.py
-      - tests/test_development_preview.py
-      - .github/workflows/development-preview.yml
+      - devfolder/assets/preview_workflow.py
+      - tests/test_devfolder_preview.py
+      - .github/workflows/devfolder-preview.yml
   push:
     branches: [main]
     paths:
-      - development/assets/preview_workflow.py
-      - tests/test_development_preview.py
-      - .github/workflows/development-preview.yml
+      - devfolder/assets/preview_workflow.py
+      - tests/test_devfolder_preview.py
+      - .github/workflows/devfolder-preview.yml
 
 permissions:
   contents: read
@@ -30,4 +30,4 @@ jobs:
       - uses: actions/setup-python@v7
         with:
           python-version: '3.10'
-      - run: python -m unittest discover -s tests -p test_development_preview.py -v
+      - run: python -m unittest discover -s tests -p test_devfolder_preview.py -v

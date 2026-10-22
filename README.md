@@ -5,7 +5,7 @@ Portable skills for bioinformatics and research, usable by Codex and Claude Code
 | Skill | Purpose |
 | --- | --- |
 | [biofolder](biofolder/SKILL.md) | Organize modality modules and agent/manual task workspaces; initialize Pixi and Git; upload manual results to a configured cloud drive. |
-| [development](development/SKILL.md) | Start software projects with Pixi, a lightweight monorepo, UI design guidance, and a visual development plan. |
+| [devfolder](devfolder/SKILL.md) | Start software projects with Pixi, a lightweight monorepo, UI design guidance, and a visual development plan. |
 | [research-flow](research-flow/SKILL.md) | Read workflow YAML as context for requested work, without automatically executing or changing the plan. |
 | [cellxgene-browser](cellxgene-browser/SKILL.md) | Set up and launch CELLxGENE Annotate for single-cell H5AD data, locally or over SSH. |
 | [consensus-mcp](consensus-mcp/SKILL.md) | Search academic literature and retrieve full-text excerpts through Consensus MCP or its API. |
@@ -67,17 +67,17 @@ and [releases](https://github.com/SpicyChicken6/research-flow/releases).
 ## Start a development project
 
 ```text
-Use development to start a sample-sheet validation app with a web UI and
+Use devfolder to start a sample-sheet validation app with a web UI and
 Python backend. Use Pixi, keep frontend and backend separate, and record
 components and development tasks in docs/workflow.yaml with its HTML preview.
 Start with a small working version.
 ```
 
-Development includes [project instructions](development/assets/AGENTS.md), a
-[README template](development/assets/README.md), an
-[example layout](development/assets/project-layout.md), and a
-[workflow template](development/assets/workflow.yaml). For web projects, the
-[design template](development/assets/DESIGN.md) records the theme and links to
+Devfolder includes [project instructions](devfolder/assets/AGENTS.md), a
+[README template](devfolder/assets/README.md), an
+[example layout](devfolder/assets/project-layout.md), and a
+[workflow template](devfolder/assets/workflow.yaml). For web projects, the
+[design template](devfolder/assets/DESIGN.md) records the theme and links to
 a visual preview. Design resources and moon task tooling are optional.
 
 ## Analysis examples

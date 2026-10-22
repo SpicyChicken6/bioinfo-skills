@@ -8,7 +8,7 @@ from types import SimpleNamespace
 import unittest
 
 
-SCRIPT = Path(__file__).resolve().parents[1] / "development/assets/preview_workflow.py"
+SCRIPT = Path(__file__).resolve().parents[1] / "devfolder/assets/preview_workflow.py"
 WRITER = next(node for node in ast.parse(SCRIPT.read_text(encoding="utf-8")).body
               if isinstance(node, ast.FunctionDef) and node.name == "write_preview")
 CODE = compile(ast.Module(body=[WRITER], type_ignores=[]), str(SCRIPT), "exec")
