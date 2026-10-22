@@ -92,6 +92,7 @@ from hashlib import sha256
 from pathlib import Path
 import os
 import stat
+import tempfile
 from research_flow.server import parse_project
 from research_flow.workflow_html import render_workflow_html
 
@@ -103,8 +104,6 @@ marker = ("<!-- toolfolder-workflow-preview source-sha256:"
 def write_preview(path, content):
     payload = marker + content.encode("utf-8")
     flags = os.O_RDWR | getattr(os, "O_BINARY", 0)
-    expected = None
-
     def check_file(info):
         reparse = getattr(info, "st_file_attributes", 0) & getattr(
             stat, "FILE_ATTRIBUTE_REPARSE_POINT", 0
@@ -112,27 +111,31 @@ def write_preview(path, content):
         if not stat.S_ISREG(info.st_mode) or info.st_nlink != 1 or reparse:
             raise FileExistsError(f"Refusing non-regular or linked output: {path}")
 
-    # Windows exclusive creation may follow a dangling symlink: inspect first.
     try:
         expected = path.lstat()
     except FileNotFoundError:
-        fd = os.open(path, flags | os.O_CREAT | os.O_EXCL, 0o600)
-        created = True
-    else:
-        check_file(expected)
-        fd = os.open(path, flags | getattr(os, "O_NOFOLLOW", 0)
-                     | getattr(os, "O_NONBLOCK", 0))
-        created = False
+        # Publish without opening the destination or following a raced symlink.
+        fd, temporary = tempfile.mkstemp(dir=path.parent, prefix=".workflow-preview-")
+        try:
+            with os.fdopen(fd, "wb") as output:
+                output.write(payload)
+            os.link(temporary, path)
+        finally:
+            os.unlink(temporary)
+        return
+    check_file(expected)
+    fd = os.open(path, flags | getattr(os, "O_NOFOLLOW", 0)
+                 | getattr(os, "O_NONBLOCK", 0))
     with os.fdopen(fd, "r+b") as output:
         opened = os.fstat(output.fileno())
         check_file(opened)
-        if not created and output.read(len(marker)) != marker:
+        if output.read(len(marker)) != marker:
             raise FileExistsError(f"Refusing output not owned by this workflow: {path}")
         current = path.lstat()
         check_file(current)
         check_file(os.fstat(output.fileno()))
         if (not opened.st_ino or not os.path.samestat(opened, current)
-                or (expected is not None and not os.path.samestat(opened, expected))):
+                or not os.path.samestat(opened, expected)):
             raise FileExistsError(f"Output changed or identity is unavailable: {path}")
         output.seek(0)
         output.write(payload)
@@ -153,6 +156,9 @@ comments and layout. Use `layout_mode="freeform"` to preview saved node position
 The writer creates new files exclusively and refreshes only regular,
 unlinked files with this workflow's ownership marker. It refuses unmarked files
 (including older previews), another workflow's marker, and symbolic or hard links.
+New previews are staged beside the destination and published with `os.link`,
+which refuses an existing destination even if it is a dangling symlink. The
+temporary name is then removed; creation requires filesystem hard-link support.
 Platform-specific flags are optional; path and open-file identity checks guard
 refreshes before any writes even when `O_NOFOLLOW` is unavailable.
 On a collision, choose an unused output basename and link that actual path; preserve

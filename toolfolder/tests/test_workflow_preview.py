@@ -27,7 +27,7 @@ class PreviewWriterTests(unittest.TestCase):
             name: getattr(os, name) for name in dir(os)
             if name not in {"O_NOFOLLOW", "O_NONBLOCK"}
         })
-        namespace = {"os": self.os, "stat": stat, "marker": MARKER}
+        namespace = {"os": self.os, "stat": stat, "tempfile": tempfile, "marker": MARKER}
         exec(CODE, namespace)
         self.write_preview = namespace["write_preview"]
 
@@ -88,6 +88,29 @@ class PreviewWriterTests(unittest.TestCase):
         with self.assertRaises(OSError):
             self.write_preview(self.path, "Replacement")
         self.assertEqual(child.read_bytes(), b"Personal content")
+
+    def test_dangling_symlink_created_during_publication_is_preserved(self):
+        target = self.root / "missing.html"
+
+        def racing_link(source, destination):
+            self.symlink(self.path, target)
+            return os.link(source, destination)
+
+        self.os.link = racing_link
+        with self.assertRaises(OSError):
+            self.write_preview(self.path, "Must not be published")
+        self.assertTrue(self.path.is_symlink())
+        self.assertFalse(target.exists())
+        self.assertEqual(list(self.root.iterdir()), [self.path])
+
+    def test_publication_failure_cleans_temporary_file(self):
+        def unsupported_link(*args):
+            raise OSError("Filesystem does not support hard links")
+
+        self.os.link = unsupported_link
+        with self.assertRaises(OSError):
+            self.write_preview(self.path, "Must not be published")
+        self.assertEqual(list(self.root.iterdir()), [])
 
     def check_open_race(self, use_symlink):
         original = MARKER + b"Original preview"
