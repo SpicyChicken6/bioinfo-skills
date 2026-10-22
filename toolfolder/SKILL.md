@@ -7,7 +7,9 @@ description: Initialize and organize reusable software tools with shared source 
 
 Keep maintained source and tests in stable, shared locations. Use task folders
 for plans, experiments, and review, with one canonical component overview and
-development plan in `docs/workflow.yaml`.
+development plan in `docs/workflow.yaml`. Use
+[Research Flow](https://github.com/SpicyChicken6/research-flow) to validate and
+visualize the plan, generating a read-only HTML preview after every YAML save.
 
 ## Initialize a tool project
 
@@ -27,6 +29,7 @@ development plan in `docs/workflow.yaml`.
    runtime relationships in `project.description`, with development tasks in
    `tasks`. Do not create a separate `architecture.md`. Initialization includes
    an initial plan, with future work marked `todo` and expected outputs identified.
+   Generate its HTML preview once Research Flow is available in step 6.
 5. When a task needs a workspace, use `tasks/<NN-name>/` with a shared
    [task README](assets/task-README.md). Use stable, zero-padded numbers as
    identifiers, not execution order. Link the README from the corresponding YAML
@@ -38,6 +41,8 @@ development plan in `docs/workflow.yaml`.
    a generated `pixi.lock`. Use the language's normal manifest and lockfile for
    other stacks. Add only the runtimes and development tools the project needs;
    document commands for installation, tests, linting, and builds as applicable.
+   Set up Research Flow as development tooling and generate the initial preview
+   using the [preview instructions](references/workflow-yaml.md#regenerate-the-preview).
 7. Reuse a covering Git repository or initialize one at the tool root. Review
    tracking exclusions. Validate the scaffold, links, workflow, and any configured
    environment or runnable example. Report what exists, what was checked, and
@@ -60,8 +65,13 @@ Use `docs/workflow.yaml` as the canonical record of components, relationships,
 task statuses, and dependencies. Keep detailed implementation notes in task
 READMEs and link them from YAML `notes`. Reading the workflow is context for the
 requested work, not a request to execute its graph. Edit an existing plan within
-the user's requested scope, preserving unrelated content and layout. Record
-significant design rationale in `docs/decisions.md` only when useful; do not
+the user's requested scope, preserving unrelated content and layout. After
+each authorized save, regenerate the read-only HTML preview with Research
+Flow, including after direct YAML edits. Follow the
+[preview instructions](references/workflow-yaml.md#regenerate-the-preview), verify
+the refreshed file, and link it in the response. Report failed generation as
+incomplete and identify any existing preview as stale. Record significant design
+rationale in `docs/decisions.md` only when useful; do not
 duplicate the component overview or task-status tracking there.
 
 For requested reorganizations, inspect imports, entry points, packaging, tests,
