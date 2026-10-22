@@ -1,0 +1,33 @@
+name: Toolfolder preview writer
+
+on:
+  pull_request:
+    paths:
+      - toolfolder/references/workflow-yaml.md
+      - toolfolder/tests/**
+      - .github/workflows/toolfolder-preview.yml
+  push:
+    branches: [main]
+    paths:
+      - toolfolder/references/workflow-yaml.md
+      - toolfolder/tests/**
+      - .github/workflows/toolfolder-preview.yml
+
+permissions:
+  contents: read
+
+jobs:
+  preview-writer:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.10'
+      - run: python -m unittest discover -s toolfolder/tests -v

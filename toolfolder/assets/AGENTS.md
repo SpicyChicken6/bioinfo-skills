@@ -46,6 +46,13 @@
   project.description; depends_on describes development prerequisites only.
 - Reading the workflow does not request execution or edits. Keep plan changes
   within the user's requested scope and preserve unrelated content and layout.
+- Use Research Flow to validate and visualize the workflow. After every save of
+  docs/workflow.yaml, including initial creation and direct YAML edits, regenerate
+  its offline, read-only HTML preview using the
+  [preview instructions](https://github.com/SpicyChicken6/bioinfo-skills/blob/main/toolfolder/references/workflow-yaml.md#regenerate-the-preview).
+  Verify and link the refreshed file in the response. Report failed generation
+  and label any existing preview stale. Preview generation must not rewrite the
+  canonical YAML or execute tasks.
 - Keep task READMEs concise: Description, Plan, Output. Link to them from YAML
   notes rather than duplicating implementation details or task-status tracking.
 - Record significant design rationale in docs/decisions.md when useful.

@@ -19,6 +19,7 @@ my-tool/
 ├── examples/                  # Runnable user examples
 ├── docs/
 │   ├── workflow.yaml          # Components, relationships, tasks, dependencies
+│   ├── workflow-preview.html  # Generated offline view; refresh after each YAML save
 │   └── decisions.md           # Optional significant design rationale
 ├── tasks/                     # Add workspaces when a task needs them
 │   └── 01-parser/
