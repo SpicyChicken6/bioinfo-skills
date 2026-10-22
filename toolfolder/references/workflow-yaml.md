@@ -112,11 +112,13 @@ def write_preview(path, content):
         if not stat.S_ISREG(info.st_mode) or info.st_nlink != 1 or reparse:
             raise FileExistsError(f"Refusing non-regular or linked output: {path}")
 
+    # Windows exclusive creation may follow a dangling symlink: inspect first.
     try:
+        expected = path.lstat()
+    except FileNotFoundError:
         fd = os.open(path, flags | os.O_CREAT | os.O_EXCL, 0o600)
         created = True
-    except FileExistsError:
-        expected = path.lstat()
+    else:
         check_file(expected)
         fd = os.open(path, flags | getattr(os, "O_NOFOLLOW", 0)
                      | getattr(os, "O_NONBLOCK", 0))
