@@ -1,4 +1,4 @@
-"""Exercise the documented preview writer without installing Research Flow."""
+"""Exercise the preview writer template without installing Research Flow."""
 import ast
 import os
 from pathlib import Path
@@ -8,12 +8,11 @@ from types import SimpleNamespace
 import unittest
 
 
-RECIPE = Path(__file__).resolve().parents[1] / "references" / "workflow-yaml.md"
-SNIPPET = RECIPE.read_text(encoding="utf-8").split("python - <<'PY'\n", 1)[1].split("\nPY\n", 1)[0]
-WRITER = next(node for node in ast.parse(SNIPPET).body
+SCRIPT = Path(__file__).resolve().parents[1] / "development/assets/preview_workflow.py"
+WRITER = next(node for node in ast.parse(SCRIPT.read_text(encoding="utf-8")).body
               if isinstance(node, ast.FunctionDef) and node.name == "write_preview")
-CODE = compile(ast.Module(body=[WRITER], type_ignores=[]), str(RECIPE), "exec")
-MARKER = b"<!-- toolfolder-workflow-preview source-sha256:test -->\n"
+CODE = compile(ast.Module(body=[WRITER], type_ignores=[]), str(SCRIPT), "exec")
+MARKER = b"<!-- development-workflow-preview -->\n"
 
 
 class PreviewWriterTests(unittest.TestCase):
@@ -27,7 +26,7 @@ class PreviewWriterTests(unittest.TestCase):
             name: getattr(os, name) for name in dir(os)
             if name not in {"O_NOFOLLOW", "O_NONBLOCK"}
         })
-        namespace = {"os": self.os, "stat": stat, "tempfile": tempfile, "marker": MARKER}
+        namespace = {"os": self.os, "stat": stat, "tempfile": tempfile, "MARKER": MARKER}
         exec(CODE, namespace)
         self.write_preview = namespace["write_preview"]
 

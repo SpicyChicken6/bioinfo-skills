@@ -1,0 +1,21 @@
+schema_version: 1
+project:
+  id: example-tool
+  name: Example tool
+  description: |-
+    Purpose: Validate tabular input.
+    Planned components: ../src/tool_name/validation.py and cli.py.
+    Runtime: CLI calls validation.
+tasks:
+  - id: validation
+    title: Implement validation
+    goal: Validate supported inputs and explain errors.
+    status: todo
+    depends_on: []
+    outputs: [../src/tool_name/validation.py]
+  - id: cli
+    title: Expose the CLI
+    goal: Provide a command and usage example.
+    status: todo
+    depends_on: [validation]
+    outputs: [../src/tool_name/cli.py, ../README.md]

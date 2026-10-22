@@ -5,7 +5,7 @@ Portable skills for bioinformatics and research, usable by Codex and Claude Code
 | Skill | Purpose |
 | --- | --- |
 | [biofolder](biofolder/SKILL.md) | Organize modality modules and agent/manual task workspaces; initialize Pixi and Git; upload manual results to a configured cloud drive. |
-| [toolfolder](toolfolder/SKILL.md) | Organize reusable tools with shared source and tests, task workspaces, and components and development plans in workflow YAML. |
+| [development](development/SKILL.md) | Start software projects with Pixi, a lightweight monorepo, UI design guidance, and a visual development plan. |
 | [research-flow](research-flow/SKILL.md) | Read workflow YAML as context for requested work, without automatically executing or changing the plan. |
 | [cellxgene-browser](cellxgene-browser/SKILL.md) | Set up and launch CELLxGENE Annotate for single-cell H5AD data, locally or over SSH. |
 | [consensus-mcp](consensus-mcp/SKILL.md) | Search academic literature and retrieve full-text excerpts through Consensus MCP or its API. |
@@ -64,20 +64,21 @@ Read docs/workflow.yaml.
 For the visual editor, see the [Research Flow installation guide](https://github.com/SpicyChicken6/research-flow/blob/main/docs/install.md)
 and [releases](https://github.com/SpicyChicken6/research-flow/releases).
 
-## Start a tool project
+## Start a development project
 
 ```text
-Use toolfolder to initialize a reusable Python CLI for validating sample sheets.
-Use Pixi, keep source and tests shared, and record components, relationships,
-and development tasks in docs/workflow.yaml. Scaffold the project without
-implementing the planned features yet.
+Use development to start a sample-sheet validation app with a web UI and
+Python backend. Use Pixi, keep frontend and backend separate, and record
+components and development tasks in docs/workflow.yaml with its HTML preview.
+Start with a small working version.
 ```
 
-Toolfolder includes an [example layout](toolfolder/references/project-layout.md),
-[project instructions](toolfolder/assets/AGENTS.md), README templates, and a
-[workflow example](toolfolder/examples/workflow.yaml). It keeps maintained code
-outside task workspaces and uses the workflow for the component overview instead
-of a separate architecture document.
+Development includes [project instructions](development/assets/AGENTS.md), a
+[README template](development/assets/README.md), an
+[example layout](development/assets/project-layout.md), and a
+[workflow template](development/assets/workflow.yaml). For web projects, the
+[design template](development/assets/DESIGN.md) records the theme and links to
+a visual preview. Design resources and moon task tooling are optional.
 
 ## Analysis examples
 
