@@ -61,6 +61,14 @@ migrate existing project files; apply those changes only within the requested sc
    preserving unrelated work. Report checks, unresolved choices, and incomplete
    setup. Initialization does not include scientific analyses or publication.
 
+## Analysis methods
+
+For bioinformatics analyses using packages with established procedures, follow
+the [official-workflow-first rules](assets/AGENTS.md#analysis-and-execution).
+Produce the relevant standard results and diagnostics before adding clearly
+labeled extensions, and record workflow sources and justified deviations in
+`agent/docs/methods.md`.
+
 ## Maintain or reorganize a project
 
 Apply the project rules for file placement, ownership, Pixi, and session Git
