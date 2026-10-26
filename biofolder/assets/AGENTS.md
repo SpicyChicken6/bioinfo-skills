@@ -60,6 +60,18 @@ before work. Follow the user's scope and existing project conventions.
 
 ## Analysis and execution
 
+- For packages with an established workflow, consult the official documentation,
+  vignette, or maintained tutorial applicable to the installed package version,
+  assay, inputs, and study design before implementing the analysis. Follow its
+  core steps and produce the relevant standard results and recommended
+  diagnostics within the requested scope; reuse verified upstream steps.
+- Adapt settings to the data and question rather than copying tutorial defaults
+  blindly. Record the workflow source, package version, and material deviations
+  with their rationale in `agent/docs/methods.md`. If the official workflow is
+  unsuitable or unavailable, explain the limitation and justify the alternative.
+- Add extra tests, sensitivity analyses, and custom summaries after establishing
+  the standard results, and label them as extensions. Do not silently replace the
+  established workflow or omit relevant diagnostics in favor of a custom analysis.
 - Use scripts or notebooks in `agent/code/` for analysis and figures.
   Agents may run scripts directly through the project Pixi environment.
   For notebooks, use the project Pixi kernel, keep cells focused and runnable

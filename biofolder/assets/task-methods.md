@@ -38,6 +38,9 @@ with their parameters and place in the processing sequence.
 
 ## Analysis
 
+- Official workflow reference (URL or local documentation path) and package
+  version, material deviations and rationale, and which outputs are standard
+  results versus additional analyses.
 - Methods, comparisons, model settings/covariates, and statistical thresholds
   or multiple-testing correction where applicable.
 - Exact input artifact or object/layer and data scale used by each analysis.
