@@ -1,0 +1,4 @@
+interface:
+  display_name: "Plotbook Reference"
+  short_description: "Refresh Plotbook and inspect scientific figure references"
+  default_prompt: "Use $plotbook-reference to update my local Plotbook collection, find relevant figure examples, and inspect their images and code before designing my plot. Report the download location on first use."

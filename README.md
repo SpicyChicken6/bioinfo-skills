@@ -11,6 +11,7 @@ Portable skills for bioinformatics and research, usable by Codex and Claude Code
 | [consensus-mcp](consensus-mcp/SKILL.md) | Search academic literature and retrieve full-text excerpts through Consensus MCP or its API. |
 | [semantic-scholar-literature-search](semantic-scholar-literature-search/SKILL.md) | Search the Semantic Scholar API, enrich records, and export literature tables. |
 | [over-representation-analysis](over-representation-analysis/SKILL.md) | Run unranked-gene pathway ORA with GSEApy and MSigDB, including paired plots. |
+| [plotbook-reference](plotbook-reference/SKILL.md) | Download/update the private Plotbook collection and inspect figure images, code, and provenance as references. |
 
 ## Start a project
 
@@ -85,3 +86,19 @@ a visual preview. Design resources and moon task tooling are optional.
 - [Consensus search and setup](consensus-mcp/examples/example_prompt.md)
 - [Semantic Scholar literature search](semantic-scholar-literature-search/examples/example_prompt.md)
 - [Pathway over-representation analysis](over-representation-analysis/examples/example_prompt.md)
+
+## Consult Plotbook
+
+```text
+Use plotbook-reference to find heatmap examples for these expression data.
+Inspect the images and relevant code, then adapt the design to my data.
+Tell me where Plotbook is downloaded on first use.
+```
+
+The skill requires Python 3.10+, Git, and GitHub access to the private
+[Plotbook repository](https://github.com/SpicyChicken6/plotbook). It clones on first
+use and checks for updates on every invocation, preserving local changes.
+The shared checkout defaults to `~/.local/share/plotbook`
+(`$XDG_DATA_HOME/plotbook` when configured); set `PLOTBOOK_ROOT` to use another
+location. The skill reports the absolute path on first download. Plotbook does
+not need to be running, and its private figures are not bundled in this repository.
