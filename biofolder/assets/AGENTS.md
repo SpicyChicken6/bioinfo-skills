@@ -72,6 +72,9 @@ before work. Follow the user's scope and existing project conventions.
 - Add extra tests, sensitivity analyses, and custom summaries after establishing
   the standard results, and label them as extensions. Do not silently replace the
   established workflow or omit relevant diagnostics in favor of a custom analysis.
+- Optionally use [plotbook-reference](https://github.com/SpicyChicken6/bioinfo-skills/blob/main/plotbook-reference/SKILL.md)
+  for figure examples and plotting code when helpful. Follow the project's plotting
+  conventions; continue without Plotbook when it is unavailable or unnecessary.
 - Use scripts or notebooks in `agent/code/` for analysis and figures.
   Agents may run scripts directly through the project Pixi environment.
   For notebooks, use the project Pixi kernel, keep cells focused and runnable
