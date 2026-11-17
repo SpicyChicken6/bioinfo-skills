@@ -1,0 +1,33 @@
+name: Plotbook reference helper
+
+on:
+  pull_request:
+    paths:
+      - plotbook-reference/**
+      - tests/test_plotbook_reference.py
+      - .github/workflows/plotbook-reference.yml
+  push:
+    branches: [main]
+    paths:
+      - plotbook-reference/**
+      - tests/test_plotbook_reference.py
+      - .github/workflows/plotbook-reference.yml
+
+permissions:
+  contents: read
+
+jobs:
+  reference-helper:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.10'
+      - run: python -m unittest discover -s tests -p test_plotbook_reference.py -v
