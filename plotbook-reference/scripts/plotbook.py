@@ -144,7 +144,8 @@ def _sync_locked(root, repo_url):
             ancestry = _git(root, "merge-base", "--is-ancestor", "HEAD", upstream, check=False)
             if ancestry.returncode:
                 raise PlotbookError("Plotbook has local commits, divergent history, or insufficient history for a fast-forward. Resolve manually; nothing was reset.")
-            _git(root, "merge", "--ff-only", upstream)
+            # Fast-forward alone still permits replacing ignored local files.
+            _git(root, "merge", "--ff-only", "--no-overwrite-ignore", upstream)
     commit = _git(root, "rev-parse", "HEAD").stdout.strip()
     return {"root": str(root), "action": "cloned" if cloned else "updated" if before != commit else "current",
             "commit": commit, "catalog_updated_at": _catalog(root).get("updatedAt")}

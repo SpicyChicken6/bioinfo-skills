@@ -146,6 +146,37 @@ class PlotbookReferenceTests(unittest.TestCase):
                 else:
                     target.write_bytes(original)
 
+    def test_upstream_cannot_overwrite_an_ignored_local_file(self):
+        self.sync()
+        (self.root / ".git/info/exclude").write_text("notes.txt\n", encoding="utf-8")
+        notes = self.root / "notes.txt"
+        notes.write_bytes(b"Personal notes must survive\n")
+        before = self.state(self.root)
+        self.assertEqual(before[1], "")
+        self.assertEqual(self.git(self.root, "check-ignore", "notes.txt"), "notes.txt")
+
+        (self.source / "notes.txt").write_bytes(b"New upstream notes\n")
+        self.commit(self.source, "Start tracking notes")
+        self.git(self.source, "push", "origin", "main")
+
+        with self.assertRaises(plotbook.PlotbookError):
+            self.sync()
+        self.assertEqual(notes.read_bytes(), b"Personal notes must survive\n")
+        self.assertEqual(self.state(self.root), before)
+
+    def test_nonconflicting_ignored_file_does_not_block_updates(self):
+        self.sync()
+        (self.root / ".git/info/exclude").write_text("notes.txt\n", encoding="utf-8")
+        notes = self.root / "notes.txt"
+        notes.write_bytes(b"Personal notes must survive\n")
+        expected_commit = self.publish_update()
+
+        result = self.sync()
+        self.assertEqual(result["action"], "updated")
+        self.assertEqual(result["commit"], expected_commit)
+        self.assertEqual(notes.read_bytes(), b"Personal notes must survive\n")
+        self.assertEqual(self.state(self.root), (expected_commit, ""))
+
     def test_local_commit_ahead_of_remote_is_not_reset(self):
         self.sync()
         self.identity(self.root)
